@@ -51,7 +51,7 @@ Both features require a number of new API primitives and configurations;
 and they are barely documented yet (though I managed to add a `section <../../manual/features/submatch/submatch.html>`_ in the manual).
 The paper cited above has some interesting benchmark results;
 articles and examples will follow in the nearest future.
-As usually, you may expect a number of small bug-fix releases in the 1.0x series.
+As usually, you may expect a number of small bug-fix releases in the 1.0.x series.
 
 The following people contributed to this release:
 
