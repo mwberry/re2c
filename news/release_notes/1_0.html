@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>1.0x &#8212; re2c 0.16 documentation</title>
+    <title>Release 1.0 &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -33,25 +33,23 @@
 </div>
 
 <h3><a href="../../index.html">Home</a></h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../about/about.html">About</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples/examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../news.html">News</a></li>
-</ul>
-
-    <h3>1.0x</h3>
-    <div class="re2c-toc-local">
-        <ul>
-<li><a class="reference internal" href="#">1.0x</a><ul>
-<li><a class="reference internal" href="#id1">1.0.1 (2017-08-11)</a></li>
-<li><a class="reference internal" href="#id2">1.0 (2017-08-11)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../news.html">News</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Release 1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0_16.html">Release 0.16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0_15_3.html">Release 0.15.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0_15_2.html">Release 0.15.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0_15_1.html">Release 0.15.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0_15.html">Release 0.15</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
 </ul>
 </li>
 </ul>
 
-    </div>
 
         </div>
       </div>
@@ -61,17 +59,87 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="x">
-<h1>1.0x<a class="headerlink" href="#x" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="id1">
-<h2>1.0.1 (2017-08-11)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="release-1-0">
+<h1>Release 1.0<a class="headerlink" href="#release-1-0" title="Permalink to this headline">¶</a></h1>
+<p><em>by Ulya Trofimovich</em></p>
+<p>This release is an important milestone in the history of re2c: it adds <em>submatch extraction</em>.
+It is a long-awaited feature; even as Peter Bumbulis released the first version of re2c back in 1993,
+he mentioned submatch extraction in his paper together with Donald D. Cowan
+<a class="reference download internal" href="../../_downloads/1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf" download=""><code class="xref download docutils literal"><span class="pre">&quot;RE2C:</span> <span class="pre">a</span> <span class="pre">more</span> <span class="pre">versatile</span> <span class="pre">scanner</span> <span class="pre">generator&quot;</span></code></a>
+as a useful feature that soon should be added to re2c.
+It seemed back then that submatch extraction is relatively easy to implement;
+like many other useful extensions, it was deemed to be no more than syntactic sugar on top of canonical regular expressions.</p>
+<p>As it turned out, this is not so:
+the problem of <em>parsing</em> with regular expressions is inherently more complex than <em>recognition</em>,
+and submatch extraction cannot be implemented using traditional DFA-based approach.
+Many authors studied this subject and developed algorithms suitable for their particular settings and problem domains.
+Some of them used NFA-based approach,
+others suggested algorithms based on multiple DFA or multiple passes over a single DFA.
+For re2c most of these algorithms are too heavyweight:
+they require complication of the underlying computational model and incur overhead even in simple cases.</p>
+<p>However, one algorithm is outstanding in this respect:
+it is the algorithm invented by Ville Laurikari in 2000 and described in his paper
+<a class="reference external" href="http://laurikari.net/ville/spire2000-tnfa.pdf">“NFAs with Tagged Transitions, their Conversion to Deterministic Automata and Application to Regular Expressions”</a>.
+Laurikari algorithm is based on a single DFA extended with a fixed number of <em>registers</em>; it makes one pass over the input string,
+works in linear time and the required space does not depend on the input length.
+But what is most important, the added complexity depends on submatch detalization:
+on submatch-free regular expressions Laurikari automaton reduces to a simple DFA.</p>
+<p>As I started working on the implementation of submatch extraction in re2c (in early 2016),
+at first I didn’t appreciate the elegance of Laurikari approach; it still seemed overly complicated for re2c.
+I studied many papers and tried to invent an algorithm that would support only <em>partial</em> submatch extraction,
+but the supported cases would be handled very efficiently.
+As I developed the algorithm, I came to realize that it was in fact but a special case of Laurikari algorithm.
+Naturally, I turned back to the original paper and started to adapt my implementation.
+To my surprise, I discovered a strange deficiency in Laurikari algorithm compared to my early implementation:
+when recording submatches, Laurikari automata totally ignore the lookahead symbol
+and perform a lot of redundant operations that could be easily avoided.
+It was only logical to fix Laurikari algorithm;
+but as I worked on it, a couple of other issues showed up,
+and so it happened that I ended up writing a whole paper on the subject:
+<a class="reference download internal" href="../../_downloads/2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf" download=""><code class="xref download docutils literal"><span class="pre">&quot;Tagged</span> <span class="pre">Deterministic</span> <span class="pre">Finite</span> <span class="pre">Automata</span> <span class="pre">with</span> <span class="pre">Lookahead&quot;</span></code></a>.</p>
+<p>Submatch extraction in re2c comes in two flavors:
+POSIX-compliant capturing groups (with true POSIX semantics)
+and standalone <em>tags</em> that use leftmost greedy disambiguation.
+Both features require a number of new API primitives and configurations;
+and they are barely documented yet (though I managed to add a <a class="reference external" href="../../manual/features/submatch/submatch.html">section</a> in the manual).
+The paper cited above has some interesting benchmark results;
+articles and examples will follow in the nearest future.
+As usually, you may expect a number of small bug-fix releases in the 1.0x series.</p>
+<p>The following people contributed to this release:</p>
 <ul class="simple">
-<li>Fixed bug #193 1.0 build failure on macOS: error: calling a private constructor of class ‘re2c::Rule’</li>
-<li>Added paper “Tagged Deterministic Finite Automata with Lookahead” to distribution</li>
+<li>Petr Skocik tidied up re2c documentation: fixed ubiquitous spelling errors
+and established synchronization system between the online documentation,
+manpage and help message displayed by re2c with <code class="docutils literal"><span class="pre">--help</span></code> option.</li>
+<li>Sergei Trofimovich wrote a <em>fuzzer</em> that generates random regular expressions
+and checks them on input data generated with re2c <code class="docutils literal"><span class="pre">--skeleton</span></code> option.
+This fuzzer is most helpful; it has already found tens of bugs in the early implementation of submatch extraction.
+Sergei also helped me with testing re2c on numerous platforms and computer architectures.</li>
+<li>Abs62,
+asmwarrior,
+Ben Smith,
+CRCinAU,
+Derick Rethans,
+Dimitri John Ledkov,
+Eldar Zakirov,
+jcfp,
+Jean-Claude Wippler,
+Jeff Trull,
+Jérôme Dumesnil,
+Jesse Buesking,
+Julian Andres Klode,
+Paulo Custodio,
+Perry E. Metzger,
+philippschaefer,
+Ross Burton,
+Rui Maciel,
+Ryan Mast,
+Samuel006,
+sirzooro,
+Tim Kelly
+— all these people contributed bug reports, patches and feedback. Thank you!</li>
+<li>Many thanks to the early user of the new features João Paredes for his patience and encouraging comments on the subject.</li>
 </ul>
-</div>
-<div class="section" id="id2">
-<h2>1.0 (2017-08-11)<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Below is a coarse list of all changes (a raw excerpt from <a class="reference external" href="../changelog/changelog.html">changelog</a>):</p>
 <ul>
 <li><dl class="first docutils">
 <dt>Added options:</dt>
@@ -210,7 +278,6 @@
 </dl>
 </li>
 </ul>
-</div>
 </div>
 
 
