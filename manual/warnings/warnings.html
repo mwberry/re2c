@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Warnings &mdash; re2c 0.16 documentation</title>
-    
+    <title>Warnings &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -40,7 +38,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Install</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../manual.html">Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../options/options.html">Options</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Warnings</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Warnings</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="undefined_control_flow/wundefined_control_flow.html">[-Wundefined-control-flow]</a></li>
 <li class="toctree-l3"><a class="reference internal" href="unreachable_rules/wunreachable_rules.html">[-Wunreachable-rules]</a></li>
 <li class="toctree-l3"><a class="reference internal" href="condition_order/wcondition_order.html">[-Wcondition-order]</a></li>
@@ -73,17 +71,17 @@
 <dt><code class="docutils literal"><span class="pre">-W</span></code></dt>
 <dd>Turn on all warnings.</dd>
 <dt><code class="docutils literal"><span class="pre">-Werror</span></code></dt>
-<dd>Turn warnings into errors. Note that this option along
-doesn&#8217;t turn on any warnings, it only affects those warnings that have
+<dd>Turn warnings into errors. Note that this option alone
+doesn’t turn on any warnings; it only affects those warnings that have
 been turned on so far or will be turned on later.</dd>
 <dt><code class="docutils literal"><span class="pre">-W&lt;warning&gt;</span></code></dt>
-<dd>Turn on individual <code class="docutils literal"><span class="pre">warning</span></code>.</dd>
+<dd>Turn on a <code class="docutils literal"><span class="pre">warning</span></code>.</dd>
 <dt><code class="docutils literal"><span class="pre">-Wno-&lt;warning&gt;</span></code></dt>
-<dd>Turn off individual <code class="docutils literal"><span class="pre">warning</span></code>.</dd>
+<dd>Turn off a <code class="docutils literal"><span class="pre">warning</span></code>.</dd>
 <dt><code class="docutils literal"><span class="pre">-Werror-&lt;warning&gt;</span></code></dt>
-<dd>Turn on individual <code class="docutils literal"><span class="pre">warning</span></code> and treat it as error (this implies <code class="docutils literal"><span class="pre">-W&lt;warning&gt;</span></code>).</dd>
+<dd>Turn on a <code class="docutils literal"><span class="pre">warning</span></code> and treat it as an error (this implies <code class="docutils literal"><span class="pre">-W&lt;warning&gt;</span></code>).</dd>
 <dt><code class="docutils literal"><span class="pre">-Wno-error-&lt;warning&gt;</span></code></dt>
-<dd>Don&#8217;t treat this particular <code class="docutils literal"><span class="pre">warning</span></code> as error. This doesn&#8217;t turn off
+<dd>Don’t treat this particular <code class="docutils literal"><span class="pre">warning</span></code> as an error. This doesn’t turn off
 the warning itself.</dd>
 </dl>
 <p>re2c has the following warnings:</p>
@@ -107,7 +105,7 @@ the warning itself.</dd>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

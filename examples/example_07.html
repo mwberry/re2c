@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>C++98 lexer &mdash; re2c 0.16 documentation</title>
-    
+    <title>A C++98 lexer &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -46,7 +44,7 @@
 <li class="toctree-l2"><a class="reference internal" href="example_04.html">Parsing integers (multiple re2c blocks)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_05.html">Parsing integers (conditions)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns (encodings)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">C++98 lexer</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">A C++98 lexer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -61,15 +59,15 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="c-98-lexer">
-<h1>C++98 lexer<a class="headerlink" href="#c-98-lexer" title="Permalink to this headline">¶</a></h1>
-<p>This is an example of a big real-world re2c program: C++98 lexer.
-It confirms to the C++98 standard (except for a couple of hacks to simulate preprocessor).
-All nontrivial lexemes (integers, floating-point constants, strings and character literals)
-are parsed (not only recognized): numeric literals are converted to numbers, strings are unescaped.
-Some additional checks described in standard (e.g. overflows in integer literals) are also done.
-In fact, C++ is an easy language to lex: unlike many other languages, lexer can proceed without feedback from parser.</p>
-<p><a class="reference download internal" href="../_downloads/07_cxx98.re.txt"><code class="xref download docutils literal"><span class="pre">[07_cxx98.re]</span></code></a></p>
+  <div class="section" id="a-c-98-lexer">
+<h1>A C++98 lexer<a class="headerlink" href="#a-c-98-lexer" title="Permalink to this headline">¶</a></h1>
+<p>This is an example of a big, real-world re2c program: a C++98 lexer.
+It conforms to the C++98 standard (except for a couple of hacks that simulate the preprocessor).
+All nontrivial lexemes (integers, floating-point constants, strings, and character literals)
+are parsed (not only recognized): numeric literals are converted to numbers, and strings are unescaped.
+Some additional checks described in the standard (e.g., overflows in integer literals) are also done.
+In fact, C++ is an easy language to lex: unlike in many other languages, the C++98 lexer can proceed without feedback from the parser.</p>
+<p><a class="reference download internal" href="../_downloads/07_cxx98.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[07_cxx98.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
   2
   3
@@ -443,15 +441,15 @@ In fact, C++ is an easy language to lex: unlike many other languages, lexer can 
 371
 372
 373
-374</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;float.h&gt;</span>
-<span class="cp">#include &lt;limits.h&gt;</span>
-<span class="cp">#include &lt;stdio.h&gt;</span>
-<span class="cp">#include &lt;string.h&gt;</span>
+374</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;float.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;limits.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
 
 <span class="cm">/*!max:re2c*/</span>
 <span class="k">static</span> <span class="k">const</span> <span class="kt">size_t</span> <span class="n">SIZE</span> <span class="o">=</span> <span class="mi">64</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">;</span>
 
-<span class="k">struct</span> <span class="kt">input_t</span> <span class="p">{</span>
+<span class="k">struct</span> <span class="n">input_t</span> <span class="p">{</span>
     <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="n">SIZE</span> <span class="o">+</span> <span class="n">YYMAXFILL</span><span class="p">];</span>
     <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">lim</span><span class="p">;</span>
     <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">cur</span><span class="p">;</span>
@@ -461,7 +459,7 @@ In fact, C++ is an easy language to lex: unlike many other languages, lexer can 
 
     <span class="kt">FILE</span> <span class="o">*</span><span class="k">const</span> <span class="n">file</span><span class="p">;</span>
 
-    <span class="kt">input_t</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">input_t</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">f</span><span class="p">)</span>
         <span class="o">:</span> <span class="n">buf</span><span class="p">()</span>
         <span class="p">,</span> <span class="n">lim</span><span class="p">(</span><span class="n">buf</span> <span class="o">+</span> <span class="n">SIZE</span><span class="p">)</span>
         <span class="p">,</span> <span class="n">cur</span><span class="p">(</span><span class="n">lim</span><span class="p">)</span>
@@ -540,7 +538,7 @@ In fact, C++ is an easy language to lex: unlike many other languages, lexer can 
     <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="k">static</span> <span class="kt">bool</span> <span class="n">lex_str</span><span class="p">(</span><span class="kt">input_t</span> <span class="o">&amp;</span><span class="n">in</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">q</span><span class="p">)</span>
+<span class="k">static</span> <span class="kt">bool</span> <span class="n">lex_str</span><span class="p">(</span><span class="n">input_t</span> <span class="o">&amp;</span><span class="n">in</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">q</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span> <span class="n">q</span><span class="p">);</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">u</span> <span class="o">=</span> <span class="n">q</span><span class="p">;;</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">x%lx&quot;</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span> <span class="p">{</span>
@@ -616,7 +614,7 @@ In fact, C++ is an easy language to lex: unlike many other languages, lexer can 
     <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="k">static</span> <span class="kt">bool</span> <span class="n">lex</span><span class="p">(</span><span class="kt">input_t</span> <span class="o">&amp;</span><span class="n">in</span><span class="p">)</span>
+<span class="k">static</span> <span class="kt">bool</span> <span class="n">lex</span><span class="p">(</span><span class="n">input_t</span> <span class="o">&amp;</span><span class="n">in</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">u</span><span class="p">;</span>
     <span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
@@ -807,7 +805,7 @@ In fact, C++ is an easy language to lex: unlike many other languages, lexer can 
         <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="kt">input_t</span> <span class="n">in</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+    <span class="n">input_t</span> <span class="n">in</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">lex</span><span class="p">(</span><span class="n">in</span><span class="p">))</span> <span class="p">{</span>
         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;... error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
@@ -821,58 +819,58 @@ In fact, C++ is an easy language to lex: unlike many other languages, lexer can 
 </td></tr></table></div>
 <p>Notes:</p>
 <ul class="simple">
-<li>The main lexer is used to lex all trivial lexemes (macros, whitespaces, boolean literals, keywords, operators and punctuators, identifiers),
-recognize numeric literals (which are further parsed by a bunch of auxilary lexers),
-and recognize the start of string and character literals (which are further recognized and parsed by an auxilary lexer).
+<li>The main lexer is used to lex all trivial lexemes (macros, whitespace, boolean literals, keywords, operators, punctuators, and identifiers),
+recognize numeric literals (which are further parsed by a bunch of auxiliary lexers),
+and recognize the start of a string and character literals (which are further recognized and parsed by an auxiliary lexer).
 Numeric literals are thus lexed twice: this approach may be deemed inefficient,
-but it takes much more effort to validate and parse them at once.
-Besides, a real-world lexer would rather recognize ill-formed lexemes (e.g. overflowed integer literals),
-report them and resume lexing.</li>
-<li>We don&#8217;t use re2c in cases when hand-written parser looks simpler: when parsing octal and decimal literals
-(though re2c-based parser would do exactly the same, without the slightest overhead).
+but it takes much more effort to validate and parse them in one go.
+Besides, a real-world lexer would rather recognize ill-formed lexemes (e.g., overflown integer literals),
+report them, and resume lexing.</li>
+<li>We don’t use re2c in cases where a hand-written parser looks simpler: when parsing octal and decimal literals
+(though a re2c-based parser would do exactly the same, without the slightest overhead).
 However, hexadecimal literals still require some lexing, which looks better with re2c.
-Again, it&#8217;s only a matter of taste: re2c-based implementation adds no overhead.
+Again, it’s only a matter of taste: a re2c-based implementation adds no overhead.
 Look at the generated code to make sure.</li>
 <li>The main lexer and string lexer both use <code class="docutils literal"><span class="pre">re2c:yyfill:enable</span> <span class="pre">=</span> <span class="pre">1;</span></code>, other lexers use <code class="docutils literal"><span class="pre">re2c:yyfill:enable</span> <span class="pre">=</span> <span class="pre">0;</span></code>.
-This is very important: both main lexer and string lexer advance input position to new (yet unseen) input characters,
-so they must check for the end of input and call <code class="docutils literal"><span class="pre">YYFILL</span></code>. In conrast, other lexers only parse lexemes that
-have been already recognized by the main lexer: these lexemes are guaranteed to be within buffer bounds
+This is very important: both the main lexer and string lexer advance input position to new (yet unseen) input characters,
+so they must check for the end of input and call <code class="docutils literal"><span class="pre">YYFILL</span></code>. In contrast, other lexers only parse lexemes that
+have already been recognized by the main lexer: these lexemes are guaranteed to be within buffer bounds
 (they are guarded by <code class="docutils literal"><span class="pre">in.tok</span></code> on the left and <code class="docutils literal"><span class="pre">in.lim</span></code> on the right).</li>
 <li>The hardest part is (unsurprisingly) floating-point literals.
-They are just as hard to lex as to use. <code class="docutils literal"><span class="pre">:)</span></code></li>
+They are just as hard to lex as they are to use. <code class="docutils literal"><span class="pre">:)</span></code></li>
 </ul>
-<p>Generate, compile and run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>re2c -o example.cc 07_cxx98.re
-<span class="nv">$ </span>g++ -o example example.cc
-<span class="nv">$ </span>./example 07_cxx98.re <span class="p">|</span> fold
+<p>Generate, compile, and run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -o example.cc 07_cxx98.re
+$ g++ -o example example.cc
+$ ./example 07_cxx98.re <span class="p">|</span> fold
  STATIC CONST size_t <span class="nv">SIZE</span> <span class="o">=</span> <span class="m">64</span> * 1024<span class="p">;</span> STRUCT input_t <span class="o">{</span> UNSIGNED CHAR buf<span class="o">[</span>SIZE +
  YYMAXFILL<span class="o">]</span><span class="p">;</span> UNSIGNED CHAR *lim<span class="p">;</span> UNSIGNED CHAR *cur<span class="p">;</span> UNSIGNED CHAR *mar<span class="p">;</span> UNSIGNE
 D CHAR *tok<span class="p">;</span> BOOL eof<span class="p">;</span> FILE *CONST file<span class="p">;</span> input_t<span class="o">(</span>FILE *f<span class="o">)</span> : buf<span class="o">()</span> , lim<span class="o">(</span>buf + SI
 ZE<span class="o">)</span> , cur<span class="o">(</span>lim<span class="o">)</span> , mar<span class="o">(</span>lim<span class="o">)</span> , tok<span class="o">(</span>lim<span class="o">)</span> , eof<span class="o">(</span><span class="nb">false</span><span class="o">)</span> , file<span class="o">(</span>f<span class="o">)</span> <span class="o">{}</span> BOOL fill<span class="o">(</span>size_t
-need<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>eof<span class="o">)</span> <span class="o">{</span> RETURN <span class="nb">false</span><span class="p">;</span> <span class="o">}</span> CONST size_t <span class="nv">free</span> <span class="o">=</span> tok - buf<span class="p">;</span> IF <span class="o">(</span>free &lt; nee
-d<span class="o">)</span> <span class="o">{</span> RETURN <span class="nb">false</span><span class="p">;</span> <span class="o">}</span> memmove<span class="o">(</span>buf, tok, lim - tok<span class="o">)</span><span class="p">;</span> lim -<span class="o">=</span> free<span class="p">;</span> cur -<span class="o">=</span> free<span class="p">;</span> mar
+need<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>eof<span class="o">)</span> <span class="o">{</span> RETURN false<span class="p">;</span> <span class="o">}</span> CONST size_t <span class="nv">free</span> <span class="o">=</span> tok - buf<span class="p">;</span> IF <span class="o">(</span>free &lt; nee
+d<span class="o">)</span> <span class="o">{</span> RETURN false<span class="p">;</span> <span class="o">}</span> memmove<span class="o">(</span>buf, tok, lim - tok<span class="o">)</span><span class="p">;</span> lim -<span class="o">=</span> free<span class="p">;</span> cur -<span class="o">=</span> free<span class="p">;</span> mar
  -<span class="o">=</span> free<span class="p">;</span> tok -<span class="o">=</span> free<span class="p">;</span> lim +<span class="o">=</span> fread<span class="o">(</span>lim, 1, free, file<span class="o">)</span><span class="p">;</span> IF <span class="o">(</span>lim &lt; buf + SIZE<span class="o">)</span> <span class="o">{</span>
- <span class="nv">eof</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> memset<span class="o">(</span>lim, 0, YYMAXFILL<span class="o">)</span><span class="p">;</span> lim +<span class="o">=</span> YYMAXFILL<span class="p">;</span> <span class="o">}</span> RETURN <span class="nb">true</span><span class="p">;</span> <span class="o">}</span> <span class="o">}</span><span class="p">;</span> TE
+ <span class="nv">eof</span> <span class="o">=</span> true<span class="p">;</span> memset<span class="o">(</span>lim, 0, YYMAXFILL<span class="o">)</span><span class="p">;</span> lim +<span class="o">=</span> YYMAXFILL<span class="p">;</span> <span class="o">}</span> RETURN true<span class="p">;</span> <span class="o">}</span> <span class="o">}</span><span class="p">;</span> TE
 MPLATE&lt;INT base&gt; STATIC BOOL adddgt<span class="o">(</span>UNSIGNED LONG <span class="p">&amp;</span>u, UNSIGNED LONG d<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>u &gt;
- <span class="o">(</span>ULONG_MAX - d<span class="o">)</span> / base<span class="o">)</span> <span class="o">{</span> RETURN <span class="nb">false</span><span class="p">;</span> <span class="o">}</span> <span class="nv">u</span> <span class="o">=</span> u * base + d<span class="p">;</span> RETURN <span class="nb">true</span><span class="p">;</span> <span class="o">}</span> STAT
+ <span class="o">(</span>ULONG_MAX - d<span class="o">)</span> / base<span class="o">)</span> <span class="o">{</span> RETURN false<span class="p">;</span> <span class="o">}</span> <span class="nv">u</span> <span class="o">=</span> u * base + d<span class="p">;</span> RETURN true<span class="p">;</span> <span class="o">}</span> STAT
 IC BOOL lex_oct<span class="o">(</span>CONST UNSIGNED CHAR *s, CONST UNSIGNED CHAR *e, UNSIGNED LONG <span class="p">&amp;</span>u
-<span class="o">)</span> <span class="o">{</span> FOR <span class="o">(</span><span class="nv">u</span> <span class="o">=</span> 0, ++s<span class="p">;</span> s &lt; e<span class="p">;</span> ++s<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>!adddgt&lt;8&gt;<span class="o">(</span>u, *s - 48<span class="o">))</span> <span class="o">{</span> RETURN <span class="nb">false</span><span class="p">;</span> <span class="o">}</span>
- <span class="o">}</span> RETURN <span class="nb">true</span><span class="p">;</span> <span class="o">}</span> STATIC BOOL lex_dec<span class="o">(</span>CONST UNSIGNED CHAR *s, CONST UNSIGNED CHA
+<span class="o">)</span> <span class="o">{</span> FOR <span class="o">(</span><span class="nv">u</span> <span class="o">=</span> 0, ++s<span class="p">;</span> s &lt; e<span class="p">;</span> ++s<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>!adddgt&lt;8&gt;<span class="o">(</span>u, *s - 48<span class="o">))</span> <span class="o">{</span> RETURN false<span class="p">;</span> <span class="o">}</span>
+ <span class="o">}</span> RETURN true<span class="p">;</span> <span class="o">}</span> STATIC BOOL lex_dec<span class="o">(</span>CONST UNSIGNED CHAR *s, CONST UNSIGNED CHA
 R *e, UNSIGNED LONG <span class="p">&amp;</span>u<span class="o">)</span> <span class="o">{</span> FOR <span class="o">(</span><span class="nv">u</span> <span class="o">=</span> 0<span class="p">;</span> s &lt; e<span class="p">;</span> ++s<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>!adddgt&lt;10&gt;<span class="o">(</span>u, *s - 48<span class="o">))</span>
- <span class="o">{</span> RETURN <span class="nb">false</span><span class="p">;</span> <span class="o">}</span> <span class="o">}</span> RETURN <span class="nb">true</span><span class="p">;</span> <span class="o">}</span> STATIC BOOL lex_hex<span class="o">(</span>CONST UNSIGNED CHAR *s,
+ <span class="o">{</span> RETURN false<span class="p">;</span> <span class="o">}</span> <span class="o">}</span> RETURN true<span class="p">;</span> <span class="o">}</span> STATIC BOOL lex_hex<span class="o">(</span>CONST UNSIGNED CHAR *s,
 CONST UNSIGNED CHAR *e, UNSIGNED LONG <span class="p">&amp;</span>u<span class="o">)</span> <span class="o">{</span> FOR <span class="o">(</span><span class="nv">u</span> <span class="o">=</span> 0, s +<span class="o">=</span> 2<span class="p">;</span> s &lt; e<span class="p">;</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span> RETU
-RN <span class="nb">true</span><span class="p">;</span> <span class="o">}</span> STATIC BOOL lex_str<span class="o">(</span>input_t <span class="p">&amp;</span>in, UNSIGNED CHAR q<span class="o">)</span> <span class="o">{</span> <span class="nb">printf</span><span class="o">(</span><span class="s2">&quot;\x25\x63&quot;</span>
-, q<span class="o">)</span><span class="p">;</span> FOR <span class="o">(</span>UNSIGNED LONG <span class="nv">u</span> <span class="o">=</span> q<span class="p">;;</span> <span class="nb">printf</span><span class="o">(</span><span class="s2">&quot;\x5c\x78\x25\x6c\x78&quot;</span>, u<span class="o">))</span> <span class="o">{</span> in.tok <span class="o">=</span> i
-n.cur<span class="p">;</span> <span class="o">}</span> <span class="nb">printf</span><span class="o">(</span><span class="s2">&quot;\x25\x63&quot;</span>, q<span class="o">)</span><span class="p">;</span> RETURN <span class="nb">true</span><span class="p">;</span> <span class="o">}</span> STATIC BOOL lex_flt<span class="o">(</span>CONST UNSIGNE
+RN true<span class="p">;</span> <span class="o">}</span> STATIC BOOL lex_str<span class="o">(</span>input_t <span class="p">&amp;</span>in, UNSIGNED CHAR q<span class="o">)</span> <span class="o">{</span> printf<span class="o">(</span><span class="s2">&quot;\x25\x63&quot;</span>
+, q<span class="o">)</span><span class="p">;</span> FOR <span class="o">(</span>UNSIGNED LONG <span class="nv">u</span> <span class="o">=</span> q<span class="p">;;</span> printf<span class="o">(</span><span class="s2">&quot;\x5c\x78\x25\x6c\x78&quot;</span>, u<span class="o">))</span> <span class="o">{</span> in.tok <span class="o">=</span> i
+n.cur<span class="p">;</span> <span class="o">}</span> printf<span class="o">(</span><span class="s2">&quot;\x25\x63&quot;</span>, q<span class="o">)</span><span class="p">;</span> RETURN true<span class="p">;</span> <span class="o">}</span> STATIC BOOL lex_flt<span class="o">(</span>CONST UNSIGNE
 D CHAR *s<span class="o">)</span> <span class="o">{</span> DOUBLE <span class="nv">d</span> <span class="o">=</span> 0<span class="p">;</span> DOUBLE <span class="nv">x</span> <span class="o">=</span> 1<span class="p">;</span> INT <span class="nv">e</span> <span class="o">=</span> 0<span class="p">;</span> mant_int: mant_frac: exp_sig
-n: exp: sfx: end: <span class="nb">printf</span><span class="o">(</span><span class="s2">&quot;\x25\x67&quot;</span>, d<span class="o">)</span><span class="p">;</span> RETURN <span class="nb">true</span><span class="p">;</span> <span class="o">}</span> STATIC BOOL lex<span class="o">(</span>input_t
+n: exp: sfx: end: printf<span class="o">(</span><span class="s2">&quot;\x25\x67&quot;</span>, d<span class="o">)</span><span class="p">;</span> RETURN true<span class="p">;</span> <span class="o">}</span> STATIC BOOL lex<span class="o">(</span>input_t
 <span class="p">&amp;</span>in<span class="o">)</span> <span class="o">{</span> UNSIGNED LONG u<span class="p">;</span> FOR <span class="o">(</span><span class="p">;;</span><span class="o">)</span> <span class="o">{</span> in.tok <span class="o">=</span> in.cur<span class="p">;</span> sfx: <span class="o">}</span> <span class="o">}</span> INT main<span class="o">(</span>INT argc,
 CHAR **argv<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>argc !<span class="o">=</span> 2<span class="o">)</span> <span class="o">{</span> <span class="nb">printf</span> <span class="o">(</span><span class="s2">&quot;\x75\x73\x61\x67\x65\x3a\x20\x2e\x2f\x6</span>
 <span class="s2">5\x78\x61\x6d\x70\x6c\x65\x20\x3c\x66\x69\x6c\x65\x6e\x61\x6d\x65\x3e\xa&quot;</span><span class="o">)</span><span class="p">;</span> RETU
-RN 1<span class="p">;</span> <span class="o">}</span> FILE *file <span class="o">=</span> fopen<span class="o">(</span>argv<span class="o">[</span>1<span class="o">]</span>, <span class="s2">&quot;\x72\x62&quot;</span><span class="o">)</span><span class="p">;</span> IF <span class="o">(</span>!file<span class="o">)</span> <span class="o">{</span> <span class="nb">printf</span><span class="o">(</span><span class="s2">&quot;\x65\x72\x</span>
+RN 1<span class="p">;</span> <span class="o">}</span> FILE *file <span class="o">=</span> fopen<span class="o">(</span>argv<span class="o">[</span>1<span class="o">]</span>, <span class="s2">&quot;\x72\x62&quot;</span><span class="o">)</span><span class="p">;</span> IF <span class="o">(</span>!file<span class="o">)</span> <span class="o">{</span> printf<span class="o">(</span><span class="s2">&quot;\x65\x72\x</span>
 <span class="s2">72\x6f\x72\x3a\x20\x63\x61\x6e\x6e\x6f\x74\x20\x6f\x70\x65\x6e\x20\x66\x69\x6c\x</span>
 <span class="s2">65\x3a\x20\x25\x73\xa&quot;</span>, argv<span class="o">[</span>1<span class="o">])</span><span class="p">;</span> RETURN 1<span class="p">;</span> <span class="o">}</span> input_t in<span class="o">(</span>file<span class="o">)</span><span class="p">;</span> IF <span class="o">(</span>!lex<span class="o">(</span>in<span class="o">))</span> <span class="o">{</span>
-<span class="nb">printf</span><span class="o">(</span><span class="s2">&quot;\x2e\x2e\x2e\x20\x65\x72\x72\x6f\x72\xa&quot;</span><span class="o">)</span><span class="p">;</span> <span class="o">}</span> ELSE <span class="o">{</span> <span class="nb">printf</span><span class="o">(</span><span class="s2">&quot;\xa&quot;</span><span class="o">)</span><span class="p">;</span> <span class="o">}</span> fcl
+printf<span class="o">(</span><span class="s2">&quot;\x2e\x2e\x2e\x20\x65\x72\x72\x6f\x72\xa&quot;</span><span class="o">)</span><span class="p">;</span> <span class="o">}</span> ELSE <span class="o">{</span> printf<span class="o">(</span><span class="s2">&quot;\xa&quot;</span><span class="o">)</span><span class="p">;</span> <span class="o">}</span> fcl
 ose<span class="o">(</span>file<span class="o">)</span><span class="p">;</span> RETURN 0<span class="p">;</span> <span class="o">}</span>
 </pre></div>
 </div>
@@ -885,7 +883,7 @@ ose<span class="o">(</span>file<span class="o">)</span><span class="p">;</span> 
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

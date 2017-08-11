@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>[-Wempty-character-class] &mdash; re2c 0.16 documentation</title>
-    
+    <title>[-Wempty-character-class] &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -46,7 +44,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../condition_order/wcondition_order.html">[-Wcondition-order]</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../useless_escape/wuseless_escape.html">[-Wuseless-escape]</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../swapped_range/wswapped_range.html">[-Wswapped-range]</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">[-Wempty-character-class]</a><ul class="simple">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">[-Wempty-character-class]</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../match_empty_string/wmatch_empty_string.html">[-Wmatch-empty-string]</a></li>
@@ -73,26 +71,26 @@
 <h1>[-Wempty-character-class]<a class="headerlink" href="#wempty-character-class" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<p>This warning is complementary to <code class="docutils literal"><span class="pre">--empty-class</span></code> option.
-The option expects a single argument, one of the following:</p>
+<p>This warning is complementary to the <code class="docutils literal"><span class="pre">--empty-class</span></code> option.
+The option expects a single argument, which should be one of the following:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">match-empty</span></code> (default): empty character class matches empty string
-(that is, always matches and consumes no code units).
+<li><code class="docutils literal"><span class="pre">match-empty</span></code> (default): an empty character class matches an empty string
+(that is, it always matches and consumes no code units).
 This attitude is strange; however, some real-world programs rely on it.</li>
-<li><code class="docutils literal"><span class="pre">match-none</span></code>: empty character class never matches.
+<li><code class="docutils literal"><span class="pre">match-none</span></code>: an empty character class never matches.
 This is what logic suggests.</li>
-<li><code class="docutils literal"><span class="pre">error</span></code>: empty character class is an error.</li>
+<li><code class="docutils literal"><span class="pre">error</span></code>: an empty character class is an error.</li>
 </ul>
-<p>The <code class="docutils literal"><span class="pre">[-Wempty-character-class]</span></code> warning is a reminder for those
-who are not aware of <code class="docutils literal"><span class="pre">--empty-class</span></code> option.</p>
-<p>Note that empty character class can be constructed in many ways:</p>
+<p>The <code class="docutils literal"><span class="pre">[-Wempty-character-class]</span></code> warning is a reminder to those
+who are not aware of the <code class="docutils literal"><span class="pre">--empty-class</span></code> option.</p>
+<p>Note that an empty character class can be constructed in many ways:</p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
 4
 5
 6
-7</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/*!re2c</span>
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
 <span class="cm">    []                        { return 0; }</span>
 <span class="cm">    [^\x00-\xFF]              { return 1; }</span>
 <span class="cm">    [^] \ [^]                 { return 2; }</span>
@@ -107,7 +105,7 @@ who are not aware of <code class="docutils literal"><span class="pre">--empty-cl
 3
 4
 5
-6</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/* Generated by re2c 0.14.1.dev on Wed Nov 11 11:42:00 2015*/</span>
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cm">/* Generated by re2c 0.14.1.dev on Wed Nov 11 11:42:00 2015*/</span>
 
 <span class="p">{</span>
         <span class="n">YYCTYPE</span> <span class="n">yych</span><span class="p">;</span>
@@ -116,7 +114,7 @@ who are not aware of <code class="docutils literal"><span class="pre">--empty-cl
 </pre></div>
 </td></tr></table></div>
 <p>And warns:</p>
-<div class="highlight-none"><div class="highlight"><pre>re2c: warning: line 2: empty character class [-Wempty-character-class]
+<div class="highlight-none"><div class="highlight"><pre><span></span>re2c: warning: line 2: empty character class [-Wempty-character-class]
 re2c: warning: line 3: empty character class [-Wempty-character-class]
 re2c: warning: line 4: empty character class [-Wempty-character-class]
 re2c: warning: line 5: empty character class [-Wempty-character-class]
@@ -132,7 +130,7 @@ re2c: warning: line 6: empty character class [-Wempty-character-class]
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Release 0.16 &mdash; re2c 0.16 documentation</title>
-    
+    <title>Release 0.16 &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -41,7 +39,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples/examples.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../news.html">News</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="">Release 0.16</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Release 0.16</a></li>
 <li class="toctree-l2"><a class="reference internal" href="0_15_3.html">Release 0.15.3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="0_15_2.html">Release 0.15.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="0_15_1.html">Release 0.15.1</a></li>
@@ -65,33 +63,33 @@
 <p>This release adds a very important step in the process of code generation:
 minimization of the underlying DFA (deterministic finite automaton).
 Simply speaking, this means that re2c now generates less code
-(while the generated code behaves in exactly the same way).</p>
+(while the generated code behaves exactly the same).</p>
 <p>DFA minimization is a very well-known technique
 and one might expect that any self-respecting lexer generator would definitely use it.
-So how could it be that re2c didn&#8217;t?
+So how could it be that re2c didn’t?
 In fact, re2c did use a couple of self-invented tricks to compress the generated code
-(one interesting technique is constructing <em>tunnel</em> automaton).
+(one interesting technique is the construction of a <em>tunnel</em> automaton).
 Some of these tricks were quite buggy (see <a class="reference external" href="https://bugs.gentoo.org/show_bug.cgi?id=518904">this bug report</a> for example).
-Now that re2c does canonical DFA minimization all this stuff is obsolete and has been dropped.</p>
-<p>A lot of attention has been paid to the correctness of DFA minimization.
-Usually re2c uses a very simple criterion to validate changes:
-the generated code for all tests in testsuite must remain the same.
-However, in case of DFA minimization the generated code changes dramatically.
+Now that re2c does canonical DFA minimization, all this stuff is obsolete and has been dropped.</p>
+<p>A lot of attention has been paid to the correctness of the DFA minimization.
+Usually, re2c uses a very simple criterion to validate changes:
+the generated code for all the tests in testsuite must remain the same.
+However, in the case of DFA minimization the generated code changes dramatically.
 It is impossible to verify the changes manually.</p>
 <p>One possible verification tool is <a class="reference external" href="../../manual/features/skeleton/skeleton.html">skeleton</a>.
 Because skeleton is constructed prior to DFA minimization, it cannot be affected by any errors in its implementation.</p>
-<p>Another way to verify DFA minimization is to implement two different algorithms
-and compare the results. Minimization procedure has a very useful property:
-the miminal DFA is unique (with respect to state relabelling).
-We used Moore&#8217;s and so-called <em>table filling</em> algorithms:
-Moore&#8217;s algorithm is fast, while table filling is very simple to implement.
-There is an option <code class="docutils literal"><span class="pre">--dfa-minimization</span> <span class="pre">&lt;moore</span> <span class="pre">|</span> <span class="pre">table&gt;</span></code> that allows to choose
-a particular algorithm (defaults to <code class="docutils literal"><span class="pre">moore</span></code>), but it&#8217;s only useful for debugging
+<p>Another way to verify DFA minimization is by implementing two different algorithms
+and comparing the results. The minimization procedure has a very useful property:
+the miminal DFA is unique (with respect to state relabeling).
+We used the Moore and the so-called <em>table filling</em> algorithms:
+The Moore algorithm is fast, while table filling is very simple to implement.
+The <code class="docutils literal"><span class="pre">--dfa-minimization</span> <span class="pre">&lt;moore</span> <span class="pre">|</span> <span class="pre">table&gt;</span></code> option that allows choosing
+the particular algorithm (defaults to <code class="docutils literal"><span class="pre">moore</span></code>), but it’s only useful for debugging
 DFA minimization.</p>
 <p>A good side effect of messing with re2c internals is a significant speedup
 of code generation (see <a class="reference external" href="https://github.com/skvadrik/re2c/issues/128">this issue</a> for example).
-Test suite now runs twice as fast (at least).</p>
-<p>See <a class="reference external" href="../changelog/changelog.html">changelog</a> for the list of all changes.</p>
+The test suite now runs twice as fast (at least).</p>
+<p>See <a class="reference external" href="../changelog/changelog.html">changelog</a> for the list of changes.</p>
 </div>
 
 
@@ -101,7 +99,7 @@ Test suite now runs twice as fast (at least).</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

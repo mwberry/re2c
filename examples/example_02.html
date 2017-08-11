@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Recognizing strings: the need for YYMAXFILL &mdash; re2c 0.16 documentation</title>
-    
+    <title>Recognizing strings: the need for YYMAXFILL &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -41,12 +39,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../manual/manual.html">Manual</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="example_01.html">Recognizing integers: the sentinel method</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Recognizing strings: the need for YYMAXFILL</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Recognizing strings: the need for YYMAXFILL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_03.html">Arbitrary large input and YYFILL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_04.html">Parsing integers (multiple re2c blocks)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_05.html">Parsing integers (conditions)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns (encodings)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_07.html">C++98 lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_07.html">A C++98 lexer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -64,27 +62,27 @@
   <div class="section" id="recognizing-strings-the-need-for-yymaxfill">
 <h1>Recognizing strings: the need for YYMAXFILL<a class="headerlink" href="#recognizing-strings-the-need-for-yymaxfill" title="Permalink to this headline">¶</a></h1>
 <p>This example is about recognizing strings.
-Strings (in generic sense) are different from other kinds of lexemes: they can contain <em>arbitrary</em> characters.
-It makes them a way more difficult to lex: unlike <a class="reference external" href="example_01.html">Recognizing integers: the sentinel method</a> example,
-we cannot use sentinel character to stop at the end of input.
+Strings (in the generic sense) are different from other kinds of lexemes: they can contain <em>arbitrary</em> characters.
+That makes them way more difficult to lex: unlike in the <a class="reference external" href="example_01.html">Recognizing integers: the sentinel method</a> example,
+we cannot use a sentinel character to stop at the end of input.
 Suppose, for example, that our strings may be single or double-quoted
 and may contain any character in range <code class="docutils literal"><span class="pre">[0</span> <span class="pre">-</span> <span class="pre">0xFF]</span></code> except quotes of the appropriate type.
-This time we cannot use <code class="docutils literal"><span class="pre">NULL</span></code> as a sentinel: input strings like <code class="docutils literal"><span class="pre">&quot;aha\0ha&quot;</span></code> are perfectly valid,
-but ill-formed strings like <code class="docutils literal"><span class="pre">&quot;aha\0</span></code> are also possible and shouldn&#8217;t crash lexer.
+This time we cannot use <code class="docutils literal"><span class="pre">\0</span></code> as a sentinel: input strings such as <code class="docutils literal"><span class="pre">&quot;aha\0ha&quot;</span></code> are perfectly valid,
+but ill-formed strings such as <code class="docutils literal"><span class="pre">&quot;aha\0</span></code> are also possible and shouldn’t crash the lexer.
 Any other character cannot be used for the same reason
-(including quotes: each type of strings can contain quotes of the opposite type).</p>
-<p>By default re2c-generated lexers use the following approach to check for the end of input:
-they assume that <code class="docutils literal"><span class="pre">YYLIMIT</span></code> is a pointer to the end of input and check by simply comparing <code class="docutils literal"><span class="pre">YYCURSOR</span></code> and <code class="docutils literal"><span class="pre">YYLIMIT</span></code>.
-The obvious way is to check on each input character (before advancing to the next character), but it&#8217;s very slow.
+(including quotes: each type of string may contain quotes of the opposite type).</p>
+<p>By default, re2c-generated lexers use the following approach to check for the end of the input buffer:
+they assume that <code class="docutils literal"><span class="pre">YYLIMIT</span></code> is a pointer to the end of the input buffer, and they check by simply comparing <code class="docutils literal"><span class="pre">YYCURSOR</span></code> and <code class="docutils literal"><span class="pre">YYLIMIT</span></code>.
+The obvious way to accomplish this is by checking on each input character (before advancing to the next character), but that’s very slow.
 Instead, re2c inserts checks only at certain points in the generated program.
 Each check ensures that there is enough input to proceed until the next check.
-If the check fails, lexer calls <code class="docutils literal"><span class="pre">YYFILL(n)</span></code>, which can either supply at least <code class="docutils literal"><span class="pre">n</span></code> characters or stop:</p>
+If the check fails, the lexer calls <code class="docutils literal"><span class="pre">YYFILL(n)</span></code>, which may either supply at least <code class="docutils literal"><span class="pre">n</span></code> characters or stop:</p>
 <blockquote>
 <div><code class="docutils literal"><span class="pre">if</span> <span class="pre">((YYLIMIT</span> <span class="pre">-</span> <span class="pre">YYCURSOR)</span> <span class="pre">&lt;</span> <span class="pre">n)</span> <span class="pre">YYFILL(n);</span></code></div></blockquote>
 <p>For those interested in the internal re2c algorithm used to determine checkpoints,
-here is a quote from the original paper
-<a class="reference download internal" href="../_downloads/1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf"><code class="xref download docutils literal"><span class="pre">&quot;RE2C:</span> <span class="pre">a</span> <span class="pre">more</span> <span class="pre">versatile</span> <span class="pre">scanner</span> <span class="pre">generator&quot;</span></code></a>
-by Peter Bumbulis, Donald D. Cowan, 1994, ACM Letters on Programming Languages and Systems (LOPLAS):</p>
+here is a quotation from the original paper
+<a class="reference download internal" href="../_downloads/1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf" download=""><code class="xref download docutils literal"><span class="pre">&quot;RE2C:</span> <span class="pre">a</span> <span class="pre">more</span> <span class="pre">versatile</span> <span class="pre">scanner</span> <span class="pre">generator&quot;</span></code></a>
+<em>by Peter Bumbulis, Donald D. Cowan, 1994, ACM Letters on Programming Languages and Systems (LOPLAS)</em>:</p>
 <blockquote>
 <div><em>A set of key states can be determined by discovering the strongly-connected components (SCCs) of the
 DFA. An SCC is a maximal subset of states such that there exists a path from any state in the subset to any
@@ -93,10 +91,10 @@ Note that for each SCC S, we actually only have to include a subset of states of
 is removed, S becomes acyclic.</em></div></blockquote>
 <p>This approach reduces the number of checks significantly, but it has a downside.
 Since the lexer checks for multiple characters at once, the last few input characters may become unreachable.
-Common hack is to pad input with a few fake characters that <strong>do not form a valid lexeme or lexeme suffix</strong>.
-The length of padding depends on the maximal argument to <code class="docutils literal"><span class="pre">YYFILL</span></code>
-(this value is called <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> and can be generated using <code class="docutils literal"><span class="pre">/*!max:re2c*/</span></code> directive).</p>
-<p><a class="reference download internal" href="../_downloads/02_recognizing_strings.re.txt"><code class="xref download docutils literal"><span class="pre">[02_recognizing_strings.re]</span></code></a></p>
+A common hack is to pad the input with a few fake characters that <strong>do not form a valid lexeme or lexeme suffix</strong>.
+The length of the padding depends on the maximum argument to <code class="docutils literal"><span class="pre">YYFILL</span></code>
+(this value is called <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> and can be generated with the <code class="docutils literal"><span class="pre">/*!max:re2c*/</span></code> directive).</p>
+<p><a class="reference download internal" href="../_downloads/02_recognizing_strings.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[02_recognizing_strings.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -143,29 +141,29 @@ The length of padding depends on the maximal argument to <code class="docutils l
 44
 45
 46
-47</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
-<span class="cp">#include &lt;string.h&gt;</span>
+47</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
 
 <span class="cm">/*!max:re2c*/</span>
 
-<span class="k">struct</span> <span class="kt">input_t</span> <span class="p">{</span>
+<span class="k">struct</span> <span class="n">input_t</span> <span class="p">{</span>
     <span class="kt">size_t</span> <span class="n">len</span><span class="p">;</span>
     <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">;</span>
 
-    <span class="kt">input_t</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">input_t</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">)</span>
         <span class="o">:</span> <span class="n">len</span><span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
         <span class="p">,</span> <span class="n">str</span><span class="p">(</span><span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span> <span class="o">+</span> <span class="n">YYMAXFILL</span><span class="p">])</span>
     <span class="p">{</span>
         <span class="n">memcpy</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
         <span class="n">memset</span><span class="p">(</span><span class="n">str</span> <span class="o">+</span> <span class="n">len</span><span class="p">,</span> <span class="sc">&#39;a&#39;</span><span class="p">,</span> <span class="n">YYMAXFILL</span><span class="p">);</span>
     <span class="p">}</span>
-    <span class="o">~</span><span class="kt">input_t</span><span class="p">()</span>
+    <span class="o">~</span><span class="n">input_t</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">delete</span><span class="p">[]</span><span class="n">str</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">};</span>
 
-<span class="k">static</span> <span class="kt">bool</span> <span class="nf">lex</span><span class="p">(</span><span class="k">const</span> <span class="kt">input_t</span> <span class="o">&amp;</span> <span class="n">input</span><span class="p">)</span>
+<span class="k">static</span> <span class="kt">bool</span> <span class="nf">lex</span><span class="p">(</span><span class="k">const</span> <span class="n">input_t</span> <span class="o">&amp;</span> <span class="n">input</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">YYCURSOR</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">str</span><span class="p">;</span>
     <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="k">const</span> <span class="n">YYLIMIT</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">str</span> <span class="o">+</span> <span class="n">input</span><span class="p">.</span><span class="n">len</span> <span class="o">+</span> <span class="n">YYMAXFILL</span><span class="p">;</span>
@@ -185,7 +183,7 @@ The length of padding depends on the maximal argument to <code class="docutils l
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">argc</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">input_t</span> <span class="n">arg</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">input_t</span> <span class="n">arg</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">lex</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="o">?</span> <span class="s">&quot;str&quot;</span> <span class="o">:</span> <span class="s">&quot;err&quot;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
@@ -195,24 +193,24 @@ The length of padding depends on the maximal argument to <code class="docutils l
 <p>Notes:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">/*!max:re2c*/</span></code> (line 4) tells re2c to generate <code class="docutils literal"><span class="pre">#define</span> <span class="pre">YYMAXFILL</span> <span class="pre">n</span></code>.</li>
-<li>Input string is padded with <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> characters <code class="docutils literal"><span class="pre">'a'</span></code> (line 15).
-Sequence of <code class="docutils literal"><span class="pre">'a'</span></code> does not form a valid lexeme or lexeme suffix
-(but padding with quotes would cause false match on ill-formed input like <code class="docutils literal"><span class="pre">&quot;aha</span></code>).</li>
-<li><code class="docutils literal"><span class="pre">YYLIMIT</span></code> points at the end of padding (line 26).</li>
-<li><code class="docutils literal"><span class="pre">YYFILL</span></code> returns an error (line 29): if the input was correct, lexer should have stopped
-at the beginning of padding.</li>
-<li>If the rule matched (line 36), we ensure that lexer consumed <em>all</em> input characters
-and stopped exactly at the beginning of padding.</li>
+<li>The input string is padded with <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> <code class="docutils literal"><span class="pre">'a'</span></code> characters (line 15).
+The sequence of <code class="docutils literal"><span class="pre">'a'</span></code> does not form a valid lexeme or lexeme suffix
+(but padding with quotes would cause false matches on ill-formed inputs such as <code class="docutils literal"><span class="pre">&quot;aha</span></code>).</li>
+<li><code class="docutils literal"><span class="pre">YYLIMIT</span></code> points at the end of the padding (line 26).</li>
+<li><code class="docutils literal"><span class="pre">YYFILL</span></code> returns an error (line 29): if the input was correct, the lexer should have stopped
+at the beginning of the padding.</li>
+<li>If the rule matched (line 36), we ensure that the lexer has consumed <em>all</em> input characters
+and stopped exactly at the beginning of the padding.</li>
 <li>We have to use <code class="docutils literal"><span class="pre">re2c:define:YYFILL:naked</span> <span class="pre">=</span> <span class="pre">1;</span></code> (line 30)
-in order to suppress passing parameter to <code class="docutils literal"><span class="pre">YYFILL</span></code>.
+in order to suppress passing a parameter to <code class="docutils literal"><span class="pre">YYFILL</span></code>.
 (It was an unfortunate idea to make <code class="docutils literal"><span class="pre">YYFILL</span></code> a call expression by default:
-<code class="docutils literal"><span class="pre">YYFILL</span></code> has to stop the lexer eventually, that&#8217;s why it has to be a macro and not a function.
+<code class="docutils literal"><span class="pre">YYFILL</span></code> has to stop the lexer eventually. That’s why it has to be a macro and not a function.
 One should either set <code class="docutils literal"><span class="pre">re2c:define:YYFILL:naked</span> <span class="pre">=</span> <span class="pre">1;</span></code> or define <code class="docutils literal"><span class="pre">YYFILL(n)</span></code> as a macro.)</li>
 </ul>
-<p>Generate, compile and run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>re2c -o example.cc 02_recognizing_strings.re
-<span class="nv">$ </span>g++ -o example example.cc
-<span class="nv">$ </span>./example <span class="s1">&#39;&quot;a momentary&quot;&#39;</span> <span class="s1">&#39;&quot;&quot;&#39;</span> <span class="s1">&#39;&quot;lap&quot;se&quot;&#39;</span> <span class="s1">&#39;&quot;of&#39;</span> <span class="s1">&#39;&quot;&#39;</span> <span class="s1">&#39;&quot;rea&quot;&quot;son&quot;&#39;</span> <span class="s1">&#39;&#39;</span>
+<p>Generate, compile, and run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -o example.cc 02_recognizing_strings.re
+$ g++ -o example example.cc
+$ ./example <span class="s1">&#39;&quot;a momentary&quot;&#39;</span> <span class="s1">&#39;&quot;&quot;&#39;</span> <span class="s1">&#39;&quot;lap&quot;se&quot;&#39;</span> <span class="s1">&#39;&quot;of&#39;</span> <span class="s1">&#39;&quot;&#39;</span> <span class="s1">&#39;&quot;rea&quot;&quot;son&quot;&#39;</span> <span class="s1">&#39;&#39;</span>
 str: <span class="s2">&quot;a momentary&quot;</span>
 str: <span class="s2">&quot;&quot;</span>
 err: <span class="s2">&quot;lap&quot;</span>se<span class="s2">&quot;</span>
@@ -220,7 +218,7 @@ err: <span class="s2">&quot;lap&quot;</span>se<span class="s2">&quot;</span>
 err: <span class="s2">&quot;</span>
 <span class="s2">err: &quot;</span>rea<span class="s2">&quot;&quot;</span>son<span class="s2">&quot;</span>
 <span class="s2">err:</span>
-<span class="nv">$ </span><span class="s2">./example &quot;</span><span class="s1">&#39;a momentary&#39;</span><span class="s2">&quot; &quot;</span><span class="s1">&#39;&#39;</span><span class="s2">&quot; &quot;</span><span class="s1">&#39;lap&#39;</span>se<span class="s1">&#39;&quot; &quot;&#39;</span>of<span class="s2">&quot; &quot;</span><span class="s1">&#39;&quot; &quot;&#39;</span>rea<span class="s1">&#39;&#39;</span>son<span class="s1">&#39;&quot; &quot;&quot;</span>
+$<span class="s2"> ./example &quot;</span><span class="s1">&#39;a momentary&#39;</span><span class="s2">&quot; &quot;</span><span class="s1">&#39;&#39;</span><span class="s2">&quot; &quot;</span><span class="s1">&#39;lap&#39;</span>se<span class="s1">&#39;&quot; &quot;&#39;</span>of<span class="s2">&quot; &quot;</span><span class="s1">&#39;&quot; &quot;&#39;</span>rea<span class="s1">&#39;&#39;</span>son<span class="s1">&#39;&quot; &quot;&quot;</span>
 <span class="s1">str: &#39;</span>a momentary<span class="s1">&#39;</span>
 <span class="s1">str: &#39;&#39;</span>
 <span class="s1">err: &#39;</span>lap<span class="s1">&#39;se&#39;</span>
@@ -239,7 +237,7 @@ err:
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

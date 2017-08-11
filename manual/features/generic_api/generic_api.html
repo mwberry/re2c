@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Generic API &mdash; re2c 0.16 documentation</title>
-    
+    <title>Generic API &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -43,11 +41,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../../warnings/warnings.html">Warnings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../syntax/syntax.html">Syntax</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../features.html">Features</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../submatch/submatch.html">Submatch</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../conditions/conditions.html">Conditions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../state/state.html">State</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../reuse/reuse.html">Reuse</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../encodings/encodings.html">Encodings</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">Generic API</a><ul class="simple">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Generic API</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../skeleton/skeleton.html">Skeleton</a></li>
@@ -73,23 +72,23 @@
 <h1>Generic API<a class="headerlink" href="#generic-api" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<p><code class="docutils literal"><span class="pre">re2c</span></code> usually operates on input using pointer-like primitives
-<code class="docutils literal"><span class="pre">YYCURSOR</span></code>, <code class="docutils literal"><span class="pre">YYMARKER</span></code>, <code class="docutils literal"><span class="pre">YYCTXMARKER</span></code> and <code class="docutils literal"><span class="pre">YYLIMIT</span></code>.</p>
-<p>Generic input API (enabled with <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> switch) allows to
-customize input operations. In this mode, <code class="docutils literal"><span class="pre">re2c</span></code> will express all
+<p><code class="docutils literal"><span class="pre">re2c</span></code> usually operates on input with pointer-like primitives
+<code class="docutils literal"><span class="pre">YYCURSOR</span></code>, <code class="docutils literal"><span class="pre">YYMARKER</span></code>, <code class="docutils literal"><span class="pre">YYCTXMARKER</span></code>, and <code class="docutils literal"><span class="pre">YYLIMIT</span></code>.</p>
+<p>The generic input API (enabled with the <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> switch) allows
+customizing input operations. In this mode, <code class="docutils literal"><span class="pre">re2c</span></code> will express all
 operations on input in terms of the following primitives:</p>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
-<col width="28%" />
-<col width="72%" />
+<col width="27%" />
+<col width="73%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">YYPEEK</span> <span class="pre">()</span></code></td>
 <td>get current input character</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">YYSKIP</span> <span class="pre">()</span></code></td>
-<td>advance to the next character</td>
+<td>advance to next character</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">YYBACKUP</span> <span class="pre">()</span></code></td>
 <td>backup current input position</td>
@@ -97,13 +96,28 @@ operations on input in terms of the following primitives:</p>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">YYBACKUPCTX</span> <span class="pre">()</span></code></td>
 <td>backup current input position for trailing context</td>
 </tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">YYSTAGP</span> <span class="pre">(t)</span></code></td>
+<td>save current input position to tag <code class="docutils literal"><span class="pre">t</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">YYSTAGN</span> <span class="pre">(t)</span></code></td>
+<td>save default value to tag <code class="docutils literal"><span class="pre">t</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">YYMTAGP</span> <span class="pre">(t)</span></code></td>
+<td>append input position to the history of tag <code class="docutils literal"><span class="pre">t</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">YYMTAGN</span> <span class="pre">(t)</span></code></td>
+<td>append default value to the history of tag <code class="docutils literal"><span class="pre">t</span></code></td>
+</tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">YYRESTORE</span> <span class="pre">()</span></code></td>
 <td>restore current input position</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">YYRESTORECTX</span> <span class="pre">()</span></code></td>
 <td>restore current input position for trailing context</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">YYLESSTHAN</span> <span class="pre">(n)</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">YYRESTORETAG</span> <span class="pre">(t)</span></code></td>
+<td>restore current input position from tag <code class="docutils literal"><span class="pre">t</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">YYLESSTHAN</span> <span class="pre">(n)</span></code></td>
 <td>check if less than <code class="docutils literal"><span class="pre">n</span></code> input characters are left</td>
 </tr>
 </tbody>
@@ -121,7 +135,7 @@ has more details, and you can find some usage examples
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

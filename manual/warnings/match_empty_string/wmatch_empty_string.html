@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>[-Wmatch-empty-string] &mdash; re2c 0.16 documentation</title>
-    
+    <title>[-Wmatch-empty-string] &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -47,9 +45,9 @@
 <li class="toctree-l3"><a class="reference internal" href="../useless_escape/wuseless_escape.html">[-Wuseless-escape]</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../swapped_range/wswapped_range.html">[-Wswapped-range]</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../empty_character_class/wempty_character_class.html">[-Wempty-character-class]</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">[-Wmatch-empty-string]</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">[-Wmatch-empty-string]</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#a-simple-example">A simple example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#false-alarm">False alarm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#false-alarms">False alarms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#real-world-examples">Real-world examples</a><ul>
 <li class="toctree-l5"><a class="reference internal" href="#typos-in-definitions">Typos in definitions</a></li>
 <li class="toctree-l5"><a class="reference internal" href="#skipping-uninteresting-stuff">Skipping uninteresting stuff</a></li>
@@ -72,7 +70,7 @@
         <ul>
 <li><a class="reference internal" href="#">[-Wmatch-empty-string]</a><ul>
 <li><a class="reference internal" href="#a-simple-example">A simple example</a></li>
-<li><a class="reference internal" href="#false-alarm">False alarm</a></li>
+<li><a class="reference internal" href="#false-alarms">False alarms</a></li>
 <li><a class="reference internal" href="#real-world-examples">Real-world examples</a><ul>
 <li><a class="reference internal" href="#typos-in-definitions">Typos in definitions</a></li>
 <li><a class="reference internal" href="#skipping-uninteresting-stuff">Skipping uninteresting stuff</a></li>
@@ -98,9 +96,9 @@
 </div>
 <div class="section" id="a-simple-example">
 <h2>A simple example<a class="headerlink" href="#a-simple-example" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">[-Wmatch-empty-string]</span></code> warns when a rule is nullable (matches empty string).
-It was intended to prevent hitting eternal loop in cases like this:</p>
-<p><a class="reference download internal" href="../../../_downloads/wmatch_empty_string.re.txt"><code class="xref download docutils literal"><span class="pre">[wmatch_empty_string.re]</span></code></a></p>
+<p><code class="docutils literal"><span class="pre">[-Wmatch-empty-string]</span></code> warns when a rule is nullable (matches an empty string).
+It was intended to prevent infinite looping in cases such as this:</p>
+<p><a class="reference download internal" href="../../../_downloads/wmatch_empty_string.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[wmatch_empty_string.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -117,7 +115,7 @@ It was intended to prevent hitting eternal loop in cases like this:</p>
 14
 15
 16
-17</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
 <span class="p">{</span>
@@ -141,7 +139,7 @@ and tries to lex each argument (the inner <code class="docutils literal"><span c
 Lexer stops when all input has been consumed and it sees the terminating <code class="docutils literal"><span class="pre">NULL</span></code>.
 Arguments must consist of lowercase letters only.
 Generate, compile and run:</p>
-<div class="highlight-none"><div class="highlight"><pre>$ re2c -o example.c -Wmatch-empty-string wmatch_empty_string.re
+<div class="highlight-none"><div class="highlight"><pre><span></span>$ re2c -o example.c -Wmatch-empty-string wmatch_empty_string.re
 re2c: warning: line 11: rule matches empty string [-Wmatch-empty-string]
 $ g++ -o example example.c
 $
@@ -159,18 +157,18 @@ argv[1]: oh
 </div>
 <p>The program hangs forever if one of the arguments is ill-formed.</p>
 <p>Note that <a class="reference external" href="../undefined_control_flow/wundefined_control_flow.html">[-Wundefined-control-flow]</a>
-has no complaints about this particular case: all input patterns are covered by rules.
-Yet if we add default rule <code class="docutils literal"><span class="pre">*</span></code>, lexer won&#8217;t hang anymore: it will match default rule
-instead of nullable rule.</p>
-<p>The fix is easy: make the rule non-nullable (say, <code class="docutils literal"><span class="pre">[a-z]+</span></code>) and add default rule <code class="docutils literal"><span class="pre">*</span></code>.</p>
+has no complaints about this particular case: all input patterns are covered by the rules.
+Yet if we add the default rule (<code class="docutils literal"><span class="pre">*</span></code>), the lexer won’t hang anymore: it will match the default rule
+instead of the nullable rule.</p>
+<p>The fix is easy: make the rule non-nullable (say, <code class="docutils literal"><span class="pre">[a-z]+</span></code>) and add the default rule (<code class="docutils literal"><span class="pre">*</span></code>).</p>
 </div>
-<div class="section" id="false-alarm">
-<h2>False alarm<a class="headerlink" href="#false-alarm" title="Permalink to this headline">¶</a></h2>
-<p>In many cases matching empty string makes perfect sense:</p>
+<div class="section" id="false-alarms">
+<h2>False alarms<a class="headerlink" href="#false-alarms" title="Permalink to this headline">¶</a></h2>
+<p>In many cases, matching an empty string makes perfect sense:</p>
 <ul class="simple">
 <li>It might be used as a non-consuming default rule.</li>
-<li>It might be used to lex an optional lexeme: if lexeme rules didn&#8217;t match,
-lexer must jump to another block and resume lexing at the same input position.</li>
+<li>It might be used to lex an optional lexeme: if lexeme rules didn’t match,
+the lexer must jump to another block and resume lexing at the same input position.</li>
 </ul>
 <p>Or any other useful examples you can invent.
 All these cases are perfectly sane.
@@ -183,7 +181,7 @@ Maybe re2c should move this warning to some paranoid level.</p>
 That is, to accept zero or more repetitions instead of one or more.</p>
 <div class="section" id="typos-in-definitions">
 <h3>Typos in definitions<a class="headerlink" href="#typos-in-definitions" title="Permalink to this headline">¶</a></h3>
-<p>Here is the skeleton of REXX lexer (the very lexer which motivated Peter to write re2c <code class="docutils literal"><span class="pre">:)</span></code>).</p>
+<p>Here is a skeleton of a REXX lexer (the very lexer that motivated Peter to write re2c <code class="docutils literal"><span class="pre">:)</span></code>).</p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
   2
   3
@@ -322,7 +320,7 @@ That is, to accept zero or more repetitions instead of one or more.</p>
 136
 137
 138
-139</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/*!re2c</span>
+139</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
 <span class="cm">    all    = [\000-\377];</span>
 <span class="cm">    eof    = [\000];</span>
 <span class="cm">    any    = all\eof;</span>
@@ -464,34 +462,34 @@ That is, to accept zero or more repetitions instead of one or more.</p>
 </pre></div>
 </td></tr></table></div>
 <p><code class="docutils literal"><span class="pre">`re2c</span> <span class="pre">-Wmatch-empty-string`</span></code> warns:</p>
-<div class="highlight-none"><div class="highlight"><pre>re2c: warning: line 133: rule matches empty string [-Wmatch-empty-string]
+<div class="highlight-none"><div class="highlight"><pre><span></span>re2c: warning: line 133: rule matches empty string [-Wmatch-empty-string]
 </pre></div>
 </div>
 <p>The faulty rule is <code class="docutils literal"><span class="pre">symbol</span></code>.
 It is defined as <code class="docutils literal"><span class="pre">symchr*</span></code> and clearly is nullable.
-In this particular example (assuming ASCII encoding) empty match is shadowed by other rules:
-together <code class="docutils literal"><span class="pre">eof</span></code> and <code class="docutils literal"><span class="pre">any</span></code> cover all possible code units.
-So in this case there is no chance of hitting eternal loop.</p>
-<p>However, by no means <code class="docutils literal"><span class="pre">symbol</span></code> should be nullable: it makes no sense.
-Sure, it&#8217;s just a typo and the author meant <code class="docutils literal"><span class="pre">symchr+</span></code>.</p>
+In this particular example (assuming ASCII encoding), the empty match is shadowed by other rules:
+together <code class="docutils literal"><span class="pre">eof</span></code> and <code class="docutils literal"><span class="pre">any</span></code> cover all possible code units,
+so in this case, there is no chance of hitting an infinite loop.</p>
+<p>However, by no means should <code class="docutils literal"><span class="pre">symbol</span></code> be nullable: it makes no sense.
+Surely, it is just a typo and the author meant <code class="docutils literal"><span class="pre">symchr+</span></code>.</p>
 </div>
 <div class="section" id="skipping-uninteresting-stuff">
 <h3>Skipping uninteresting stuff<a class="headerlink" href="#skipping-uninteresting-stuff" title="Permalink to this headline">¶</a></h3>
-<p>One often needs to skip variable number of, say, spaces:</p>
-<div class="highlight-cpp"><div class="highlight"><pre><span class="cm">/*!re2c</span>
+<p>One often needs to skip a variable number of, say, spaces:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
 <span class="cm">    TABS_AND_SPACES = [ \t]*;</span>
 <span class="cm">*/</span>
 </pre></div>
 </div>
 <p>This definition is ok when used inside of another (non-nullable) rule:</p>
-<div class="highlight-cpp"><div class="highlight"><pre><span class="cm">/*!re2c</span>
+<div class="highlight-cpp"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
 <span class="cm">    TABS_AND_SPACES = [ \t]*;</span>
 <span class="cm">    &quot;(&quot; TABS_AND_SPACES (&quot;int&quot; | &quot;integer&quot;) TABS_AND_SPACES &quot;)&quot; {}</span>
 <span class="cm">*/</span>
 </pre></div>
 </div>
-<p>However, as a standalone rule it may cause eternal loop on ill-formed input.
-And it&#8217;s very common to reuse one rule for multiple purposes.</p>
+<p>However, as a standalone rule, it may cause an infinite loop on ill-formed input.
+And it’s very common to reuse one rule for multiple purposes.</p>
 </div>
 </div>
 </div>
@@ -503,7 +501,7 @@ And it&#8217;s very common to reuse one rule for multiple purposes.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

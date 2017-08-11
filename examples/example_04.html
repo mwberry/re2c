@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Parsing integers (multiple re2c blocks) &mdash; re2c 0.16 documentation</title>
-    
+    <title>Parsing integers (multiple re2c blocks) &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -43,10 +41,10 @@
 <li class="toctree-l2"><a class="reference internal" href="example_01.html">Recognizing integers: the sentinel method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_02.html">Recognizing strings: the need for YYMAXFILL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_03.html">Arbitrary large input and YYFILL</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Parsing integers (multiple re2c blocks)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Parsing integers (multiple re2c blocks)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_05.html">Parsing integers (conditions)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns (encodings)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_07.html">C++98 lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_07.html">A C++98 lexer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -63,12 +61,12 @@
             
   <div class="section" id="parsing-integers-multiple-re2c-blocks">
 <h1>Parsing integers (multiple re2c blocks)<a class="headerlink" href="#parsing-integers-multiple-re2c-blocks" title="Permalink to this headline">¶</a></h1>
-<p>This example is based on <a class="reference external" href="example_01.html">Recognizing integers: the sentinel method</a> example,
-only now integer literals are parsed rather than simply recognized.
+<p>This example is based on the <a class="reference external" href="example_01.html">Recognizing integers: the sentinel method</a> example,
+only now the integer literals are parsed rather than simply recognized.
 Parsing integers is simple: one can easily do it by hand.
 However, re2c-generated code <em>does</em> look like a simple handwritten parser:
 a couple of dereferences and conditional jumps. No overhead. <code class="docutils literal"><span class="pre">:)</span></code></p>
-<p><a class="reference download internal" href="../_downloads/04_parsing_integers_blocks.re.txt"><code class="xref download docutils literal"><span class="pre">[04_parsing_integers_blocks.re]</span></code></a></p>
+<p><a class="reference download internal" href="../_downloads/04_parsing_integers_blocks.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[04_parsing_integers_blocks.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -146,8 +144,8 @@ a couple of dereferences and conditional jumps. No overhead. <code class="docuti
 75
 76
 77
-78</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;limits.h&gt;</span>
-<span class="cp">#include &lt;stdio.h&gt;</span>
+78</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;limits.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 
 <span class="k">template</span><span class="o">&lt;</span><span class="kt">int</span> <span class="n">base</span><span class="o">&gt;</span>
 <span class="k">static</span> <span class="kt">bool</span> <span class="n">adddgt</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="o">&amp;</span><span class="n">u</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">d</span><span class="p">)</span>
@@ -229,14 +227,14 @@ a couple of dereferences and conditional jumps. No overhead. <code class="docuti
 <p>Notes:</p>
 <ul class="simple">
 <li>Configurations and definitions (lines 20 - 26) are not scoped to a single re2c block — they are global.
-Each block may override configurations, but this affects global scope.</li>
-<li>Blocks don&#8217;t have to be in the same function: they can be in separate functions or elsewhere
-as long as the exposed interface fits into lexical scope.</li>
+Each block may override configurations, but this affects the global scope.</li>
+<li>Blocks don’t have to be in the same function: they can be in separate functions or elsewhere
+as long as the exposed interface fits into the lexical scope.</li>
 </ul>
-<p>Generate, compile and run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>re2c -o example.cc 04_parsing_integers_blocks.re
-<span class="nv">$ </span>g++ -o example example.cc
-<span class="nv">$ </span>./example <span class="m">0</span> <span class="m">12345678901234567890</span> 0xFFFFffffFFFFffff 0x1FFFFffffFFFFffff 0xAbcDEf 0x00 <span class="m">007</span> 0B0 0b110101010 <span class="s2">&quot;&quot;</span>
+<p>Generate, compile, and run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -o example.cc 04_parsing_integers_blocks.re
+$ g++ -o example example.cc
+$ ./example <span class="m">0</span> <span class="m">12345678901234567890</span> 0xFFFFffffFFFFffff 0x1FFFFffffFFFFffff 0xAbcDEf 0x00 <span class="m">007</span> 0B0 0b110101010 <span class="s2">&quot;&quot;</span>
 0
 12345678901234567890
 18446744073709551615
@@ -258,7 +256,7 @@ error
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

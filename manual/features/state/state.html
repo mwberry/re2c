@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>State &mdash; re2c 0.16 documentation</title>
-    
+    <title>State &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -43,8 +41,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../../warnings/warnings.html">Warnings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../syntax/syntax.html">Syntax</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../features.html">Features</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../submatch/submatch.html">Submatch</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../conditions/conditions.html">Conditions</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">State</a><ul class="simple">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">State</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../reuse/reuse.html">Reuse</a></li>
@@ -74,46 +73,45 @@
 <div class="toctree-wrapper compound">
 </div>
 <p>When the <code class="docutils literal"><span class="pre">-f</span></code> flag is specified, <code class="docutils literal"><span class="pre">re2c</span></code> generates a scanner that can
-store its current state, return to the caller, and later resume
+store its current state, return to its caller, and later resume
 operations exactly where it left off.</p>
-<p>The default operation of <code class="docutils literal"><span class="pre">re2c</span></code> is a
-&#8220;pull&#8221; model, where the scanner asks for extra input whenever it needs it. However, this mode of operation assumes that the scanner is the &#8220;owner&#8221;
-the parsing loop, and that may not always be convenient.</p>
+<p>The default mode of operation in <code class="docutils literal"><span class="pre">re2c</span></code> is a
+“pull” model, where the scanner asks for extra input whenever it needs it. However, this mode of operation assumes that the scanner is the “owner” of the parsing loop, and that may not always be convenient.</p>
 <p>Typically, if there is a preprocessor ahead of the scanner in the
-stream, or for that matter any other procedural source of data, the
-scanner cannot &#8220;ask&#8221; for more data unless both scanner and source
-live in a separate threads.</p>
-<p>The <code class="docutils literal"><span class="pre">-f</span></code> flag is useful for just this situation: it lets users design
-scanners that work in a &#8220;push&#8221; model, i.e. where data is fed to the
+stream, or for that matter, any other procedural source of data, the
+scanner cannot “ask” for more data unless both the scanner and the source
+live in separate threads.</p>
+<p>The <code class="docutils literal"><span class="pre">-f</span></code> flag is useful exactly for situations like that: it lets users design
+scanners that work in a “push” model, i.e., a model where data is fed to the
 scanner chunk by chunk. When the scanner runs out of data to consume, it
-just stores its state, and return to the caller. When more input data is
+stores its state and returns to the caller. When more input data is
 fed to the scanner, it resumes operations exactly where it left off.</p>
-<p>Changes needed compared to the &#8220;pull&#8221; model:</p>
+<p>Changes needed compared to the “pull” model:</p>
 <ul class="simple">
-<li>User has to supply macros <code class="docutils literal"><span class="pre">YYSETSTATE</span> <span class="pre">()</span></code> and <code class="docutils literal"><span class="pre">YYGETSTATE</span> <span class="pre">(state)</span></code>.</li>
-<li>The <code class="docutils literal"><span class="pre">-f</span></code> option inhibits declaration of <code class="docutils literal"><span class="pre">yych</span></code> and <code class="docutils literal"><span class="pre">yyaccept</span></code>. So the
-user has to declare these. Also the user has to save and restore these.
-In the example <code class="docutils literal"><span class="pre">examples/push_model/push.re</span></code> these are declared as
-fields of the (C++) class of which the scanner is a method, so they do
-not need to be saved/restored explicitly. For C they could e.g. be made
-macros that select fields from a structure passed in as parameter.
+<li>The user has to supply macros named <code class="docutils literal"><span class="pre">YYSETSTATE</span> <span class="pre">()</span></code> and <code class="docutils literal"><span class="pre">YYGETSTATE</span> <span class="pre">(state)</span></code>.</li>
+<li>The <code class="docutils literal"><span class="pre">-f</span></code> option inhibits declaration of <code class="docutils literal"><span class="pre">yych</span></code> and <code class="docutils literal"><span class="pre">yyaccept</span></code>, so the
+user has to declare them and save and restore them where required.
+In the <code class="docutils literal"><span class="pre">examples/push_model/push.re</span></code> example, these are declared as
+fields of a (C++) class of which the scanner is a method, so they do
+not need to be saved/restored explicitly. For C, they could, e.g., be made
+macros that select fields from a structure passed in as a parameter.
 Alternatively, they could be declared as local variables, saved with
-<code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code> when it decides to return and restored at entry to the
+<code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code> when it decides to return and restored upon entering the
 function. Also, it could be more efficient to save the state from
 <code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code> because <code class="docutils literal"><span class="pre">YYSETSTATE</span> <span class="pre">(state)</span></code> is called unconditionally.
-<code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code> however does not get <code class="docutils literal"><span class="pre">state</span></code> as parameter, so we would have
+<code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code> however does not get <code class="docutils literal"><span class="pre">state</span></code> as a parameter, so we would have
 to store state in a local variable by <code class="docutils literal"><span class="pre">YYSETSTATE</span> <span class="pre">(state)</span></code>.</li>
 <li>Modify <code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code> to return (from the function calling it) if more input is needed.</li>
-<li>Modify caller to recognise if more input is needed and respond appropriately.</li>
+<li>Modify the caller to recognize if more input is needed and respond appropriately.</li>
 <li>The generated code will contain a switch block that is used to
-restores the last state by jumping behind the corrspoding <code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code>
-call. This code is automatically generated in the epilog of the first <code class="docutils literal"><span class="pre">/*!re2c</span> <span class="pre">*/</span></code>
+restore the last state by jumping behind the corresponding <code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code>
+call. This code is automatically generated in the epilogue of the first <code class="docutils literal"><span class="pre">/*!re2c</span> <span class="pre">*/</span></code>
 block. It is possible to trigger generation of the <code class="docutils literal"><span class="pre">YYGETSTATE</span> <span class="pre">()</span></code>
 block earlier by placing a <code class="docutils literal"><span class="pre">/*!getstate:re2c*/</span></code> comment. This is especially useful when the scanner code should be
 wrapped inside a loop.</li>
 </ul>
-<p>Please see <code class="docutils literal"><span class="pre">examples/push_model/push.re</span></code> for &#8220;push&#8221; model scanner. The
-generated code can be tweaked using inplace configurations <code class="docutils literal"><span class="pre">state:abort</span></code>
+<p>Please see <code class="docutils literal"><span class="pre">examples/push_model/push.re</span></code> for an example of a “push” model scanner. The
+generated code can be tweaked with inplace configurations <code class="docutils literal"><span class="pre">state:abort</span></code>
 and <code class="docutils literal"><span class="pre">state:nextlabel</span></code>.</p>
 </div>
 
@@ -124,7 +122,7 @@ and <code class="docutils literal"><span class="pre">state:nextlabel</span></cod
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

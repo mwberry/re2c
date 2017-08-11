@@ -1,0 +1,145 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Submatch &#8212; re2c 0.16 documentation</title>
+    <link rel="stylesheet" href="../../../_static/theme-re2c.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.16',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head>
+  <body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c-0.16
+</div>
+
+<h3><a href="../../../index.html">Home</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../about/about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/install.html">Install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../manual.html">Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../options/options.html">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../warnings/warnings.html">Warnings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../syntax/syntax.html">Syntax</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../features.html">Features</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Submatch</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../conditions/conditions.html">Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../state/state.html">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reuse/reuse.html">Reuse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../encodings/encodings.html">Encodings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generic_api/generic_api.html">Generic API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../skeleton/skeleton.html">Skeleton</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dot/dot.html">.dot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../news/news.html">News</a></li>
+</ul>
+
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="submatch">
+<h1>Submatch<a class="headerlink" href="#submatch" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p><code class="docutils literal"><span class="pre">re2c</span></code> supports two kinds of submatch extraction.</p>
+<p>The first option is <code class="docutils literal"><span class="pre">-P</span> <span class="pre">--posix-captures</span></code>: it enables POSIX-compliant capturing groups.
+In this mode parentheses in regular expressions denote the beginning and the end of capturing groups;
+the whole regular expression is group number zero.
+The number of groups for the matching rule is stored in a variable <code class="docutils literal"><span class="pre">yynmatch</span></code>,
+and submatch results are stored in <code class="docutils literal"><span class="pre">yypmatch</span></code> array.
+Both <code class="docutils literal"><span class="pre">yynmatch</span></code> and <code class="docutils literal"><span class="pre">yypmatch</span></code> should be defined by the user;
+note that <code class="docutils literal"><span class="pre">yypmatch</span></code> size must be at least <code class="docutils literal"><span class="pre">[yynmatch</span> <span class="pre">*</span> <span class="pre">2]</span></code>.
+<code class="docutils literal"><span class="pre">re2c</span></code> provides a directive <code class="docutils literal"><span class="pre">/*!maxnmatch:re2c*/</span></code> that defines a constant <code class="docutils literal"><span class="pre">YYMAXNMATCH</span></code>: the maximal value of <code class="docutils literal"><span class="pre">yynmatch</span></code> among all rules.
+Note that <code class="docutils literal"><span class="pre">re2c</span></code> implements POSIX-compliant disambiguation:
+each subexpression matches as long as possible,
+and subexpressions that start earlier in regular expression have priority over those starting later.</p>
+<p>Second option is <code class="docutils literal"><span class="pre">-T</span> <span class="pre">--tags</span></code>.
+With this option one can use standalone tags of the form <code class="docutils literal"><span class="pre">&#64;stag</span></code> and <code class="docutils literal"><span class="pre">#mtag</span></code> instead of capturing parentheses,
+where <code class="docutils literal"><span class="pre">stag</span></code> and <code class="docutils literal"><span class="pre">mtag</span></code> are arbitrary used-defined names.
+Tags can be used anywhere inside of a regular expression; semantically they are just position markers.
+Tags of the form <code class="docutils literal"><span class="pre">&#64;stag</span></code> are called <em>s-tags</em>: they denote a single submatch value (the last input position where this tag matched).
+Tags of the form <code class="docutils literal"><span class="pre">#mtag</span></code> are called <em>m-tags</em>: they denote multiple submatch values (the whole history of repetitions of this tag).
+All tags should be defined by the user as variables with the corresponding names.
+With standalone tags <code class="docutils literal"><span class="pre">re2c</span></code> uses leftmost greedy disambiguation:
+submatch positions correspond to the leftmost matching path through the regular expression.</p>
+<p>With both <code class="docutils literal"><span class="pre">--posix-captures</span></code> and <code class="docutils literal"><span class="pre">--tags</span></code> options <code class="docutils literal"><span class="pre">re2c</span></code> generates a number of tag variables
+that are used by the lexer to track multiple possible versions of each tag
+(multiple versions are caused by possible ambiguity of submatch).
+When a rule matches, ambiguity is resolved and all tags of this rule (or capturing parentheses, which are also implemented as tags)
+are initialized with the values of appropriate tag variables.
+Note that there is no one-to-one correspondence between tag variables and tags:
+the same tag variable may be reused for different tags, and one tag may require multiple tag variables to hold all its ambiguous versions.
+The exact number of tag variables is unknown to the user; this number is determined by <code class="docutils literal"><span class="pre">re2c</span></code>.
+However, tag variables should be defined by the user, because it might be necessary to update them in <code class="docutils literal"><span class="pre">YYFILL</span></code>
+and store them between invocations of lexer with <code class="docutils literal"><span class="pre">--storable-state</span></code> option.
+Therefore <code class="docutils literal"><span class="pre">re2c</span></code> provides directives <code class="docutils literal"><span class="pre">/*!stags:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code> and <code class="docutils literal"><span class="pre">/*!mtags:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code>
+that can be used to declare, initialize and manipulate tag variables.</p>
+<p><em>S-tags</em> must support the following operations:</p>
+<ul class="simple">
+<li>save input position to <em>s-tag</em>:
+<code class="docutils literal"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">YYCURSOR</span></code> with default API, or user-defined operation <code class="docutils literal"><span class="pre">YYSTAGP</span> <span class="pre">(t)</span></code> with generic API</li>
+<li>save default value to <em>s-tag</em>:
+<code class="docutils literal"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">NULL</span></code> with default API, or user-defined operation <code class="docutils literal"><span class="pre">YYSTAGN</span> <span class="pre">(t)</span></code> with generic API</li>
+<li>copy one <em>s-tag</em> to another:
+<code class="docutils literal"><span class="pre">t1</span> <span class="pre">=</span> <span class="pre">t2</span></code></li>
+</ul>
+<p><em>M-tags</em> must support the following operations:</p>
+<ul class="simple">
+<li>append input position to <em>m-tag</em>:
+user-defined operation <code class="docutils literal"><span class="pre">YYMTAGP</span> <span class="pre">(t)</span></code> with both default and generic API</li>
+<li>append default value to <em>m-tag</em>:
+user-defined operation <code class="docutils literal"><span class="pre">YYMTAGN</span> <span class="pre">(t)</span></code> with both default and generic API</li>
+<li>copy one <em>m-tag</em> to another:
+<code class="docutils literal"><span class="pre">t1</span> <span class="pre">=</span> <span class="pre">t2</span></code></li>
+</ul>
+<p><em>S-tags</em> can be implemented as scalar values (pointers or offsets).
+<em>M-tags</em> need a more complex representation, as they need to store a sequence of tag values.
+The most naive and inefficient representation of <em>m-tag</em> is a list (array, vector) of tag values;
+a more efficient representation is to store all <em>m-tags</em> in a prefix-tree
+represented as array of nodes <code class="docutils literal"><span class="pre">(v,</span> <span class="pre">p)</span></code>, where <code class="docutils literal"><span class="pre">v</span></code> is tag value and <code class="docutils literal"><span class="pre">p</span></code> is a pointer to parent node.</p>
+<p>For further details see <code class="docutils literal"><span class="pre">http://re2c.org/examples/examples.html</span></code> page on the website
+or <code class="docutils literal"><span class="pre">re2c/examples/</span></code> subdirectory of <code class="docutils literal"><span class="pre">re2c</span></code> distribution.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Aug 11, 2017.
+    </div>
+  </body>
+</html>

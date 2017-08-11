@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Install &mdash; re2c 0.16 documentation</title>
-    
+    <title>Install &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -37,7 +35,7 @@
 <h3><a href="../index.html">Home</a></h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../about/about.html">About</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Install</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Install</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#download">Download</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#tarballs">Tarballs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sources">Sources</a></li>
@@ -50,7 +48,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#build">Build</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#simple">Simple</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#bootstrap">Bootstrap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bootstrapping">Bootstrapping</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#out-of-source">Out-of-source</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#windows">Windows</a></li>
 </ul>
@@ -79,7 +77,7 @@
 </li>
 <li><a class="reference internal" href="#build">Build</a><ul>
 <li><a class="reference internal" href="#simple">Simple</a></li>
-<li><a class="reference internal" href="#bootstrap">Bootstrap</a></li>
+<li><a class="reference internal" href="#bootstrapping">Bootstrapping</a></li>
 <li><a class="reference internal" href="#out-of-source">Out-of-source</a></li>
 <li><a class="reference internal" href="#windows">Windows</a></li>
 </ul>
@@ -108,6 +106,7 @@
 <div class="section" id="tarballs">
 <h3>Tarballs<a class="headerlink" href="#tarballs" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li><a class="reference external" href="https://github.com/skvadrik/re2c/releases/download/1.0/re2c-1.0.tar.gz">re2c-1.0.tar.gz</a></li>
 <li><a class="reference external" href="https://github.com/skvadrik/re2c/releases/download/0.16/re2c-0.16.tar.gz">re2c-0.16.tar.gz</a></li>
 <li><a class="reference external" href="https://github.com/skvadrik/re2c/releases/download/0.15.3/re2c-0.15.3.tar.gz">re2c-0.15.3.tar.gz</a></li>
 <li><a class="reference external" href="https://github.com/skvadrik/re2c/releases/download/0.14.3/re2c-0.14.3.tar.gz">re2c-0.14.3.tar.gz</a></li>
@@ -122,12 +121,12 @@ most of them contain bugs that have been fixed in the next minor release).</p>
 <div class="section" id="sources">
 <h3>Sources<a class="headerlink" href="#sources" title="Permalink to this headline">¶</a></h3>
 <p>re2c is hosted on <a class="reference external" href="https://github.com/skvadrik/re2c">github</a>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git clone git@github.com:skvadrik/re2c.git re2c
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ git clone git@github.com:skvadrik/re2c.git re2c
 </pre></div>
 </div>
-<p>There&#8217;s also a mirror on <a class="reference external" href="https://sourceforge.net/p/re2c/code-git/ci/master/tree/">sourceforge</a>
+<p>There’s also a mirror on <a class="reference external" href="https://sourceforge.net/p/re2c/code-git/ci/master/tree/">sourceforge</a>
 (should be in sync with github):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git clone ssh://git.code.sf.net/p/re2c/code-git re2c
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ git clone ssh://git.code.sf.net/p/re2c/code-git re2c
 </pre></div>
 </div>
 </div>
@@ -164,37 +163,37 @@ can be found on <a class="reference external" href="http://pkgs.org/download/re2
 </div>
 <div class="section" id="build">
 <h2>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h2>
-<p>You only need C++98 compier to build re2c from tarball.
+<p>You only need a C++98 compiler to build re2c from the tarball.
 If you have bison, re2c will use it (otherwise it will use precompiled files).</p>
-<p>If you are building re2c from source (not from tarball), you will also need autotools:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./autogen.sh
+<p>If you are building re2c from source (not from a tarball), you will also need autotools:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./autogen.sh
 </pre></div>
 </div>
 <div class="section" id="simple">
 <h3>Simple<a class="headerlink" href="#simple" title="Permalink to this headline">¶</a></h3>
 <p>This will install re2c (binary and manpage) to <code class="docutils literal"><span class="pre">prefix</span></code> (<code class="docutils literal"><span class="pre">/usr/local</span></code> by default):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./configure <span class="o">[</span>--prefix<span class="o">=</span>&lt;prefix&gt;<span class="o">]</span>
-<span class="nv">$ </span>make
-<span class="nv">$ </span>make install
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./configure <span class="o">[</span>--prefix<span class="o">=</span>&lt;prefix&gt;<span class="o">]</span>
+$ make
+$ make install
 </pre></div>
 </div>
 </div>
-<div class="section" id="bootstrap">
-<h3>Bootstrap<a class="headerlink" href="#bootstrap" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="bootstrapping">
+<h3>Bootstrapping<a class="headerlink" href="#bootstrapping" title="Permalink to this headline">¶</a></h3>
 <p>Some parts of re2c (lexers and parser of command-line options) are written in re2c.
-These files are precompiled and packaged into re2c distribution (so that re2c can be built without re2c).
+These files are precompiled and packaged into the re2c distribution (so that re2c can be built without re2c).
 However, one can fully bootstrap re2c:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>make bootstrap
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ make bootstrap
 </pre></div>
 </div>
 </div>
 <div class="section" id="out-of-source">
 <h3>Out-of-source<a class="headerlink" href="#out-of-source" title="Permalink to this headline">¶</a></h3>
 <p>re2c supports out-of-source builds:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir builddir <span class="o">&amp;&amp;</span> <span class="nb">cd </span>builddir
-<span class="nv">$ </span>../configure <span class="o">[</span>--prefix<span class="o">=</span>&lt;prefix&gt;<span class="o">]</span>
-<span class="nv">$ </span>make
-<span class="nv">$ </span>make install
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ mkdir builddir <span class="o">&amp;&amp;</span> <span class="nb">cd</span> builddir
+$ ../configure <span class="o">[</span>--prefix<span class="o">=</span>&lt;prefix&gt;<span class="o">]</span>
+$ make
+$ make install
 </pre></div>
 </div>
 </div>
@@ -203,9 +202,9 @@ However, one can fully bootstrap re2c:</p>
 <p>If you intend to use re2c on Windows, you can either
 use <a class="reference external" href="https://cygwin.com/">cygwin</a>
 or build re2c with <a class="reference external" href="http://mingw.org/">mingw</a>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./configure --host i686-w64-mingw32  <span class="o">[</span>--prefix<span class="o">=</span>&lt;prefix&gt;<span class="o">]</span>
-<span class="nv">$ </span>make
-<span class="nv">$ </span>make install
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./configure --host i686-w64-mingw32  <span class="o">[</span>--prefix<span class="o">=</span>&lt;prefix&gt;<span class="o">]</span>
+$ make
+$ make install
 </pre></div>
 </div>
 <p>(mingw builds are supported and tested regularly).</p>
@@ -214,23 +213,23 @@ or build re2c with <a class="reference external" href="http://mingw.org/">mingw<
 <div class="section" id="test">
 <h2>Test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h2>
 <p>re2c has a main test suite and a couple of small tests. Run them all:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>make check
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ make check
 </pre></div>
 </div>
 <p>Or run only the main test suite (and watch progress dumped to <code class="docutils literal"><span class="pre">stdout</span></code>):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>make tests
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ make tests
 </pre></div>
 </div>
-<p>Run test suite under <a class="reference external" href="http://valgrind.org/">valgrind</a> (takes a long time):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>make vtests
+<p>Run the test suite under <a class="reference external" href="http://valgrind.org/">valgrind</a> (takes a long time):</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ make vtests
 </pre></div>
 </div>
 <p>Test mingw builds with <a class="reference external" href="https://www.winehq.org/">wine</a>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>make wtests
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ make wtests
 </pre></div>
 </div>
 <p>Check the distribution:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>make distcheck
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ make distcheck
 </pre></div>
 </div>
 </div>
@@ -243,7 +242,7 @@ or build re2c with <a class="reference external" href="http://mingw.org/">mingw<
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

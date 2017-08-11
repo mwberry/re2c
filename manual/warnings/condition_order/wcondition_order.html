@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>[-Wcondition-order] &mdash; re2c 0.16 documentation</title>
-    
+    <title>[-Wcondition-order] &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -43,7 +41,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../warnings.html">Warnings</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../undefined_control_flow/wundefined_control_flow.html">[-Wundefined-control-flow]</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../unreachable_rules/wunreachable_rules.html">[-Wunreachable-rules]</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">[-Wcondition-order]</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">[-Wcondition-order]</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#a-simple-example">A simple example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#how-it-works">How it works</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#real-world-examples">Real-world examples</a></li>
@@ -92,11 +90,11 @@
 <h2>A simple example<a class="headerlink" href="#a-simple-example" title="Permalink to this headline">¶</a></h2>
 <p>The following lexer consists of two conditions: <code class="docutils literal"><span class="pre">a</span></code> and <code class="docutils literal"><span class="pre">b</span></code>.
 It starts in condition <code class="docutils literal"><span class="pre">a</span></code>, which expects a sequence of letters <code class="docutils literal"><span class="pre">'a'</span></code> followed by a comma.
-Comma causes transition to condition <code class="docutils literal"><span class="pre">b</span></code>, which expects a sequence of letters <code class="docutils literal"><span class="pre">'b'</span></code> followed by an exclamation.
+The comma causes transition to condition <code class="docutils literal"><span class="pre">b</span></code>, which expects a sequence of letters <code class="docutils literal"><span class="pre">'b'</span></code> followed by an exclamation mark.
 Anything else is an error.
-Nothing special, except that instead of generating condition names with <code class="docutils literal"><span class="pre">/*!types:re2c*/</span></code> directive
-or <code class="docutils literal"><span class="pre">-t,</span> <span class="pre">--type-header</span></code> option we hardcoded them manually:</p>
-<p><a class="reference download internal" href="../../../_downloads/wcondition_order.re.txt"><code class="xref download docutils literal"><span class="pre">[wcondition_order.re]</span></code></a></p>
+Nothing special, except that instead of generating condition names with the <code class="docutils literal"><span class="pre">/*!types:re2c*/</span></code> directive
+or the <code class="docutils literal"><span class="pre">-t,</span> <span class="pre">--type-header</span></code> option, we’ve hardcoded them manually:</p>
+<p><a class="reference download internal" href="../../../_downloads/wcondition_order.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[wcondition_order.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -130,7 +128,7 @@ or <code class="docutils literal"><span class="pre">-t,</span> <span class="pre"
 31
 32
 33
-34</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+34</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 
 <span class="cp">#ifdef REVERSED_CONDITION_ORDER</span>
 <span class="cp">#    define yyca 1</span>
@@ -166,9 +164,9 @@ or <code class="docutils literal"><span class="pre">-t,</span> <span class="pre"
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
-<p>Condition order is controlled by <code class="docutils literal"><span class="pre">REVERSED_CONDITION_ORDER</span></code> define.
-Let&#8217;s compile and run it:</p>
-<div class="highlight-none"><div class="highlight"><pre>$ re2c -c -o example.c -Wcondition-order wcondition_order.re
+<p>Condition order is controlled by the <code class="docutils literal"><span class="pre">REVERSED_CONDITION_ORDER</span></code> define.
+Let’s compile and run it:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>$ re2c -c -o example.c -Wcondition-order wcondition_order.re
 $
 $ g++ -o example example.c
 $ ./example
@@ -180,8 +178,8 @@ aaaa,bbb!
 </pre></div>
 </div>
 <p>Everything works fine: we get <code class="docutils literal"><span class="pre">aaaa,bbb!</span></code> in both cases.
-However, if we use <code class="docutils literal"><span class="pre">-s</span></code> re2c option, lexer becomes sensitive to condition order:</p>
-<div class="highlight-none"><div class="highlight"><pre>$ re2c -cs -o example.c -Wcondition-order wcondition_order.re
+However, if we use the <code class="docutils literal"><span class="pre">-s</span></code> re2c option, the lexer becomes sensitive to condition order:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>$ re2c -cs -o example.c -Wcondition-order wcondition_order.re
 re2c: warning: line 31: looks like you use hardcoded numbers instead of autogenerated condition names: better add
 &#39;/*!types:re2c*/&#39; directive or &#39;-t, --type-header&#39; option and don&#39;t rely on fixed condition order. [-Wcondition-order]
 $
@@ -195,55 +193,55 @@ error
 </pre></div>
 </div>
 <p>And we also get a warning from re2c.
-The same behaviour (re2c warning and error with <code class="docutils literal"><span class="pre">-DREVERSED_CONDITION_ORDER</span></code>) remains if we use <code class="docutils literal"><span class="pre">-g</span></code> option
+The same behavior (re2c warning and error with <code class="docutils literal"><span class="pre">-DREVERSED_CONDITION_ORDER</span></code>) remains if we use the <code class="docutils literal"><span class="pre">-g</span></code> option
 (or any option that implies <code class="docutils literal"><span class="pre">-s</span></code> or <code class="docutils literal"><span class="pre">-g</span></code>).
 Why is that?
 A look at the generated code explains everything.
-Normally the inital dispatch on conditions is a <code class="docutils literal"><span class="pre">switch</span></code> statement:</p>
-<div class="highlight-cpp"><div class="highlight"><pre><span class="k">switch</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+Normally the initial dispatch on conditions is a <code class="docutils literal"><span class="pre">switch</span></code> statement:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span></span><span class="k">switch</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="p">{</span>
 <span class="k">case</span> <span class="nl">yyca</span><span class="p">:</span> <span class="k">goto</span> <span class="n">yyc_a</span><span class="p">;</span>
 <span class="k">case</span> <span class="nl">yycb</span><span class="p">:</span> <span class="k">goto</span> <span class="n">yyc_b</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>Dispatch uses explicit condition names and works no matter what numbers are assigned to them.
-However, with <code class="docutils literal"><span class="pre">-s</span></code> option re2c generates an <code class="docutils literal"><span class="pre">if</span></code> statement instead of a <code class="docutils literal"><span class="pre">switch</span></code>:</p>
-<div class="highlight-cpp"><div class="highlight"><pre><span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+However, with the <code class="docutils literal"><span class="pre">-s</span></code> option, re2c generates an <code class="docutils literal"><span class="pre">if</span></code> statement instead of a <code class="docutils literal"><span class="pre">switch</span></code>:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">goto</span> <span class="n">yyc_a</span><span class="p">;</span>
 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="k">goto</span> <span class="n">yyc_b</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>And with <code class="docutils literal"><span class="pre">-g</span></code> option it uses jump table (computed <code class="docutils literal"><span class="pre">goto</span></code>):</p>
-<div class="highlight-cpp"><div class="highlight"><pre><span class="k">static</span> <span class="kt">void</span> <span class="o">*</span><span class="n">yyctable</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+<p>And with the <code class="docutils literal"><span class="pre">-g</span></code> option, it uses a jump table (computed <code class="docutils literal"><span class="pre">goto</span></code>):</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span> <span class="o">*</span><span class="n">yyctable</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="o">&amp;&amp;</span><span class="n">yyc_a</span><span class="p">,</span>
         <span class="o">&amp;&amp;</span><span class="n">yyc_b</span><span class="p">,</span>
 <span class="p">};</span>
 <span class="k">goto</span> <span class="o">*</span><span class="n">yyctable</span><span class="p">[</span><span class="n">c</span><span class="p">];</span>
 </pre></div>
 </div>
-<p>Clearly, the last two cases are sensitive to condition order.
-The fix is easy: as the warning suggests, use <code class="docutils literal"><span class="pre">/*!types:re2c*/</span></code> directive or <code class="docutils literal"><span class="pre">-t,</span> <span class="pre">--type-header</span></code> option.</p>
+<p>Clearly, the last two cases are condition order sensitive .
+The fix is easy: as the warning suggests, use the <code class="docutils literal"><span class="pre">/*!types:re2c*/</span></code> directive or the <code class="docutils literal"><span class="pre">-t,</span> <span class="pre">--type-header</span></code> option.</p>
 </div>
 <div class="section" id="how-it-works">
 <h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
 <p>The warning is triggered if at the same time:</p>
 <ul class="simple">
-<li>Conditions are enabled with <code class="docutils literal"><span class="pre">-c</span></code>.</li>
-<li>Neither <code class="docutils literal"><span class="pre">/*!types:re2c*/</span></code>, nor <code class="docutils literal"><span class="pre">-t,</span> <span class="pre">--type-header</span></code> is used.</li>
-<li>Initial dispatch on conditions in sensitive to condition order:
+<li>Conditions are enabled with with <code class="docutils literal"><span class="pre">-c</span></code>.</li>
+<li>Neither <code class="docutils literal"><span class="pre">/*!types:re2c*/</span></code> nor <code class="docutils literal"><span class="pre">-t,</span> <span class="pre">--type-header</span></code> is used.</li>
+<li>The initial condition dispatch is sensitive to condition order:
 it is either an <code class="docutils literal"><span class="pre">if</span></code> statement or a jump table.
 Note that the number of conditions must be greater than one,
-otherwise dispatch shrinks to a simple unconditional jump.</li>
+otherwise the dispatch shrinks to a simple unconditional jump.</li>
 </ul>
 </div>
 <div class="section" id="real-world-examples">
 <h2>Real-world examples<a class="headerlink" href="#real-world-examples" title="Permalink to this headline">¶</a></h2>
-<p>The  best real-world example is a story of how <code class="docutils literal"><span class="pre">[-Wcondition-order]</span></code> was added to re2c.</p>
-<p>One day I decided to change condition numbering scheme.
-It was only natural: re2c assigns numbers to conditions in the order they appear in code.
-This is not very convenient, because elsewhere in the code condition names (not numbers) are used as unique identifiers.
+<p>The  best real-world example is the story of how <code class="docutils literal"><span class="pre">[-Wcondition-order]</span></code> was added to re2c.</p>
+<p>One day I decided to change the condition numbering scheme.
+It was only natural: re2c assigns numbers to conditions in the order they appear in the code.
+This is not very convenient, because elsewhere in the code, condition names (not numbers) are used as unique identifiers.
 Names are sorted lexicographically, so the original condition order is not preserved.
 It takes extra care to remember the mapping of names to numbers.
 So why not just drop numbers and sort conditions by their names?
@@ -301,7 +299,7 @@ Here is the carcass of this program:</p>
 47
 48
 49
-50</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#define NORMAL 0</span>
+50</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#define NORMAL 0</span>
 <span class="cp">#define PRE_RAW 1</span>
 <span class="cp">#define RAW 2</span>
 <span class="cp">#define INITIAL 3</span>
@@ -356,7 +354,7 @@ Here is the carcass of this program:</p>
 <p>Curiously, the program somehow avoids using re2c-generated condition names:
 even <code class="docutils literal"><span class="pre">YYSETCONDITION</span></code> is called manually instead of using <code class="docutils literal"><span class="pre">=&gt;</span></code> in rules.
 The program uses <code class="docutils literal"><span class="pre">-g</span></code> option, so the initial dispatch does depend on condition order:</p>
-<div class="highlight-cpp"><div class="highlight"><pre><span class="k">static</span> <span class="kt">void</span> <span class="o">*</span><span class="n">yyctable</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight-cpp"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span> <span class="o">*</span><span class="n">yyctable</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
     <span class="o">&amp;&amp;</span><span class="n">yyc_NORMAL</span><span class="p">,</span>
     <span class="o">&amp;&amp;</span><span class="n">yyc_PRE_RAW</span><span class="p">,</span>
     <span class="o">&amp;&amp;</span><span class="n">yyc_RAW</span><span class="p">,</span>
@@ -377,7 +375,7 @@ Who wants to break the old code? <code class="docutils literal"><span class="pre
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

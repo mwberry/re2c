@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Skeleton &mdash; re2c 0.16 documentation</title>
-    
+    <title>Skeleton &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -43,12 +41,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../../warnings/warnings.html">Warnings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../syntax/syntax.html">Syntax</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../features.html">Features</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../submatch/submatch.html">Submatch</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../conditions/conditions.html">Conditions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../state/state.html">State</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../reuse/reuse.html">Reuse</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../encodings/encodings.html">Encodings</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../generic_api/generic_api.html">Generic API</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">Skeleton</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Skeleton</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#failures">Failures</a><ul>
 <li class="toctree-l5"><a class="reference internal" href="#artificial-examples">Artificial examples</a></li>
@@ -108,21 +107,21 @@
 <h1>Skeleton<a class="headerlink" href="#skeleton" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<p>With <code class="docutils literal"><span class="pre">-S,</span> <span class="pre">--skeleton</span></code> option re2c ignores all non-re2c code and generates a self-contained C program
+<p>With the <code class="docutils literal"><span class="pre">-S,</span> <span class="pre">--skeleton</span></code> option, re2c ignores all non-re2c code and generates a self-contained C program
 that can be further compiled and executed.
 The program consists of lexer code and input data.
-For each constructed DFA (block or condition) re2c generates a standalone lexer and two files:
-<code class="docutils literal"><span class="pre">.input</span></code> file with strings derived from the DFA and <code class="docutils literal"><span class="pre">.keys</span></code> file with expected match results.
+For each constructed DFA (block or condition), re2c generates a standalone lexer and two files:
+an <code class="docutils literal"><span class="pre">.input</span></code> file with strings derived from the DFA and a <code class="docutils literal"><span class="pre">.keys</span></code> file with expected match results.
 The program runs each lexer on the corresponding <code class="docutils literal"><span class="pre">.input</span></code> file
 and compares results with the expectations.</p>
 <p>For encodings with 1-byte code units (such as ASCII, UTF-8 and EBCDIC) the generated data
-covers all DFA transitions (in other words, skeleton program triggers each conditional jump in lexer).
+covers all DFA transitions (in other words, the skeleton program triggers each conditional jump in the lexer).
 For encodings with multibyte code units the generated data covers up to 256 transitions
-of each disjoint character range in DFA (see <a class="reference internal" href="#generating-data">Generating data</a> section for details).</p>
+of each disjoint character range in the DFA (see <a class="reference internal" href="#generating-data">Generating data</a> section for details).</p>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference download internal" href="../../../_downloads/hex2.re.txt"><code class="xref download docutils literal"><span class="pre">[hex2.re]</span></code></a></p>
-<div class="highlight-c"><div class="highlight"><pre><span class="cm">/*!re2c</span>
+<p><a class="reference download internal" href="../../../_downloads/hex2.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[hex2.re]</span></code></a></p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
 <span class="cm">    *              {}</span>
 <span class="cm">    [0-9a-fA-F]{2} {}</span>
 <span class="cm">*/</span>
@@ -133,9 +132,9 @@ We can see the generated DFA using <code class="docutils literal"><span class="p
 <a class="reference internal image-reference" href="../../../_images/example.png"><img alt="../../../_images/example.png" src="../../../_images/example.png" style="width: 50%;" /></a>
 <p>Given this program, <code class="docutils literal"><span class="pre">`re2c</span> <span class="pre">-S</span> <span class="pre">-o</span> <span class="pre">example.c</span> <span class="pre">hex2.re`</span></code> generates three files:
 <code class="docutils literal"><span class="pre">example.c</span></code> (main program), <code class="docutils literal"><span class="pre">example.c.line4.input</span></code> (input data) and <code class="docutils literal"><span class="pre">example.c.line4.keys</span></code> (expected match results).
-First, let&#8217;s look at the generated strings:</p>
-<p><a class="reference download internal" href="../../../_downloads/example.c.line4.input"><code class="xref download docutils literal"><span class="pre">[example.c.line4.input]</span></code></a></p>
-<div class="highlight-bash"><div class="highlight"><pre>$ hexdump -v -e &#39;&quot;%08_ax &quot; 24/1 &quot;%02x &quot;&#39; -e &#39;&quot; |&quot; 24/1 &quot;%_p&quot; &quot;|\n&quot;&#39; example.c.line4.input
+First, let’s look at the generated strings:</p>
+<p><a class="reference download internal" href="../../../_downloads/example.c.line4.input" download=""><code class="xref download docutils literal"><span class="pre">[example.c.line4.input]</span></code></a></p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>$ hexdump -v -e &#39;&quot;%08_ax &quot; 24/1 &quot;%02x &quot;&#39; -e &#39;&quot; |&quot; 24/1 &quot;%_p&quot; &quot;|\n&quot;&#39; example.c.line4.input
 00000000 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 |........................|
 00000018 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f |........ !&quot;#$%&amp;&#39;()*+,-./|
 00000030 3a 3b 3c 3d 3e 3f 40 47 48 49 4a 4b 4c 4d 4e 4f 50 51 52 53 54 55 56 57 |:;&lt;=&gt;?@GHIJKLMNOPQRSTUVW|
@@ -171,51 +170,51 @@ First, let&#8217;s look at the generated strings:</p>
 </pre></div>
 </div>
 <p>Byte sequences correspond to the paths in DFA.
-All strings are glued together, so it&#8217;s hard to tell where is the end of one string and the beginning of another.
+All strings are glued together, so it’s hard to tell where is the end of one string and the beginning of another.
 For that re2c generates keys:</p>
-<p><a class="reference download internal" href="../../../_downloads/example.c.line4.keys"><code class="xref download docutils literal"><span class="pre">[example.c.line4.keys]</span></code></a></p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$hexdump</span> -v -e <span class="s1">&#39;&quot;%08_ax &quot; 36/1 &quot;%02x &quot; &quot;\n&quot;&#39;</span> example.c.line4.keys
-<span class="m">00000000</span> <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-<span class="m">00000024</span> <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-<span class="m">00000048</span> <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-0000006c <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-<span class="m">00000090</span> <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-000000b4 <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-000000d8 <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-000000fc <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-<span class="m">00000120</span> <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-<span class="m">00000144</span> <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-<span class="m">00000168</span> <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-0000018c <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-000001b0 <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-000001d4 <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-000001f8 <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-0000021c <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-<span class="m">00000240</span> <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-<span class="m">00000264</span> <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-<span class="m">00000288</span> <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe
-000002ac <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">01</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> 00
-000002d0 <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> 00
-000002f4 <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">02</span> <span class="m">00</span> <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-<span class="m">00000318</span> <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-0000033c <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-<span class="m">00000360</span> <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-<span class="m">00000384</span> <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-000003a8 <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-000003cc <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-000003f0 <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-<span class="m">00000414</span> <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-<span class="m">00000438</span> <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-0000045c <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-<span class="m">00000480</span> <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-000004a4 <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-000004c8 <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-000004ec <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-<span class="m">00000510</span> <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-<span class="m">00000534</span> <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-<span class="m">00000558</span> <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-0000057c <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
-000005a0 <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe <span class="m">02</span> <span class="m">01</span> fe
+<p><a class="reference download internal" href="../../../_downloads/example.c.line4.keys" download=""><code class="xref download docutils literal"><span class="pre">[example.c.line4.keys]</span></code></a></p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>$hexdump -v -e &#39;&quot;%08_ax &quot; 36/1 &quot;%02x &quot; &quot;\n&quot;&#39; example.c.line4.keys
+00000000 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+00000024 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+00000048 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+0000006c 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+00000090 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+000000b4 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+000000d8 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+000000fc 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+00000120 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+00000144 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+00000168 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+0000018c 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+000001b0 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+000001d4 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+000001f8 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+0000021c 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+00000240 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+00000264 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+00000288 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+000002ac 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 02 02 00 02 02 00 02 02 00 02 02 00 02 02 00 02 02 00
+000002d0 02 02 00 02 02 00 02 02 00 02 02 00 02 02 00 02 02 00 02 02 00 02 02 00 02 02 00 02 02 00 02 02 00 02 02 00
+000002f4 02 02 00 02 02 00 02 02 00 02 02 00 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+00000318 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+0000033c 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+00000360 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+00000384 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+000003a8 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+000003cc 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+000003f0 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+00000414 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+00000438 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+0000045c 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+00000480 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+000004a4 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+000004c8 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+000004ec 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+00000510 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+00000534 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+00000558 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+0000057c 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
+000005a0 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe 02 01 fe
 </pre></div>
 </div>
 <p>A key is a triplet: string length, the length of matching prefix and the number of matching rule.
@@ -223,7 +222,7 @@ All three components occupy equal amount of memory (re2c uses unsigned integer t
 Keys are packed into array of length <code class="docutils literal"><span class="pre">3</span> <span class="pre">*</span> <span class="pre">n</span></code> (where <code class="docutils literal"><span class="pre">n</span></code> is the number of keys).
 In our case each triplet occupies three bytes.</p>
 <p>And finally, the program itself:</p>
-<p><a class="reference download internal" href="../../../_downloads/example.c.txt"><code class="xref download docutils literal"><span class="pre">[example.c]</span></code></a></p>
+<p><a class="reference download internal" href="../../../_downloads/example.c.txt" download=""><code class="xref download docutils literal"><span class="pre">[example.c]</span></code></a></p>
 <div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
   2
   3
@@ -465,10 +464,10 @@ In our case each triplet occupies three bytes.</p>
 239
 240
 241
-242</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/* Generated by re2c 0.15.2 on Wed Dec  2 08:46:58 2015 */</span>
+242</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cm">/* Generated by re2c 0.15.2 on Wed Dec  2 08:46:58 2015 */</span>
 
-<span class="cp">#include &lt;stdio.h&gt;</span>
-<span class="cp">#include &lt;stdlib.h&gt; </span><span class="cm">/* malloc, free */</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt; /* malloc, free */</span><span class="cp"></span>
 
 <span class="k">static</span> <span class="kt">void</span> <span class="o">*</span><span class="nf">read_file</span>
     <span class="p">(</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">fname</span>
@@ -716,9 +715,9 @@ This function is specific to each lexer.
 Lexing is done by <code class="docutils literal"><span class="pre">lex_line4</span></code>: this function contains the generated DFA.
 <code class="docutils literal"><span class="pre">main</span></code> simply calls the lexer.</p>
 <p>Compile and run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>gcc -o example example.c
-<span class="nv">$ </span>./example
-<span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$?</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>$ gcc -o example example.c
+$ ./example
+$ echo $?
 0
 </pre></div>
 </div>
@@ -726,16 +725,16 @@ Lexing is done by <code class="docutils literal"><span class="pre">lex_line4</sp
 </div>
 <div class="section" id="failures">
 <h2>Failures<a class="headerlink" href="#failures" title="Permalink to this headline">¶</a></h2>
-<p>Skeleton&#8217;s main purpose was to find and prevent errors in re2c code generation (which it did).
-I don&#8217;t have a ready example of failure (otherwise I would have fixed re2c),
+<p>Skeleton’s main purpose was to find and prevent errors in re2c code generation (which it did).
+I don’t have a ready example of failure (otherwise I would have fixed re2c),
 but we can trigger various errors by alternating the generated program, input and keys.</p>
 <div class="section" id="artificial-examples">
 <h3>Artificial examples<a class="headerlink" href="#artificial-examples" title="Permalink to this headline">¶</a></h3>
-<p>Let&#8217;s take the first key in <code class="docutils literal"><span class="pre">example.c.line4.keys</span></code>  (bytes <code class="docutils literal"><span class="pre">0x01</span></code>, <code class="docutils literal"><span class="pre">0x01</span></code> and <code class="docutils literal"><span class="pre">0xFE</span></code>) and mangle it in various ways.
-For example, let&#8217;s change the first byte (length of current input string) to <code class="docutils literal"><span class="pre">0xFF</span></code>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>re2c -S -o example.c hex2.re
-<span class="nv">$ </span>sed -i -e <span class="s1">&#39;s/\x01\x01\xfe/\xff\x01\xfe/&#39;</span> example.c.line4.keys
-<span class="nv">$ </span>./example
+<p>Let’s take the first key in <code class="docutils literal"><span class="pre">example.c.line4.keys</span></code>  (bytes <code class="docutils literal"><span class="pre">0x01</span></code>, <code class="docutils literal"><span class="pre">0x01</span></code> and <code class="docutils literal"><span class="pre">0xFE</span></code>) and mangle it in various ways.
+For example, let’s change the first byte (length of current input string) to <code class="docutils literal"><span class="pre">0xFF</span></code>:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -S -o example.c hex2.re
+$ sed -i -e <span class="s1">&#39;s/\x01\x01\xfe/\xff\x01\xfe/&#39;</span> example.c.line4.keys
+$ ./example
 error: lex_line4: unused input strings left at position 255
 error: lex_line4: unused keys left after <span class="m">1</span> iterations
 </pre></div>
@@ -743,38 +742,38 @@ error: lex_line4: unused keys left after <span class="m">1</span> iterations
 <p>Lexer complains about unused keys and input strings.
 The alternated parameter controls offset of the next string:
 lexer was forced to jump past the end of input.
-Now let&#8217;s alter the second byte (length of the matching prefix):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>re2c -S -o example.c hex2.re
-<span class="nv">$ </span>sed -i -e <span class="s1">&#39;s/\x01\x01\xfe/\x01\x03\xfe/&#39;</span> example.c.line4.keys
-<span class="nv">$ </span>./example
+Now let’s alter the second byte (length of the matching prefix):</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -S -o example.c hex2.re
+$ sed -i -e <span class="s1">&#39;s/\x01\x01\xfe/\x01\x03\xfe/&#39;</span> example.c.line4.keys
+$ ./example
 error: lex_line4: at position <span class="m">0</span> <span class="o">(</span>iteration 0<span class="o">)</span>:
         expected: match length 3, rule 254
         actual:   match length 1, rule 254
 </pre></div>
 </div>
 <p>Third byte stands for rule number:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>re2c -S -o example.c hex2.re
-<span class="nv">$ </span>sed -i -e <span class="s1">&#39;s/\x01\x01\xfe/\x01\x01\xfd/&#39;</span> example.c.line4.keys
-<span class="nv">$ </span>./example
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -S -o example.c hex2.re
+$ sed -i -e <span class="s1">&#39;s/\x01\x01\xfe/\x01\x01\xfd/&#39;</span> example.c.line4.keys
+$ ./example
 error: lex_line4: at position <span class="m">0</span> <span class="o">(</span>iteration 0<span class="o">)</span>:
         expected: match length 1, rule 253
         actual:   match length 1, rule 254
 </pre></div>
 </div>
-<p>Now let&#8217;s change the input string:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>re2c -S -o example.c hex2.re
-<span class="nv">$ </span>sed -i -e <span class="s1">&#39;s/@/00/&#39;</span> example.c.line4.input
-<span class="nv">$ </span>./example
+<p>Now let’s change the input string:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -S -o example.c hex2.re
+$ sed -i -e <span class="s1">&#39;s/@/00/&#39;</span> example.c.line4.input
+$ ./example
 error: lex_line4: at position <span class="m">3</span> <span class="o">(</span>iteration 3<span class="o">)</span>:
         expected: match length 1, rule 254
         actual:   match length 2, rule 0
 </pre></div>
 </div>
-<p>Finally, let&#8217;s break the generated code:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>re2c -S -o example.c hex2.re
-<span class="nv">$ </span>sed -i -e <span class="s2">&quot;s/case &#39;7&#39;://&quot;</span> example.c
-<span class="nv">$ </span>gcc -o example example.c
-<span class="nv">$ </span>./example
+<p>Finally, let’s break the generated code:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -S -o example.c hex2.re
+$ sed -i -e <span class="s2">&quot;s/case &#39;7&#39;://&quot;</span> example.c
+$ gcc -o example example.c
+$ ./example
 error: lex_line4: at position <span class="m">248</span> <span class="o">(</span>iteration 241<span class="o">)</span>:
         expected: match length 2, rule 0
         actual:   match length 1, rule 254
@@ -788,16 +787,16 @@ error: lex_line4: at position <span class="m">248</span> <span class="o">(</span
 Suppose, for example, that we forgot to handle default case in the example above:</p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
-3</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/*!re2c</span>
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
 <span class="cm">    [0-9a-fA-F]{2} {}</span>
 <span class="cm">*/</span>
 </pre></div>
 </td></tr></table></div>
 <p>In this case re2c generates code that is perfectly correct,
 but because of the undefined control flow skeleton program fails:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>re2c -S -o example.c hex2.re
-<span class="nv">$ </span>gcc -o example example.c
-<span class="nv">$ </span>./example
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -S -o example.c hex2.re
+$ gcc -o example example.c
+$ ./example
 warning: lex_line3: control flow is undefined <span class="k">for</span> input at position 72, rerun re2c with <span class="s1">&#39;-W&#39;</span>
 error: lex_line3: at position <span class="m">72</span> <span class="o">(</span>iteration 36<span class="o">)</span>:
         expected: match length 0, rule 255
@@ -806,7 +805,7 @@ error: lex_line3: at position <span class="m">72</span> <span class="o">(</span>
 </div>
 <p>In this case we are lucky: lexer erroneously hit an action and was terminated.
 We got a nice error and a warning that suggests that we should rerun re2c with <code class="docutils literal"><span class="pre">-W</span></code>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>re2c -W -S -o example.c hex2.re
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -W -S -o example.c hex2.re
 re2c: warning: line 3: control flow is undefined <span class="k">for</span> strings that match
         <span class="s1">&#39;[\x0-\x2F\x3A-\x40\x47-\x60\x67-\xFF]&#39;</span>
         <span class="s1">&#39;[\x30-\x39\x41-\x46\x61-\x66] [\x0-\x2F\x3A-\x40\x47-\x60\x67-\xFF]&#39;</span>
@@ -836,10 +835,10 @@ However, the total size of path cover depends quadratically on the number of edg
 an example is shown below and
 upper bound follows from the fact that total size is bounded by the number of paths
 times maximal path length, both values obviously bounded by the number of edges.</p>
-<p>The algorithm&#8217;s implementation is limited by ~1Gb of edges and consumes constant amount of RAM
+<p>The algorithm’s implementation is limited by ~1Gb of edges and consumes constant amount of RAM
 (re2c dumps data to file as soon as it is generated).
 We can study the algorithm simply alternating repetition counter in the example above:</p>
-<div class="highlight-cpp"><div class="highlight"><pre><span class="cm">/*!re2c</span>
+<div class="highlight-cpp"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
 <span class="cm">    *              {}</span>
 <span class="cm">    [0-9a-fA-F]{1} {} // [0-9a-fA-F]{2}, [0-9a-fA-F]{3}, [0-9a-fA-F]{4}, ...</span>
 <span class="cm">*/</span>
@@ -850,7 +849,7 @@ Compare the following pictures of DFA with one, two and three repetitions:</p>
 <a class="reference internal image-reference" href="../../../_images/example_next.png"><img alt="../../../_images/example_next.png" src="../../../_images/example_next.png" style="width: 80%;" /></a>
 <p>We will use a simple script that dumps re2c source file,
 generates skeleton program and measures the size of <code class="docutils literal"><span class="pre">.input</span></code> and <code class="docutils literal"><span class="pre">.keys</span></code> files:</p>
-<p><a class="reference download internal" href="../../../_downloads/gen.sh.txt"><code class="xref download docutils literal"><span class="pre">[gen.sh]</span></code></a></p>
+<p><a class="reference download internal" href="../../../_downloads/gen.sh.txt" download=""><code class="xref download docutils literal"><span class="pre">[gen.sh]</span></code></a></p>
 <div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
@@ -858,19 +857,19 @@ generates skeleton program and measures the size of <code class="docutils litera
 5
 6
 7
-8</pre></div></td><td class="code"><div class="highlight"><pre><span class="nb">printf</span> <span class="s2">&quot;%10s%10s%10s%10s\n\n&quot;</span> iters edges input keys
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nb">printf</span> <span class="s2">&quot;%10s%10s%10s%10s\n\n&quot;</span> iters edges input keys
 <span class="k">for</span> i in <span class="sb">`</span>seq <span class="nv">$1</span> <span class="nv">$2</span><span class="sb">`</span>
 <span class="k">do</span>
-    <span class="nb">echo</span> <span class="s1">&#39;/*!re2c * {} [0-9a-fA-F]{&#39;</span><span class="nv">$i</span><span class="s1">&#39;} {} */&#39;</span> <span class="p">|</span> re2c -S -o example.c -
+    <span class="nb">echo</span> <span class="s1">&#39;/*!re2c * {} [0-9a-fA-F]{&#39;</span>$i<span class="s1">&#39;} {} */&#39;</span> <span class="p">|</span> re2c -S -o example.c -
     <span class="nv">input</span><span class="o">=</span><span class="sb">`</span>stat -c <span class="s1">&#39;%s&#39;</span> example.c.line1.input<span class="sb">`</span>
     <span class="nv">keys</span><span class="o">=</span><span class="sb">`</span>stat -c <span class="s1">&#39;%s&#39;</span> example.c.line1.keys<span class="sb">`</span>
-    <span class="nb">printf</span> <span class="s2">&quot;%10d%10d%10d%10d\n&quot;</span> <span class="nv">$i</span> <span class="k">$((</span><span class="m">256</span> <span class="o">*</span> i<span class="k">))</span> <span class="nv">$input</span> <span class="nv">$keys</span>
+    <span class="nb">printf</span> <span class="s2">&quot;%10d%10d%10d%10d\n&quot;</span> $i <span class="k">$((</span><span class="m">256</span> <span class="o">*</span> i<span class="k">))</span> $input $keys
 <span class="k">done</span>
 </pre></div>
 </td></tr></table></div>
 <p>Script runs in a loop and expects two arguments:
 lower and upped bounds of the iteration counter.</p>
-<div class="highlight-none"><div class="highlight"><pre>$ ./gen.sh 1 16
+<div class="highlight-none"><div class="highlight"><pre><span></span>$ ./gen.sh 1 16
      iters     edges     input      keys
 
          1       256       256       768
@@ -905,13 +904,13 @@ With a bit of common sense (or knowledge of re2c algorithm)
 one can see that path cover must include 22 paths of length <code class="docutils literal"><span class="pre">n</span></code> (that go to accepting state)
 plus all the default paths (234 paths of lenght 1, plus 234 paths of length 2
 and so on up to 234 paths of length <code class="docutils literal"><span class="pre">n</span></code>):</p>
-<div class="highlight-python"><div class="highlight"><pre>22*1 + 234*1
-22*2 + (234*1 + 234*2)
-22*3 + (234*1 + 234*2 + 234*3)
-...
-f(n) = 22*n + (234*1 + 234*2 + ... + 234*n)
-     = 22*n + 234*n*(n - 1)/2
-     = 117*n^2 + 139*n
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">22</span><span class="o">*</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">234</span><span class="o">*</span><span class="mi">1</span>
+<span class="mi">22</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">234</span><span class="o">*</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">234</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+<span class="mi">22</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="mi">234</span><span class="o">*</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">234</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">234</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="n">f</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">=</span> <span class="mi">22</span><span class="o">*</span><span class="n">n</span> <span class="o">+</span> <span class="p">(</span><span class="mi">234</span><span class="o">*</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">234</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="o">...</span> <span class="o">+</span> <span class="mi">234</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+     <span class="o">=</span> <span class="mi">22</span><span class="o">*</span><span class="n">n</span> <span class="o">+</span> <span class="mi">234</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+     <span class="o">=</span> <span class="mi">117</span><span class="o">*</span><span class="n">n</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">139</span><span class="o">*</span><span class="n">n</span>
 </pre></div>
 </div>
 <p>However, in practice maximal path length is usually less than a hundred
@@ -950,7 +949,7 @@ One only needs to measure execution time of the generated program
 <div class="section" id="executable-specs">
 <h3>Executable specs<a class="headerlink" href="#executable-specs" title="Permalink to this headline">¶</a></h3>
 <p>Because of the fact that skeleton ignores all non-re2c code (including actions),
-skeleton programs don&#8217;t need any additional code.
+skeleton programs don’t need any additional code.
 One can just sketch a regular expression specification
 and immediately get an executable program.</p>
 </div>
@@ -964,7 +963,7 @@ and immediately get an executable program.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Parsing integers (conditions) &mdash; re2c 0.16 documentation</title>
-    
+    <title>Parsing integers (conditions) &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -44,9 +42,9 @@
 <li class="toctree-l2"><a class="reference internal" href="example_02.html">Recognizing strings: the need for YYMAXFILL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_03.html">Arbitrary large input and YYFILL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_04.html">Parsing integers (multiple re2c blocks)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Parsing integers (conditions)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Parsing integers (conditions)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns (encodings)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_07.html">C++98 lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_07.html">A C++98 lexer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -63,10 +61,10 @@
             
   <div class="section" id="parsing-integers-conditions">
 <h1>Parsing integers (conditions)<a class="headerlink" href="#parsing-integers-conditions" title="Permalink to this headline">¶</a></h1>
-<p>This example does exactly the same as <a class="reference external" href="example_04.html">Parsing integers (multiple re2c blocks)</a> example,
+<p>This example does exactly the same thing as the <a class="reference external" href="example_04.html">Parsing integers (multiple re2c blocks)</a> example,
 but in a slightly different manner: it uses re2c conditions instead of blocks.
 Conditions allow to encode multiple interconnected lexers within a single re2c block.</p>
-<p><a class="reference download internal" href="../_downloads/05_parsing_integers_conditions.re.txt"><code class="xref download docutils literal"><span class="pre">[05_parsing_integers_conditions.re]</span></code></a></p>
+<p><a class="reference download internal" href="../_downloads/05_parsing_integers_conditions.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[05_parsing_integers_conditions.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -125,8 +123,8 @@ Conditions allow to encode multiple interconnected lexers within a single re2c b
 56
 57
 58
-59</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;limits.h&gt;</span>
-<span class="cp">#include &lt;stdio.h&gt;</span>
+59</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;limits.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 
 <span class="k">template</span><span class="o">&lt;</span><span class="kt">int</span> <span class="n">base</span><span class="o">&gt;</span>
 <span class="k">static</span> <span class="kt">bool</span> <span class="n">adddgt</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="o">&amp;</span><span class="n">u</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">d</span><span class="p">)</span>
@@ -188,26 +186,26 @@ Conditions allow to encode multiple interconnected lexers within a single re2c b
 </td></tr></table></div>
 <p>Notes:</p>
 <ul class="simple">
-<li>Conditions are enabled with <code class="docutils literal"><span class="pre">-c</span></code> option.</li>
-<li>Conditions are only syntactic sugar, they can be translated into multiple blocks.</li>
+<li>Conditions are enabled with the <code class="docutils literal"><span class="pre">-c</span></code> option.</li>
+<li>Conditions are only syntactic sugar; they can be translated into multiple blocks.</li>
 <li>Each condition is a standalone lexer (DFA).</li>
 <li>Each condition has a unique identifier: <code class="docutils literal"><span class="pre">/*!types:re2c*/</span></code> tells re2c to generate
-enumeration of all identifiers (names are prefixed with <code class="docutils literal"><span class="pre">yyc</span></code> by default).
-Lexer uses <code class="docutils literal"><span class="pre">YYGETCONDITION</span></code> to get the identifier of current condition
+an enumeration of all the identifiers (the names are prefixed with <code class="docutils literal"><span class="pre">yyc</span></code> by default).
+The lexer uses <code class="docutils literal"><span class="pre">YYGETCONDITION</span></code> to get the identifier of the current condition
 and <code class="docutils literal"><span class="pre">YYSETCONDITION</span></code> to set it.</li>
 <li>Each condition has a unique label (prefixed with <code class="docutils literal"><span class="pre">yyc_</span></code> by default).</li>
-<li>Conditions are connected: transitions are allowed between final states of one condition
-and start state of another condition (but not between inner states of different conditions).
+<li>Conditions are connected: transitions are allowed between the final states of one condition
+and the start state of another condition (but not between inner states of different conditions).
 The generated code starts with dispatch.
-Actions can either jump to the initial dispatch or jump directly to any condition.</li>
-<li>Rule <code class="docutils literal"><span class="pre">&lt;*&gt;</span></code> is merged to all conditions (low priority).</li>
+Actions can either jump to the initial dispatch or jump directly to a condition.</li>
+<li>The <code class="docutils literal"><span class="pre">&lt;*&gt;</span></code> rule is merged to all conditions (low priority).</li>
 <li>Rules with multiple conditions are merged to each listed condition (normal priority).</li>
 <li><code class="docutils literal"><span class="pre">:=&gt;</span></code> jumps directly to the next condition (bypassing the initial dispatch).</li>
 </ul>
-<p>Generate, compile and run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>re2c -c -o example.cc 05_parsing_integers_conditions.re
-<span class="nv">$ </span>g++ -o example example.cc
-<span class="nv">$ </span>./example <span class="m">0</span> <span class="m">12345678901234567890</span> 0xFFFFffffFFFFffff 0x1FFFFffffFFFFffff 0xAbcDEf 0x00 <span class="m">007</span> 0B0 0b110101010 <span class="s2">&quot;&quot;</span>
+<p>Generate, compile, and run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -c -o example.cc 05_parsing_integers_conditions.re
+$ g++ -o example example.cc
+$ ./example <span class="m">0</span> <span class="m">12345678901234567890</span> 0xFFFFffffFFFFffff 0x1FFFFffffFFFFffff 0xAbcDEf 0x00 <span class="m">007</span> 0B0 0b110101010 <span class="s2">&quot;&quot;</span>
 0
 12345678901234567890
 18446744073709551615
@@ -229,7 +227,7 @@ error
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

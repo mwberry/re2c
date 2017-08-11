@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Arbitrary large input and YYFILL &mdash; re2c 0.16 documentation</title>
-    
+    <title>Arbitrary large input and YYFILL &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -42,11 +40,11 @@
 <li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="example_01.html">Recognizing integers: the sentinel method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_02.html">Recognizing strings: the need for YYMAXFILL</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Arbitrary large input and YYFILL</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Arbitrary large input and YYFILL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_04.html">Parsing integers (multiple re2c blocks)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_05.html">Parsing integers (conditions)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns (encodings)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_07.html">C++98 lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_07.html">A C++98 lexer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -63,27 +61,27 @@
             
   <div class="section" id="arbitrary-large-input-and-yyfill">
 <h1>Arbitrary large input and YYFILL<a class="headerlink" href="#arbitrary-large-input-and-yyfill" title="Permalink to this headline">¶</a></h1>
-<p>In this example we suppose that input cannot be mapped in memory at once:
-either it&#8217;s too large or its size cannot be determined in advance.
-The usual thing to do in such case is to allocate a buffer and lex input in chunks that fit into buffer.
-re2c allows us to refill buffer using <code class="docutils literal"><span class="pre">YYFILL</span></code>: see <a class="reference external" href="example_02.html">Recognizing strings: the need for YYMAXFILL</a> example
-for details about program points and conditions that trigger <code class="docutils literal"><span class="pre">YYFILL</span></code> invocation.
+<p>In this example we suppose that our input cannot be mapped in memory at once:
+either it’s too large or its size cannot be determined in advance.
+The usual thing to do in such a case is to allocate a buffer and lex the input in chunks that fit into the buffer.
+re2c allows us to refill the buffer using <code class="docutils literal"><span class="pre">YYFILL</span></code>: see <a class="reference external" href="example_02.html">Recognizing strings: the need for YYMAXFILL</a> example
+for details about the program points and conditions that trigger a <code class="docutils literal"><span class="pre">YYFILL</span></code> invocation.
 Currently re2c provides no way to combine <code class="docutils literal"><span class="pre">YYFILL</span></code> with the sentinel method:
 we have to enable <code class="docutils literal"><span class="pre">YYLIMIT</span></code>-based checks for the end of input and pad input with <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> fake characters.
 This may be changed in later versions of re2c.</p>
-<p>The idea of <code class="docutils literal"><span class="pre">YYFILL</span></code> is fairly simple: lexer is stuck upon the fact that
+<p>The idea of <code class="docutils literal"><span class="pre">YYFILL</span></code> is fairly simple: the lexer is stuck upon the fact that
 <code class="docutils literal"><span class="pre">(YYLIMIT</span> <span class="pre">-</span> <span class="pre">YYCURSOR)</span> <span class="pre">&lt;</span> <span class="pre">n</span></code> and <code class="docutils literal"><span class="pre">YYFILL</span></code> must either invert this condition or stop lexing.
-Disaster will happen if <code class="docutils literal"><span class="pre">YYFILL</span></code> fails to provide at least <code class="docutils literal"><span class="pre">n</span></code> characters, yet resumes lexing.
-Technically <code class="docutils literal"><span class="pre">YYFILL</span></code> must somehow &#8220;extend&#8221; input for at least <code class="docutils literal"><span class="pre">n</span></code> characters:
-after <code class="docutils literal"><span class="pre">YYFILL</span></code> all input pointers must point to exact same characters,
-except <code class="docutils literal"><span class="pre">YYLIMIT</span></code>: it must be advanced at least <code class="docutils literal"><span class="pre">n</span></code> positions.
+A disaster will happen if <code class="docutils literal"><span class="pre">YYFILL</span></code> fails to provide at least <code class="docutils literal"><span class="pre">n</span></code> characters, yet resumes lexing.
+Technically <code class="docutils literal"><span class="pre">YYFILL</span></code> must somehow “extend” the input by at least <code class="docutils literal"><span class="pre">n</span></code> characters:
+after <code class="docutils literal"><span class="pre">YYFILL</span></code>, all input pointers must point to the exact same characters,
+except <code class="docutils literal"><span class="pre">YYLIMIT</span></code>, which must be advanced at least <code class="docutils literal"><span class="pre">n</span></code> positions.
 Since we want to use a fixed amount of memory, we have to shift buffer contents:
-discard characters that are already lexed,
-move the remaining characters at the beginning of the buffer
+discard characters that have already been lexed,
+move the remaining characters to the beginning of the buffer,
 and fill the vacant space with new characters.
-All the pointers must be decreased by the length of discarded input,
+All the pointers must be decreased by the length of the discarded input,
 except <code class="docutils literal"><span class="pre">YYLIMIT</span></code> (it must point at the end of buffer):</p>
-<div class="highlight-bash"><div class="highlight"><pre>&lt;--- discarded --&gt;                              &lt;----- n -----&gt;
+<div class="highlight-bash"><div class="highlight"><pre><span></span>&lt;--- discarded --&gt;                              &lt;----- n -----&gt;
 oxxxxxxxxxxxxxxxxxo----------o-----------------o--------o.....o..........o... <span class="o">(</span>more input<span class="o">)</span>
 buffer          lexeme    YYMARKER          YYCURSOR YYLIMIT *          *
 <span class="p">|</span>             *          *                 *            <span class="p">|</span> *          *
@@ -96,10 +94,10 @@ buffer,  YYMARKER          YYCURSOR                  YYLIMIT
 lexeme
 </pre></div>
 </div>
-<p>End of input is a special case: as explained in <a class="reference external" href="example_02.html">Recognizing strings: the need for YYMAXFILL</a> example,
+<p>The end of input is a special case: as explained in the <a class="reference external" href="example_02.html">Recognizing strings: the need for YYMAXFILL</a> example,
 the input must be padded with <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> fake characters.
-In this case <code class="docutils literal"><span class="pre">YYLIMIT</span></code> must point at the end of padding:</p>
-<div class="highlight-bash"><div class="highlight"><pre>&lt;--- discarded --&gt;                              &lt;----- n -----&gt;
+In this case, <code class="docutils literal"><span class="pre">YYLIMIT</span></code> must point at the end of the padding:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>&lt;--- discarded --&gt;                              &lt;----- n -----&gt;
 oxxxxxxxxxxxxxxxxxo----------o-----------------o---o0000000000000000o
 buffer          lexeme    YYMARKER          YYCURSOR YYLIMIT       *
 <span class="p">|</span>             *          *                 *   *        <span class="p">|</span>       *
@@ -114,18 +112,18 @@ lexeme
 </div>
 <p>Which part of input can be discarded?
 The answer is, all input up to the leftmost meaningful pointer.
-Intuitively it seems that it must be <code class="docutils literal"><span class="pre">YYMARKER</span></code>: it backups input position of the latest match,
-so it&#8217;s always less than or equal to <code class="docutils literal"><span class="pre">YYCURSOR</span></code>.
-However, <code class="docutils literal"><span class="pre">YYMARKER</span></code> is not always used and even when it is, its usage depends on the input:
-not all control flow paths in lexer ever initialize it.
-Thus for some inputs <code class="docutils literal"><span class="pre">YYMARKER</span></code> is meaningless
+Intuitively it seems that it must be <code class="docutils literal"><span class="pre">YYMARKER</span></code>: it backs up the input position of the latest match,
+so it’s always less than or equal to <code class="docutils literal"><span class="pre">YYCURSOR</span></code>.
+However, <code class="docutils literal"><span class="pre">YYMARKER</span></code> is not always used and even when it is, its use depends on the input:
+not all control flow paths in the lexer ever initialize it.
+Thus for some inputs, <code class="docutils literal"><span class="pre">YYMARKER</span></code> is meaningless
 and should be used with care.
-In practice input rarely consists of one giant lexeme: it is usually a sequence of small lexemes.
-In that case lexer runs in a loop and it is convenient to have a special &#8220;lexeme start&#8221; pointer.
-It can be used as boundary in <code class="docutils literal"><span class="pre">YYFILL</span></code>.</p>
-<p>Our example program reads <code class="docutils literal"><span class="pre">stdin</span></code> in chunks of 16 bytes (in real word buffer size is usually ~4Kb)
+In practice, input rarely consists of one giant lexeme: it is usually a sequence of small lexemes.
+In that case, the lexer runs in a loop and it is convenient to have a special “lexeme start” pointer.
+It can be used as a boundary in <code class="docutils literal"><span class="pre">YYFILL</span></code>.</p>
+<p>Our example program reads <code class="docutils literal"><span class="pre">stdin</span></code> in chunks of 16 bytes (in the real world, the buffer size is usually ~4KiB)
 and tries to lex numbers separated by newlines.</p>
-<p><a class="reference download internal" href="../_downloads/03_arbitrary_large_input.re.txt"><code class="xref download docutils literal"><span class="pre">[03_arbitrary_large_input.re]</span></code></a></p>
+<p><a class="reference download internal" href="../_downloads/03_arbitrary_large_input.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[03_arbitrary_large_input.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -203,20 +201,20 @@ and tries to lex numbers separated by newlines.</p>
 75
 76
 77
-78</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
-<span class="cp">#include &lt;string.h&gt;</span>
+78</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
 
 <span class="cm">/*!max:re2c*/</span>
 <span class="k">static</span> <span class="k">const</span> <span class="kt">size_t</span> <span class="n">SIZE</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
 
-<span class="k">struct</span> <span class="kt">input_t</span> <span class="p">{</span>
+<span class="k">struct</span> <span class="n">input_t</span> <span class="p">{</span>
     <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="n">SIZE</span> <span class="o">+</span> <span class="n">YYMAXFILL</span><span class="p">];</span>
     <span class="kt">char</span> <span class="o">*</span><span class="n">lim</span><span class="p">;</span>
     <span class="kt">char</span> <span class="o">*</span><span class="n">cur</span><span class="p">;</span>
     <span class="kt">char</span> <span class="o">*</span><span class="n">tok</span><span class="p">;</span>
     <span class="kt">bool</span> <span class="n">eof</span><span class="p">;</span>
 
-    <span class="kt">input_t</span><span class="p">()</span>
+    <span class="n">input_t</span><span class="p">()</span>
         <span class="o">:</span> <span class="n">buf</span><span class="p">()</span>
         <span class="p">,</span> <span class="n">lim</span><span class="p">(</span><span class="n">buf</span> <span class="o">+</span> <span class="n">SIZE</span><span class="p">)</span>
         <span class="p">,</span> <span class="n">cur</span><span class="p">(</span><span class="n">lim</span><span class="p">)</span>
@@ -246,7 +244,7 @@ and tries to lex numbers separated by newlines.</p>
     <span class="p">}</span>
 <span class="p">};</span>
 
-<span class="k">static</span> <span class="kt">bool</span> <span class="nf">lex</span><span class="p">(</span><span class="kt">input_t</span> <span class="o">&amp;</span> <span class="n">in</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">count</span><span class="p">)</span>
+<span class="k">static</span> <span class="kt">bool</span> <span class="nf">lex</span><span class="p">(</span><span class="n">input_t</span> <span class="o">&amp;</span> <span class="n">in</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">count</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">for</span> <span class="p">(</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;;)</span> <span class="p">{</span>
         <span class="n">in</span><span class="p">.</span><span class="n">tok</span> <span class="o">=</span> <span class="n">in</span><span class="p">.</span><span class="n">cur</span><span class="p">;</span>
@@ -271,7 +269,7 @@ and tries to lex numbers separated by newlines.</p>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
-    <span class="kt">input_t</span> <span class="n">in</span><span class="p">;</span>
+    <span class="n">input_t</span> <span class="n">in</span><span class="p">;</span>
     <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">lex</span><span class="p">(</span><span class="n">in</span><span class="p">,</span> <span class="n">count</span><span class="p">))</span> <span class="p">{</span>
         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;glorious %u numbers!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">count</span><span class="p">);</span>
@@ -285,24 +283,24 @@ and tries to lex numbers separated by newlines.</p>
 </td></tr></table></div>
 <p>Notes:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">YYMAXFILL</span></code> bytes at the end of buffer are reserved for padding.
-This memory is unused most of the time, but <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> is usually negligably small compared to buffer size.</li>
-<li>There is only one successsful way out (line 60): lexer must recognize a standalone
-&#8220;end of input&#8221; lexeme (<code class="docutils literal"><span class="pre">NULL</span></code>) exactly at the beginning of padding.
-<code class="docutils literal"><span class="pre">YYFILL</span></code> failure is an error: if the input was correct, lexer should have already stopped.</li>
+<li><code class="docutils literal"><span class="pre">YYMAXFILL</span></code> bytes at the end of the buffer are reserved for padding.
+This memory is unused most of the time, but <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> is usually negligibly small compared to the buffer size.</li>
+<li>There is only one successful way out (line 60): the lexer must recognize a standalone
+“end of input” lexeme (<code class="docutils literal"><span class="pre">NULL</span></code>) exactly at the beginning of the padding.
+A <code class="docutils literal"><span class="pre">YYFILL</span></code> failure is an error: if the input was correct, the lexer should have already stopped.</li>
 <li><code class="docutils literal"><span class="pre">YYFILL</span></code> may fail for two reasons:
 either there is no more input (line 23),
-or lexeme is too long: it occupies the whole buffer and nothing can be discarded (line 27).
-We treat both cases in the same way (as error), but a real-world program might handle them differently
-(resize buffer, cut long lexeme in two, etc.).</li>
-<li><code class="docutils literal"><span class="pre">&#64;&#64;</span></code> in <code class="docutils literal"><span class="pre">YYFILL</span></code> definition (line 52) is a formal parameter: re2c substitutes it with the actual argument to <code class="docutils literal"><span class="pre">YYFILL</span></code>.</li>
-<li>There is a special <code class="docutils literal"><span class="pre">tok</span></code> pointer: it points at the beginning of lexeme (line 47)
+or the lexeme is too long: it occupies the whole buffer and nothing can be discarded (line 27).
+We treat both cases in the same way (as an error), but a real-world program might handle them differently
+(resize the buffer, cut the long lexeme in two, etc.).</li>
+<li><code class="docutils literal"><span class="pre">&#64;&#64;</span></code> in the <code class="docutils literal"><span class="pre">YYFILL</span></code> definition (line 52) is a formal parameter: re2c substitutes it with the actual argument to <code class="docutils literal"><span class="pre">YYFILL</span></code>.</li>
+<li>There is a special <code class="docutils literal"><span class="pre">tok</span></code> pointer: it points at the beginning of a lexeme (line 47)
 and serves as a boundary in <code class="docutils literal"><span class="pre">YYFILL</span></code>.</li>
 </ul>
-<p>Generate, compile and run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>re2c -o example.cc 03_arbitrary_large_input.re
-<span class="nv">$ </span>g++ -o example example.cc
-<span class="nv">$ </span>./example
+<p>Generate, compile, and run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -o example.cc 03_arbitrary_large_input.re
+$ g++ -o example example.cc
+$ ./example
 0
 11
 222
@@ -314,9 +312,9 @@ and serves as a boundary in <code class="docutils literal"><span class="pre">YYF
 888888888
 9999999999
 glorious <span class="m">10</span> numbers!
-<span class="nv">$ </span>seq <span class="m">123456789</span> <span class="p">|</span> ./example
+$ seq <span class="m">123456789</span> <span class="p">|</span> ./example
 glorious <span class="m">123456789</span> numbers!
-<span class="nv">$ </span>seq <span class="m">123456789</span> <span class="p">|</span> wc -l
+$ seq <span class="m">123456789</span> <span class="p">|</span> wc -l
 123456789
 </pre></div>
 </div>
@@ -329,7 +327,7 @@ glorious <span class="m">123456789</span> numbers!
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>

@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>.dot &mdash; re2c 0.16 documentation</title>
-    
+    <title>.dot &#8212; re2c 0.16 documentation</title>
     <link rel="stylesheet" href="../../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '0.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -28,7 +26,7 @@
     
  
   </head>
-  <body role="document">
+  <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
     re2c-0.16
@@ -43,13 +41,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../../warnings/warnings.html">Warnings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../syntax/syntax.html">Syntax</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../features.html">Features</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../submatch/submatch.html">Submatch</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../conditions/conditions.html">Conditions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../state/state.html">State</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../reuse/reuse.html">Reuse</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../encodings/encodings.html">Encodings</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../generic_api/generic_api.html">Generic API</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../skeleton/skeleton.html">Skeleton</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">.dot</a><ul class="simple">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">.dot</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -73,18 +72,18 @@
 <h1>.dot<a class="headerlink" href="#dot" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<p>With <code class="docutils literal"><span class="pre">-D,</span> <span class="pre">--emit-dot</span></code> option re2c does not generate C/C++ code.
-Instead, it dumps the generated DFA in <a class="reference external" href="https://en.wikipedia.org/wiki/DOT_%28graph_description_language%29">DOT format</a>.
-One can convert this dump to an image of DFA using <a class="reference external" href="http://www.graphviz.org/">graphviz</a> or another library.</p>
-<p>Say we want a picture of DFA that accepts any UTF-8 code point, <code class="docutils literal"><span class="pre">utf8_any.re</span></code>:</p>
-<div class="highlight-cpp"><div class="highlight"><pre><span class="cm">/*!re2c</span>
+<p>With the <code class="docutils literal"><span class="pre">-D,</span> <span class="pre">--emit-dot</span></code> option, re2c does not generate C/C++ code.
+Instead, it dumps the generated DFA in the <a class="reference external" href="https://en.wikipedia.org/wiki/DOT_%28graph_description_language%29">DOT format</a>.
+One can convert this dump to an image of the DFA using <a class="reference external" href="http://www.graphviz.org/">graphviz</a> or another library.</p>
+<p>Say we want a picture of the DFA that accepts any UTF-8 code point, <code class="docutils literal"><span class="pre">utf8_any.re</span></code>:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
 <span class="cm">    *   {}</span>
 <span class="cm">    [^] {}</span>
 <span class="cm">*/</span>
 </pre></div>
 </div>
-<p>Generate and render :</p>
-<div class="highlight-none"><div class="highlight"><pre>$ re2c -D8 -o utf8_any.dot utf8_any.re
+<p>Generate and render:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>$ re2c -D -8 -o utf8_any.dot utf8_any.re
 $ dot -Tpng -o utf8_any.png utf8_any.dot
 </pre></div>
 </div>
@@ -92,11 +91,11 @@ $ dot -Tpng -o utf8_any.png utf8_any.dot
 <a class="reference internal image-reference" href="../../../_images/utf8_any.png"><img alt="../../../_images/utf8_any.png" src="../../../_images/utf8_any.png" style="width: 70%;" /></a>
 <p>Note that re2c performs additional transformations on the DFA:
 inserts <code class="docutils literal"><span class="pre">YYFILL</span></code> <a class="reference external" href="../../../examples/example_02.html">checkpoints</a>,
-binds actions, applies basic code deduplication.
-During the transformations it splits certain states and adds lambda transitions.
+binds actions, and applies basic code deduplication.
+During the transformations, it splits certain states and adds lambda transitions.
 Lambda transitions correspond to the unlabeled edges on the picture.</p>
 <p>A real-world example (JSON lexer, all non-re2c code stripped out), <code class="docutils literal"><span class="pre">php_json.re</span></code>:</p>
-<div class="highlight-cpp"><div class="highlight"><pre><span class="cm">/*!re2c</span>
+<div class="highlight-cpp"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
 <span class="cm">	re2c:indent:top = 1;</span>
 <span class="cm">	re2c:yyfill:enable = 0;</span>
 
@@ -175,14 +174,14 @@ Lambda transitions correspond to the unlabeled edges on the picture.</p>
 </pre></div>
 </div>
 <p>Generate .dot file:</p>
-<div class="highlight-none"><div class="highlight"><pre>$ re2c -Dc -o php_json.dot php_json.re
+<div class="highlight-none"><div class="highlight"><pre><span></span>$ re2c -Dc -o php_json.dot php_json.re
 </pre></div>
 </div>
-<p>Render with <code class="docutils literal"><span class="pre">`dot</span> <span class="pre">-Gratio=0.3</span> <span class="pre">-Tpng</span> <span class="pre">-o</span> <span class="pre">php_json_dot.png</span> <span class="pre">php_json.dot`</span></code>:</p>
+<p>Render it with <code class="docutils literal"><span class="pre">`dot</span> <span class="pre">-Gratio=0.3</span> <span class="pre">-Tpng</span> <span class="pre">-o</span> <span class="pre">php_json_dot.png</span> <span class="pre">php_json.dot`</span></code>:</p>
 <a class="reference internal image-reference" href="../../../_images/php_json_dot.png"><img alt="../../../_images/php_json_dot.png" src="../../../_images/php_json_dot.png" style="width: 100%;" /></a>
-<p>Render with <code class="docutils literal"><span class="pre">`neato</span> <span class="pre">-Elen=4</span> <span class="pre">-Tpng</span> <span class="pre">-o</span> <span class="pre">php_json_neato.png</span> <span class="pre">php_json.dot`</span></code>:</p>
+<p>Render it with <code class="docutils literal"><span class="pre">`neato</span> <span class="pre">-Elen=4</span> <span class="pre">-Tpng</span> <span class="pre">-o</span> <span class="pre">php_json_neato.png</span> <span class="pre">php_json.dot`</span></code>:</p>
 <a class="reference internal image-reference" href="../../../_images/php_json_neato.png"><img alt="../../../_images/php_json_neato.png" src="../../../_images/php_json_neato.png" style="width: 70%;" /></a>
-<p>The generated graph is sometimes very large and requires careful tuning of rendering paratemeters.</p>
+<p>The generated graph is sometimes very large and requires careful tuning of the rendering parameters.</p>
 </div>
 
 
@@ -192,7 +191,7 @@ Lambda transitions correspond to the unlabeled edges on the picture.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2016.
+      Last updated on Aug 11, 2017.
     </div>
   </body>
 </html>
