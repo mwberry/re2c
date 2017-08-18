@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Recognizing strings: the need for YYMAXFILL &#8212; re2c 1.0.1 documentation</title>
+    <title>Strings &#8212; re2c 1.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -38,13 +38,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../install/install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../manual/manual.html">Manual</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="example_01.html">Recognizing integers: the sentinel method</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Recognizing strings: the need for YYMAXFILL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_03.html">Arbitrary large input and YYFILL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_04.html">Parsing integers (multiple re2c blocks)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_05.html">Parsing integers (conditions)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns (encodings)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_07.html">A C++98 lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_01.html">Numbers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_03.html">Large input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_04.html">Multiple blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_05.html">Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_12.html">Floating-point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_08.html">IPv4 address</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_09.html">/etc/passwd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_14.html">Options &amp; arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_13.html">Records &amp; structs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_07.html">C++98</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_10.html">URI (RFC-3986)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_11.html">HTTP (RFC-7230)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -59,11 +66,11 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="recognizing-strings-the-need-for-yymaxfill">
-<h1>Recognizing strings: the need for YYMAXFILL<a class="headerlink" href="#recognizing-strings-the-need-for-yymaxfill" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="strings">
+<h1>Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h1>
 <p>This example is about recognizing strings.
 Strings (in the generic sense) are different from other kinds of lexemes: they can contain <em>arbitrary</em> characters.
-That makes them way more difficult to lex: unlike in the <a class="reference external" href="example_01.html">Recognizing integers: the sentinel method</a> example,
+That makes them way more difficult to lex: unlike in the <a class="reference external" href="example_01.html">Numbers</a> example,
 we cannot use a sentinel character to stop at the end of input.
 Suppose, for example, that our strings may be single or double-quoted
 and may contain any character in range <code class="docutils literal"><span class="pre">[0</span> <span class="pre">-</span> <span class="pre">0xFF]</span></code> except quotes of the appropriate type.
@@ -94,7 +101,7 @@ Since the lexer checks for multiple characters at once, the last few input chara
 A common hack is to pad the input with a few fake characters that <strong>do not form a valid lexeme or lexeme suffix</strong>.
 The length of the padding depends on the maximum argument to <code class="docutils literal"><span class="pre">YYFILL</span></code>
 (this value is called <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> and can be generated with the <code class="docutils literal"><span class="pre">/*!max:re2c*/</span></code> directive).</p>
-<p><a class="reference download internal" href="../_downloads/02_recognizing_strings.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[02_recognizing_strings.re]</span></code></a></p>
+<p><a class="reference download internal" href="../_downloads/02_recognizing_strings.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[strings.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -207,10 +214,13 @@ in order to suppress passing a parameter to <code class="docutils literal"><span
 <code class="docutils literal"><span class="pre">YYFILL</span></code> has to stop the lexer eventually. That’s why it has to be a macro and not a function.
 One should either set <code class="docutils literal"><span class="pre">re2c:define:YYFILL:naked</span> <span class="pre">=</span> <span class="pre">1;</span></code> or define <code class="docutils literal"><span class="pre">YYFILL(n)</span></code> as a macro.)</li>
 </ul>
-<p>Generate, compile, and run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -o example.cc 02_recognizing_strings.re
-$ g++ -o example example.cc
-$ ./example <span class="s1">&#39;&quot;a momentary&quot;&#39;</span> <span class="s1">&#39;&quot;&quot;&#39;</span> <span class="s1">&#39;&quot;lap&quot;se&quot;&#39;</span> <span class="s1">&#39;&quot;of&#39;</span> <span class="s1">&#39;&quot;&#39;</span> <span class="s1">&#39;&quot;rea&quot;&quot;son&quot;&#39;</span> <span class="s1">&#39;&#39;</span>
+<p>Compile:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -o strings.cc strings.re
+$ g++ -o strings strings.cc
+</pre></div>
+</div>
+<p>Run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./strings <span class="s1">&#39;&quot;a momentary&quot;&#39;</span> <span class="s1">&#39;&quot;&quot;&#39;</span> <span class="s1">&#39;&quot;lap&quot;se&quot;&#39;</span> <span class="s1">&#39;&quot;of&#39;</span> <span class="s1">&#39;&quot;&#39;</span> <span class="s1">&#39;&quot;rea&quot;&quot;son&quot;&#39;</span> <span class="s1">&#39;&#39;</span>
 str: <span class="s2">&quot;a momentary&quot;</span>
 str: <span class="s2">&quot;&quot;</span>
 err: <span class="s2">&quot;lap&quot;</span>se<span class="s2">&quot;</span>
@@ -218,14 +228,6 @@ err: <span class="s2">&quot;lap&quot;</span>se<span class="s2">&quot;</span>
 err: <span class="s2">&quot;</span>
 <span class="s2">err: &quot;</span>rea<span class="s2">&quot;&quot;</span>son<span class="s2">&quot;</span>
 <span class="s2">err:</span>
-$<span class="s2"> ./example &quot;</span><span class="s1">&#39;a momentary&#39;</span><span class="s2">&quot; &quot;</span><span class="s1">&#39;&#39;</span><span class="s2">&quot; &quot;</span><span class="s1">&#39;lap&#39;</span>se<span class="s1">&#39;&quot; &quot;&#39;</span>of<span class="s2">&quot; &quot;</span><span class="s1">&#39;&quot; &quot;&#39;</span>rea<span class="s1">&#39;&#39;</span>son<span class="s1">&#39;&quot; &quot;&quot;</span>
-<span class="s1">str: &#39;</span>a momentary<span class="s1">&#39;</span>
-<span class="s1">str: &#39;&#39;</span>
-<span class="s1">err: &#39;</span>lap<span class="s1">&#39;se&#39;</span>
-err: <span class="s1">&#39;of</span>
-<span class="s1">err: &#39;</span>
-err: <span class="s1">&#39;rea&#39;&#39;son&#39;</span>
-err:
 </pre></div>
 </div>
 </div>
@@ -237,7 +239,7 @@ err:
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 16, 2017.
+      Last updated on Aug 18, 2017.
     </div>
   </body>
 </html>

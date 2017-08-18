@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Braille patterns (encodings) &#8212; re2c 1.0.1 documentation</title>
+    <title>Braille patterns &#8212; re2c 1.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -38,13 +38,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../install/install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../manual/manual.html">Manual</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="example_01.html">Recognizing integers: the sentinel method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_02.html">Recognizing strings: the need for YYMAXFILL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_03.html">Arbitrary large input and YYFILL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_04.html">Parsing integers (multiple re2c blocks)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_05.html">Parsing integers (conditions)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Braille patterns (encodings)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_07.html">A C++98 lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_01.html">Numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_02.html">Strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_03.html">Large input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_04.html">Multiple blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_05.html">Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_12.html">Floating-point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_08.html">IPv4 address</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_09.html">/etc/passwd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_14.html">Options &amp; arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_13.html">Records &amp; structs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_07.html">C++98</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_10.html">URI (RFC-3986)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_11.html">HTTP (RFC-7230)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Braille patterns</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -59,8 +66,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="braille-patterns-encodings">
-<h1>Braille patterns (encodings)<a class="headerlink" href="#braille-patterns-encodings" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="braille-patterns">
+<h1>Braille patterns<a class="headerlink" href="#braille-patterns" title="Permalink to this headline">¶</a></h1>
 <p>This example is about encoding support in re2c.
 It’s a partial decoder from Grade-1 (uncontracted) Unicode English Braille to plain English.
 The input may be encoded in UTF-8, UTF-16, UTF-32, or UCS-2:
@@ -71,7 +78,7 @@ Here is a message out of the void:</p>
 <p>⠠⠁⠇⠇⠀⠓⠥⠍⠁⠝⠀⠃⠑⠊⠝⠛⠎⠀⠁⠗⠑⠀⠃⠕⠗⠝⠀⠋⠗⠑⠑⠀⠁⠝⠙⠀⠑⠟⠥⠁⠇⠀⠊⠝⠀⠙⠊⠛⠝⠊⠞⠽⠀⠁⠝⠙⠀⠗⠊⠛⠓⠞⠎⠲⠀
 ⠠⠞⠓⠑⠽⠀⠁⠗⠑⠀⠑⠝⠙⠕⠺⠑⠙⠀⠺⠊⠞⠓⠀⠗⠑⠁⠎⠕⠝⠀⠁⠝⠙⠀⠉⠕⠝⠎⠉⠊⠑⠝⠉⠑⠀⠁⠝⠙⠀⠎⠓⠕⠥⠇⠙⠀⠁⠉⠞⠀⠞⠕⠺⠁⠗⠙⠎⠀
 ⠕⠝⠑⠀⠁⠝⠕⠞⠓⠑⠗⠀⠊⠝⠀⠁⠀⠎⠏⠊⠗⠊⠞⠀⠕⠋⠀⠃⠗⠕⠞⠓⠑⠗⠓⠕⠕⠙⠲</p>
-<p>It appears to be UTF-8 encoded <a class="reference download internal" href="../_downloads/06_braille.utf8.txt" download=""><code class="xref download docutils literal"><span class="pre">[06_braille.utf8.txt]</span></code></a>.
+<p>It appears to be UTF-8 encoded <a class="reference download internal" href="../_downloads/06_braille.utf8.txt" download=""><code class="xref download docutils literal"><span class="pre">[braille.utf8.txt]</span></code></a>.
 Let’s convert it into UTF-16, UTF-32, and UCS-2:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ iconv -f utf8 -t utf16le 06_braille.utf8.txt &gt; 06_braille.utf16.txt
 $ iconv -f utf8 -t utf32le 06_braille.utf8.txt &gt; 06_braille.utf32.txt
@@ -85,7 +92,7 @@ the numeric mode indicator (⠼), the letter mode indicator (⠰), the capital l
 and some others, which we omit here for the sake of simplicity (as well as a few ambiguous punctuation patterns).
 Grade-2 Braille allows contractions; those obey some rather complex rules (like those of a natural language)
 and are much harder to implement.</p>
-<p><a class="reference download internal" href="../_downloads/06_braille.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[06_braille.re]</span></code></a></p>
+<p><a class="reference download internal" href="../_downloads/06_braille.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[braille.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
   2
   3
@@ -555,10 +562,13 @@ All blocks can have their own configurations, definitions, and rules.</li>
 <li>Each encoding needs the appropriate code unit type (<code class="docutils literal"><span class="pre">YYCTYPE</span></code>).</li>
 <li>We use conditions to switch between numeric and normal modes.</li>
 </ul>
-<p>Generate, compile,  and run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -cr8 -o example.cc 06_braille.re
-$ g++ -o example example.cc
-$ ./example
+<p>Compile:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -cr8 -o braille.cc braille.re
+$ g++ -o braille braille.cc
+</pre></div>
+</div>
+<p>Run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./braille
 utf8:
 All human beings are born free and equal in dignity and rights.
 They are endowed with reason and conscience and should act towards
@@ -589,7 +599,7 @@ one another in a spirit of brotherhood.
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 16, 2017.
+      Last updated on Aug 18, 2017.
     </div>
   </body>
 </html>

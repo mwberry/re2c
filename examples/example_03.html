@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Arbitrary large input and YYFILL &#8212; re2c 1.0.1 documentation</title>
+    <title>Large input &#8212; re2c 1.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -38,13 +38,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../install/install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../manual/manual.html">Manual</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="example_01.html">Recognizing integers: the sentinel method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_02.html">Recognizing strings: the need for YYMAXFILL</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Arbitrary large input and YYFILL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_04.html">Parsing integers (multiple re2c blocks)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_05.html">Parsing integers (conditions)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns (encodings)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_07.html">A C++98 lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_01.html">Numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_02.html">Strings</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Large input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_04.html">Multiple blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_05.html">Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_12.html">Floating-point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_08.html">IPv4 address</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_09.html">/etc/passwd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_14.html">Options &amp; arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_13.html">Records &amp; structs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_07.html">C++98</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_10.html">URI (RFC-3986)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_11.html">HTTP (RFC-7230)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -59,12 +66,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="arbitrary-large-input-and-yyfill">
-<h1>Arbitrary large input and YYFILL<a class="headerlink" href="#arbitrary-large-input-and-yyfill" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="large-input">
+<h1>Large input<a class="headerlink" href="#large-input" title="Permalink to this headline">¶</a></h1>
 <p>In this example we suppose that our input cannot be mapped in memory at once:
 either it’s too large or its size cannot be determined in advance.
 The usual thing to do in such a case is to allocate a buffer and lex the input in chunks that fit into the buffer.
-re2c allows us to refill the buffer using <code class="docutils literal"><span class="pre">YYFILL</span></code>: see <a class="reference external" href="example_02.html">Recognizing strings: the need for YYMAXFILL</a> example
+re2c allows us to refill the buffer using <code class="docutils literal"><span class="pre">YYFILL</span></code>: see <a class="reference external" href="example_02.html">Strings</a> example
 for details about the program points and conditions that trigger a <code class="docutils literal"><span class="pre">YYFILL</span></code> invocation.
 Currently re2c provides no way to combine <code class="docutils literal"><span class="pre">YYFILL</span></code> with the sentinel method:
 we have to enable <code class="docutils literal"><span class="pre">YYLIMIT</span></code>-based checks for the end of input and pad input with <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> fake characters.
@@ -94,7 +101,7 @@ buffer,  YYMARKER          YYCURSOR                  YYLIMIT
 lexeme
 </pre></div>
 </div>
-<p>The end of input is a special case: as explained in the <a class="reference external" href="example_02.html">Recognizing strings: the need for YYMAXFILL</a> example,
+<p>The end of input is a special case: as explained in the <a class="reference external" href="example_02.html">Strings</a> example,
 the input must be padded with <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> fake characters.
 In this case, <code class="docutils literal"><span class="pre">YYLIMIT</span></code> must point at the end of the padding:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>&lt;--- discarded --&gt;                              &lt;----- n -----&gt;
@@ -123,7 +130,7 @@ In that case, the lexer runs in a loop and it is convenient to have a special �
 It can be used as a boundary in <code class="docutils literal"><span class="pre">YYFILL</span></code>.</p>
 <p>Our example program reads <code class="docutils literal"><span class="pre">stdin</span></code> in chunks of 16 bytes (in the real world, the buffer size is usually ~4KiB)
 and tries to lex numbers separated by newlines.</p>
-<p><a class="reference download internal" href="../_downloads/03_arbitrary_large_input.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[03_arbitrary_large_input.re]</span></code></a></p>
+<p><a class="reference download internal" href="../_downloads/03_arbitrary_large_input.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[large_input.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -297,25 +304,14 @@ We treat both cases in the same way (as an error), but a real-world program migh
 <li>There is a special <code class="docutils literal"><span class="pre">tok</span></code> pointer: it points at the beginning of a lexeme (line 47)
 and serves as a boundary in <code class="docutils literal"><span class="pre">YYFILL</span></code>.</li>
 </ul>
-<p>Generate, compile, and run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -o example.cc 03_arbitrary_large_input.re
-$ g++ -o example example.cc
-$ ./example
-0
-11
-222
-3333
-44444
-555555
-6666666
-77777777
-888888888
-9999999999
-glorious <span class="m">10</span> numbers!
-$ seq <span class="m">123456789</span> <span class="p">|</span> ./example
+<p>Compile:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -o large_input.cc large_input.re
+$ g++ -o large_input large_input.cc
+</pre></div>
+</div>
+<p>Run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ seq <span class="m">123456789</span> <span class="p">|</span> ./large_input
 glorious <span class="m">123456789</span> numbers!
-$ seq <span class="m">123456789</span> <span class="p">|</span> wc -l
-123456789
 </pre></div>
 </div>
 </div>
@@ -327,7 +323,7 @@ $ seq <span class="m">123456789</span> <span class="p">|</span> wc -l
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 16, 2017.
+      Last updated on Aug 18, 2017.
     </div>
   </body>
 </html>

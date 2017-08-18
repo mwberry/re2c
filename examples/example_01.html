@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Recognizing integers: the sentinel method &#8212; re2c 1.0.1 documentation</title>
+    <title>Numbers &#8212; re2c 1.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -38,13 +38,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../install/install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../manual/manual.html">Manual</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Recognizing integers: the sentinel method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_02.html">Recognizing strings: the need for YYMAXFILL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_03.html">Arbitrary large input and YYFILL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_04.html">Parsing integers (multiple re2c blocks)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_05.html">Parsing integers (conditions)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns (encodings)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_07.html">A C++98 lexer</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_02.html">Strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_03.html">Large input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_04.html">Multiple blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_05.html">Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_12.html">Floating-point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_08.html">IPv4 address</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_09.html">/etc/passwd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_14.html">Options &amp; arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_13.html">Records &amp; structs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_07.html">C++98</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_10.html">URI (RFC-3986)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_11.html">HTTP (RFC-7230)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -59,8 +66,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="recognizing-integers-the-sentinel-method">
-<h1>Recognizing integers: the sentinel method<a class="headerlink" href="#recognizing-integers-the-sentinel-method" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="numbers">
+<h1>Numbers<a class="headerlink" href="#numbers" title="Permalink to this headline">¶</a></h1>
 <p>This example is very simple, yet practical.
 We assume that the input is small (fits in one continuous block of memory).
 We also assume that some characters never occur in well-formed input (but may occur in input that’s ill-formed).
@@ -71,7 +78,7 @@ Our example program simply loops over its command-line arguments
 and tries to match each argument against one of four patterns:
 binary, octal, decimal, and hexadecimal integer literals.
 The numbers are not <em>parsed</em> (their numeric value is not retrieved), they are merely <em>recognized</em>.</p>
-<p><a class="reference download internal" href="../_downloads/01_recognizing_integers.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[01_recognizing_integers.re]</span></code></a></p>
+<p><a class="reference download internal" href="../_downloads/01_recognizing_integers.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[integers.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -101,9 +108,19 @@ The numbers are not <em>parsed</em> (their numeric value is not retrieved), they
 27
 28
 29
-30</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+30
+31
+32
+33
+34
+35
+36
+37
+38</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 
-<span class="k">static</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="nf">lex</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">YYCURSOR</span><span class="p">)</span>
+<span class="k">enum</span> <span class="n">num_t</span> <span class="p">{</span> <span class="n">ERR</span><span class="p">,</span> <span class="n">BIN</span><span class="p">,</span> <span class="n">OCT</span><span class="p">,</span> <span class="n">DEC</span><span class="p">,</span> <span class="n">HEX</span> <span class="p">};</span>
+
+<span class="k">static</span> <span class="n">num_t</span> <span class="nf">lex</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">YYCURSOR</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">YYMARKER</span><span class="p">;</span>
     <span class="cm">/*!re2c</span>
@@ -116,18 +133,24 @@ The numbers are not <em>parsed</em> (their numeric value is not retrieved), they
 <span class="cm">        dec = [1-9][0-9]*;</span>
 <span class="cm">        hex = &#39;0x&#39; [0-9a-fA-F]+;</span>
 
-<span class="cm">        *       { return &quot;err&quot;; }</span>
-<span class="cm">        bin end { return &quot;bin&quot;; }</span>
-<span class="cm">        oct end { return &quot;oct&quot;; }</span>
-<span class="cm">        dec end { return &quot;dec&quot;; }</span>
-<span class="cm">        hex end { return &quot;hex&quot;; }</span>
+<span class="cm">        *       { return ERR; }</span>
+<span class="cm">        bin end { return BIN; }</span>
+<span class="cm">        oct end { return OCT; }</span>
+<span class="cm">        dec end { return DEC; }</span>
+<span class="cm">        hex end { return HEX; }</span>
 <span class="cm">    */</span>
 <span class="p">}</span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">argc</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">printf</span> <span class="p">(</span><span class="s">&quot;%s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">lex</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">lex</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="k">case</span> <span class="nl">ERR</span><span class="p">:</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">BIN</span><span class="p">:</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;binary</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">OCT</span><span class="p">:</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;octal</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">DEC</span><span class="p">:</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;decimal</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">HEX</span><span class="p">:</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;hexadecimal</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
@@ -135,41 +158,38 @@ The numbers are not <em>parsed</em> (their numeric value is not retrieved), they
 </td></tr></table></div>
 <p>A couple of things should be noted:</p>
 <ul class="simple">
-<li>The default case (when none of the rules matched) is handled properly with the <code class="docutils literal"><span class="pre">*</span></code> rule (line 16).
+<li>The default case (when none of the rules matched) is handled properly with the <code class="docutils literal"><span class="pre">*</span></code> rule (line 18).
 <strong>Never forget to handle the default case, otherwise control flow in the lexer for some input strings will be undefined .</strong>
 Use the <a class="reference external" href="../manual/warnings/undefined_control_flow/wundefined_control_flow.html">[-Wundefined-control-flow]</a> re2c warning:
 it will warn you about the unhandled default case and show the input patterns that are not covered by the rules.</li>
-<li>We use the <em>sentinel</em> method to stop at the end of input (<code class="docutils literal"><span class="pre">re2c:yyfill:enable</span> <span class="pre">=</span> <span class="pre">0;</span></code> at line 8).
+<li>We use the <em>sentinel</em> method to stop at the end of input (<code class="docutils literal"><span class="pre">re2c:yyfill:enable</span> <span class="pre">=</span> <span class="pre">0;</span></code> at line 10).
 A sentinel is a special character that can never occur in well-formed input.
 It is appended to the end of input and serves as a stop signal for the lexer.
 In our case, the sentinel is <code class="docutils literal"><span class="pre">NULL</span></code>: all arguments are <code class="docutils literal"><span class="pre">NULL</span></code>-terminated and none of the rules matches <code class="docutils literal"><span class="pre">NULL</span></code> in the middle.
 The lexer will inevitably stop when it sees a <code class="docutils literal"><span class="pre">NULL</span></code>.
 Note that we make no assumptions about the input; it may contain any characters.
 <strong>But do make sure that the sentinel character is not allowed in the middle of a rule.</strong></li>
-<li><code class="docutils literal"><span class="pre">YYMARKER</span></code> (line 5) is needed because rules overlap:
+<li><code class="docutils literal"><span class="pre">YYMARKER</span></code> (line 7) is needed because rules overlap:
 it backs up the input position of the longest successful match.
 Imagine we have overlapping rules <code class="docutils literal"><span class="pre">&quot;a&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;abc&quot;</span></code> and input string <code class="docutils literal"><span class="pre">&quot;abd&quot;</span></code>:
 by the time <code class="docutils literal"><span class="pre">&quot;a&quot;</span></code> matches, there’s still a chance to match <code class="docutils literal"><span class="pre">&quot;abc&quot;</span></code>,
 but when the lexer sees <code class="docutils literal"><span class="pre">'d'</span></code>, it must roll back.
 (You might wonder why <code class="docutils literal"><span class="pre">YYMARKER</span></code> is exposed at all: why not make it a local variable like <code class="docutils literal"><span class="pre">yych</span></code>?
 The reason is, all input pointers must be updated by <code class="docutils literal"><span class="pre">YYFILL</span></code>
-as explained in the <a class="reference external" href="example_03.html">Arbitrary large input and YYFILL</a> example.)</li>
+as explained in the <a class="reference external" href="example_03.html">Large input</a> example.)</li>
 </ul>
-<p>Generate, compile, and run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -o example.cc 01_recognizing_integers.re
-$ g++ -o example example.cc
-$ ./example <span class="m">0</span> <span class="m">12345678901234567890</span> 0xAbcDEf 0x00 <span class="m">007</span> 0B0 0b110101010 0x 0b ? <span class="s2">&quot;&quot;</span>
-oct: 0
-dec: 12345678901234567890
-hex: 0xAbcDEf
-hex: 0x00
-oct: 007
-bin: 0B0
-bin: 0b110101010
-err: 0x
-err: 0b
-err: ?
-err:
+<p>Compile:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -o integers.cc integers.re
+$ g++ -o integers integers.cc
+</pre></div>
+</div>
+<p>Run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./integers <span class="m">123</span> 0xfF <span class="m">010</span> 0B101 ?
+decimal
+hexadecimal
+octal
+binary
+error
 </pre></div>
 </div>
 </div>
@@ -181,7 +201,7 @@ err:
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 16, 2017.
+      Last updated on Aug 18, 2017.
     </div>
   </body>
 </html>

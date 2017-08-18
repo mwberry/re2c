@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>A C++98 lexer &#8212; re2c 1.0.1 documentation</title>
+    <title>C++98 lexer &#8212; re2c 1.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -38,13 +38,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../install/install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../manual/manual.html">Manual</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="example_01.html">Recognizing integers: the sentinel method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_02.html">Recognizing strings: the need for YYMAXFILL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_03.html">Arbitrary large input and YYFILL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_04.html">Parsing integers (multiple re2c blocks)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_05.html">Parsing integers (conditions)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns (encodings)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">A C++98 lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_01.html">Numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_02.html">Strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_03.html">Large input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_04.html">Multiple blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_05.html">Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_12.html">Floating-point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_08.html">IPv4 address</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_09.html">/etc/passwd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_14.html">Options &amp; arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_13.html">Records &amp; structs</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">C++98</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_10.html">URI (RFC-3986)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_11.html">HTTP (RFC-7230)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -59,15 +66,15 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="a-c-98-lexer">
-<h1>A C++98 lexer<a class="headerlink" href="#a-c-98-lexer" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="c-98-lexer">
+<h1>C++98 lexer<a class="headerlink" href="#c-98-lexer" title="Permalink to this headline">¶</a></h1>
 <p>This is an example of a big, real-world re2c program: a C++98 lexer.
 It conforms to the C++98 standard (except for a couple of hacks that simulate the preprocessor).
 All nontrivial lexemes (integers, floating-point constants, strings, and character literals)
 are parsed (not only recognized): numeric literals are converted to numbers, and strings are unescaped.
 Some additional checks described in the standard (e.g., overflows in integer literals) are also done.
 In fact, C++ is an easy language to lex: unlike in many other languages, the C++98 lexer can proceed without feedback from the parser.</p>
-<p><a class="reference download internal" href="../_downloads/07_cxx98.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[07_cxx98.re]</span></code></a></p>
+<p><a class="reference download internal" href="../_downloads/07_cxx98.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[cxx98.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
   2
   3
@@ -840,9 +847,12 @@ have already been recognized by the main lexer: these lexemes are guaranteed to 
 They are just as hard to lex as they are to use. <code class="docutils literal"><span class="pre">:)</span></code></li>
 </ul>
 <p>Generate, compile, and run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -o example.cc 07_cxx98.re
-$ g++ -o example example.cc
-$ ./example 07_cxx98.re <span class="p">|</span> fold
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -o cxx98.cc cxx98.re
+$ g++ -o cxx98 cxx98.cc
+</pre></div>
+</div>
+<p>Run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./cxx98 07_cxx98.re <span class="p">|</span> fold
  STATIC CONST size_t <span class="nv">SIZE</span> <span class="o">=</span> <span class="m">64</span> * 1024<span class="p">;</span> STRUCT input_t <span class="o">{</span> UNSIGNED CHAR buf<span class="o">[</span>SIZE +
  YYMAXFILL<span class="o">]</span><span class="p">;</span> UNSIGNED CHAR *lim<span class="p">;</span> UNSIGNED CHAR *cur<span class="p">;</span> UNSIGNED CHAR *mar<span class="p">;</span> UNSIGNE
 D CHAR *tok<span class="p">;</span> BOOL eof<span class="p">;</span> FILE *CONST file<span class="p">;</span> input_t<span class="o">(</span>FILE *f<span class="o">)</span> : buf<span class="o">()</span> , lim<span class="o">(</span>buf + SI
@@ -883,7 +893,7 @@ ose<span class="o">(</span>file<span class="o">)</span><span class="p">;</span> 
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 16, 2017.
+      Last updated on Aug 18, 2017.
     </div>
   </body>
 </html>

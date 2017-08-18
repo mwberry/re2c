@@ -36,23 +36,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../about/about.html">About</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Install</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#download">Download</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#tarballs">Tarballs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sources">Sources</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#distributions">Distributions</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#linux">Linux</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#bsd">BSD</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#build">Build</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#simple">Simple</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#bootstrapping">Bootstrapping</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#out-of-source">Out-of-source</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#windows">Windows</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#download">Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build">Build</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#test">Test</a></li>
 </ul>
 </li>
@@ -65,23 +50,8 @@
     <div class="re2c-toc-local">
         <ul>
 <li><a class="reference internal" href="#">Install</a><ul>
-<li><a class="reference internal" href="#download">Download</a><ul>
-<li><a class="reference internal" href="#tarballs">Tarballs</a></li>
-<li><a class="reference internal" href="#sources">Sources</a></li>
-<li><a class="reference internal" href="#distributions">Distributions</a><ul>
-<li><a class="reference internal" href="#linux">Linux</a></li>
-<li><a class="reference internal" href="#bsd">BSD</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#build">Build</a><ul>
-<li><a class="reference internal" href="#simple">Simple</a></li>
-<li><a class="reference internal" href="#bootstrapping">Bootstrapping</a></li>
-<li><a class="reference internal" href="#out-of-source">Out-of-source</a></li>
-<li><a class="reference internal" href="#windows">Windows</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#download">Download</a></li>
+<li><a class="reference internal" href="#build">Build</a></li>
 <li><a class="reference internal" href="#test">Test</a></li>
 </ul>
 </li>
@@ -103,8 +73,10 @@
 </div>
 <div class="section" id="download">
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="tarballs">
-<h3>Tarballs<a class="headerlink" href="#tarballs" title="Permalink to this headline">¶</a></h3>
+<p>Below is the list of the latest (stable) tarballs for each branch.
+You can find other releases <a class="reference external" href="https://sourceforge.net/projects/re2c/files/old/">here</a>
+(but be aware that they are hidden for a good reason:
+most of them contain bugs that have been fixed in the next minor release).</p>
 <ul class="simple">
 <li><a class="reference external" href="https://github.com/skvadrik/re2c/releases/download/1.0.1/re2c-1.0.1.tar.gz">re2c-1.0.1.tar.gz</a></li>
 <li><a class="reference external" href="https://github.com/skvadrik/re2c/releases/download/0.16/re2c-0.16.tar.gz">re2c-0.16.tar.gz</a></li>
@@ -114,100 +86,75 @@
 <li><a class="reference external" href="https://github.com/skvadrik/re2c/releases/download/0.13.6/re2c-0.13.6.tar.gz">re2c-0.13.6.tar.gz</a></li>
 <li><a class="reference external" href="http://sourceforge.net/projects/re2c/files/re2c/0.13.5/re2c-0.13.5.tar.gz/download">re2c-0.13.5.tar.gz</a></li>
 </ul>
-<p>You can find other releases <a class="reference external" href="https://sourceforge.net/projects/re2c/files/old/">here</a>
-(but be aware that they are hidden for a good reason:
-most of them contain bugs that have been fixed in the next minor release).</p>
-</div>
-<div class="section" id="sources">
-<h3>Sources<a class="headerlink" href="#sources" title="Permalink to this headline">¶</a></h3>
-<p>re2c is hosted on <a class="reference external" href="https://github.com/skvadrik/re2c">github</a>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ git clone git@github.com:skvadrik/re2c.git re2c
+<p>Source files are <a class="reference external" href="https://github.com/skvadrik/re2c">on github</a>:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ git clone https://github.com/skvadrik/re2c.git re2c
 </pre></div>
 </div>
 <p>There’s also a mirror on <a class="reference external" href="https://sourceforge.net/p/re2c/code-git/ci/master/tree/">sourceforge</a>
 (should be in sync with github):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ git clone ssh://git.code.sf.net/p/re2c/code-git re2c
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ git clone https://git.code.sf.net/p/re2c/code-git re2c
 </pre></div>
 </div>
-</div>
-<div class="section" id="distributions">
-<h3>Distributions<a class="headerlink" href="#distributions" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="linux">
-<h4>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h4>
-<ul class="simple">
-<li><a class="reference external" href="http://www.sisyphus.ru/ru/srpm/Sisyphus/re2c">Alt</a></li>
-<li><a class="reference external" href="https://www.archlinux.org/packages/extra/x86_64/re2c">Arch</a></li>
-<li><a class="reference external" href="https://packages.debian.org/search?keywords=re2c">Debian</a></li>
-<li><a class="reference external" href="https://packages.gentoo.org/packages/dev-util/re2c">Gentoo</a></li>
-<li><a class="reference external" href="http://rpmfind.net/linux/rpm2html/search.php?query=re2c&amp;system=fedora">Fedora</a></li>
-<li><a class="reference external" href="http://rpmfind.net/linux/rpm2html/search.php?query=re2c&amp;system=mageia">Mageia</a></li>
-<li><a class="reference external" href="http://rpmfind.net/linux/rpm2html/search.php?query=re2c&amp;system=mandriva">Mandriva</a></li>
-<li><a class="reference external" href="http://rpmfind.net/linux/rpm2html/search.php?query=re2c&amp;system=opensuse">OpenSuSE</a></li>
-<li><a class="reference external" href="http://rpmfind.net/linux/rpm2html/search.php?query=re2c&amp;system=dag">RedHat</a></li>
-<li><a class="reference external" href="http://slackbuilds.org/repository/14.1/development/re2c/?search=re2c">Slackware</a></li>
-<li><a class="reference external" href="http://packages.ubuntu.com/search?keywords=re2c">Ubuntu</a></li>
-</ul>
-<p>Summary of available re2c versions in many (but not all) Linux distributions
-can be found on <a class="reference external" href="http://pkgs.org/download/re2c">pkgs.org</a>.</p>
-</div>
-<div class="section" id="bsd">
-<h4>BSD<a class="headerlink" href="#bsd" title="Permalink to this headline">¶</a></h4>
-<ul class="simple">
-<li><a class="reference external" href="http://macappstore.org/re2c/">Apple Mac OS X</a></li>
-<li><a class="reference external" href="http://www.freebsd.org/cgi/ports.cgi?query=re2c">FreeBSD</a></li>
-<li><a class="reference external" href="ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/devel/re2c/README.html">NetBSD</a></li>
-<li><a class="reference external" href="http://www.openbsd.org/4.5_packages/sh/re2c-0.13.5.tgz-long.html">OpenBSD</a></li>
-</ul>
-</div>
-</div>
+<p>Many distributions and systems provide their own packages:
+<a class="reference external" href="http://www.sisyphus.ru/ru/srpm/Sisyphus/re2c">Alt</a>,
+<a class="reference external" href="http://macappstore.org/re2c/">Apple Mac OS X</a>,
+<a class="reference external" href="https://www.archlinux.org/packages/extra/x86_64/re2c">Arch</a>,
+<a class="reference external" href="https://packages.debian.org/search?keywords=re2c">Debian</a>,
+<a class="reference external" href="https://packages.gentoo.org/packages/dev-util/re2c">Gentoo</a>,
+<a class="reference external" href="http://rpmfind.net/linux/rpm2html/search.php?query=re2c&amp;system=fedora">Fedora</a>,
+<a class="reference external" href="http://www.freebsd.org/cgi/ports.cgi?query=re2c">FreeBSD</a>,
+<a class="reference external" href="http://rpmfind.net/linux/rpm2html/search.php?query=re2c&amp;system=mageia">Mageia</a>,
+<a class="reference external" href="http://rpmfind.net/linux/rpm2html/search.php?query=re2c&amp;system=mandriva">Mandriva</a>,
+<a class="reference external" href="ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/devel/re2c/README.html">NetBSD</a>,
+<a class="reference external" href="http://rpmfind.net/linux/rpm2html/search.php?query=re2c&amp;system=opensuse">OpenSuSE</a>,
+<a class="reference external" href="http://rpmfind.net/linux/rpm2html/search.php?query=re2c&amp;system=dag">RedHat</a>,
+<a class="reference external" href="http://slackbuilds.org/repository/14.1/development/re2c/?search=re2c">Slackware</a>,
+<a class="reference external" href="http://packages.ubuntu.com/search?keywords=re2c">Ubuntu</a>.</p>
 </div>
 <div class="section" id="build">
 <h2>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h2>
-<p>You only need a C++98 compiler to build re2c from the tarball.
-If you have bison, re2c will use it (otherwise it will use precompiled files).</p>
-<p>If you are building re2c from source (not from a tarball), you will also need autotools:</p>
+<p>The only required build-time dependency for re2c is a C++98 compiler.
+Optional build-time dependencies are the following:
+autotools (to build re2c from source, not from distribution tarball),
+bison (to rebuild re2c parser)
+and rst2man (to rebuild documentation).</p>
+<p>If you are building re2c from source, first of all you should run autoconf and automake:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./autogen.sh
 </pre></div>
 </div>
-<div class="section" id="simple">
-<h3>Simple<a class="headerlink" href="#simple" title="Permalink to this headline">¶</a></h3>
-<p>This will install re2c (binary and manpage) to <code class="docutils literal"><span class="pre">prefix</span></code> (<code class="docutils literal"><span class="pre">/usr/local</span></code> by default):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./configure <span class="o">[</span>--prefix<span class="o">=</span>&lt;prefix&gt;<span class="o">]</span>
+<p>The simplest possible build is an in-tree build.
+The following instructions will install re2c (binary and manpage) to <code class="docutils literal"><span class="pre">_p_r_e_f_i_x_</span></code> (by default <code class="docutils literal"><span class="pre">/usr/local</span></code>):</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./configure --prefix<span class="o">=</span>_p_r_e_f_i_x_
 $ make
 $ make install
 </pre></div>
 </div>
-</div>
-<div class="section" id="bootstrapping">
-<h3>Bootstrapping<a class="headerlink" href="#bootstrapping" title="Permalink to this headline">¶</a></h3>
-<p>Some parts of re2c (lexers and parser of command-line options) are written in re2c.
-These files are precompiled and packaged into the re2c distribution (so that re2c can be built without re2c).
-However, one can fully bootstrap re2c:</p>
+<p>Since re2c is a self-hosting lexer generator (some parts of re2c are written in re2c), it needs to be bootstrapped.
+Bootstrapping files are packaged into the re2c distribution, so that re2c can be built on a system without re2c.
+The following instructions bootstrap re2c from scratch and update precompiled files:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ make bootstrap
 </pre></div>
 </div>
-</div>
-<div class="section" id="out-of-source">
-<h3>Out-of-source<a class="headerlink" href="#out-of-source" title="Permalink to this headline">¶</a></h3>
-<p>re2c supports out-of-source builds:</p>
+<p>re2c supports out-of-tree builds:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ mkdir builddir <span class="o">&amp;&amp;</span> <span class="nb">cd</span> builddir
-$ ../configure <span class="o">[</span>--prefix<span class="o">=</span>&lt;prefix&gt;<span class="o">]</span>
+$ ../configure
 $ make
 $ make install
 </pre></div>
 </div>
-</div>
-<div class="section" id="windows">
-<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
 <p>If you intend to use re2c on Windows, you can either
 use <a class="reference external" href="https://cygwin.com/">cygwin</a>
-or build re2c with <a class="reference external" href="http://mingw.org/">mingw</a>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./configure --host i686-w64-mingw32  <span class="o">[</span>--prefix<span class="o">=</span>&lt;prefix&gt;<span class="o">]</span>
+or build re2c with <a class="reference external" href="http://mingw.org/">mingw</a>
+(mingw builds are supported and tested regularly).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./configure --host i686-w64-mingw32
 $ make
 $ make install
 </pre></div>
 </div>
-<p>(mingw builds are supported and tested regularly).</p>
+<p>To rebuild re2c documentation:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./configure --enable-docs
+$ make docs
+</pre></div>
 </div>
 </div>
 <div class="section" id="test">
@@ -242,7 +189,7 @@ $ make install
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 16, 2017.
+      Last updated on Aug 18, 2017.
     </div>
   </body>
 </html>
