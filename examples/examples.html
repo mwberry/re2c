@@ -68,34 +68,6 @@
             
   <div class="section" id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<p>Examples have two purposes.
-First, they show various aspects of using re2c API:</p>
-<ul class="simple">
-<li>the <a class="reference external" href="example_01.html">sentinel method</a> of checking for the end of input</li>
-<li>the <code class="docutils literal"><span class="pre">YYLIMIT</span></code> <a class="reference external" href="example_02.html">method</a> of checking for the end of input and purpose of <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> padding</li>
-<li>how to <a class="reference external" href="example_03.html">refill buffer</a> with <code class="docutils literal"><span class="pre">YYFILL</span></code> in case of large input</li>
-<li>how to use <a class="reference external" href="example_05.html">conditions</a> to switch between different lexer modes</li>
-<li>how to switch lexer modes using <a class="reference external" href="example_04.html">multiple interrelated blocks</a></li>
-<li>how to <a class="reference external" href="example_06.html">reuse the same set of rules</a> for multiple lexers</li>
-<li>the support for various <a class="reference external" href="example_06.html">encodings</a></li>
-<li>how to use <a class="reference external" href="example_08.html">basic</a> <a class="reference external" href="example_12.html">submatch</a> <a class="reference external" href="example_09.html">extraction</a> (and also <a class="reference external" href="example_14.html">here</a>)</li>
-<li>submatch extraction in case of <a class="reference external" href="example_13.html">repeated submatch</a></li>
-</ul>
-<p>Second, examples are practical: each of them solves a distinct real-world problem.
-Some problems are deliberately simple, such as lexing <a class="reference external" href="example_01.html">numbers</a> and <a class="reference external" href="example_02.html">strings</a>,
-or parsing <a class="reference external" href="example_08.html">IPv4 address</a> and <a class="reference external" href="example_12.html">floating-point numbers</a>.
-Others problems are moderately complex, such as parsing <a class="reference external" href="example_09.html">/etc/passwd file format</a>,
-parsing command-line <a class="reference external" href="example_14.html">options and arguments</a>
-or parsing non-recursive <a class="reference external" href="example_13.html">records and structures</a>.
-Finally, some examples are quite complex and conforming to real-world standards and specifications:
-<a class="reference external" href="example_07.html">C++98</a> lexer,
-RFC-3986 compliant <a class="reference external" href="example_10.html">URI parser</a>,
-RFC-7230 compliant <a class="reference external" href="example_11.html">HTTP parser</a>
-and the parser of <a class="reference external" href="example_06.html">Braille patterns</a>.</p>
-<p>All examples are written in C-90 and in C++98, so they should be quite portable.
-However, many examples use new re2c features and options,
-and they have been tested on the latest re2c version.
-Please <a class="reference external" href="mailto:re2c-general&#37;&#52;&#48;lists&#46;sourceforge&#46;net">report</a> any errors and contribute new examples!</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="example_01.html">Numbers</a></li>
@@ -114,6 +86,40 @@ Please <a class="reference external" href="mailto:re2c-general&#37;&#52;&#48;lis
 <li class="toctree-l1"><a class="reference internal" href="example_06.html">Braille patterns</a></li>
 </ul>
 </div>
+<p>Examples have been written with two goals in mind.
+First, they are practical: each example solves a distinct real-world problem,
+ranging from simple recognizers to complex parsers conforming to real-world standards and specifications.
+Second, examples show various aspects of using re2c API:</p>
+<blockquote>
+<div><p>Checking for the end of input:
+simple and efficient <a class="reference external" href="example_01.html">sentinel method</a>
+which should be used when it is possible to mark the end of input with a <em>sentinel character</em> that never appears in the middle of well-formed input;
+and the more complex <a class="reference external" href="example_02.html">general method</a> based on <code class="docutils literal"><span class="pre">YYLIMIT</span></code>
+which requires apending <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> characters of padding at the end of input.</p>
+<p>Handling <a class="reference external" href="example_03.html">large input</a>: how to organize buffering and how to refill buffer with <code class="docutils literal"><span class="pre">YYFILL</span></code>.
+Some additional details of handling <em>tags</em> in <code class="docutils literal"><span class="pre">YYFILL</span></code> are illustrated
+in parsing <a class="reference external" href="example_10.html">URI</a> and parsing <a class="reference external" href="example_11.html">HTTP messages</a>.</p>
+<p><a class="reference external" href="../manual/features/submatch/submatch.html">Submatch extraction</a>:
+using <em>s-tags</em> to store input positions corresponding to various parts of the regular expression in variables
+(outlined by parsing <a class="reference external" href="example_08.html">IPv4 address</a> and also used in
+parsing <a class="reference external" href="example_12.html">floating-point</a> numbers,
+parsing <a class="reference external" href="example_09.html">/etc/passwd</a> file format,
+parsing command-line <a class="reference external" href="example_14.html">options and arguments</a>
+and parsing <a class="reference external" href="example_10.html">URI</a>);
+using <em>m-tags</em> to handle repeated submatch and store repeated values efficiently in the form of a prefix tree
+(outlined by parsing non-recursive <a class="reference external" href="example_13.html">records and structures</a> and also used in parsing <a class="reference external" href="example_11.html">HTTP messages</a>).</p>
+<p>Switching between different lexing <em>modes</em> using multiple interrelated sub-lexers:
+either in semi-automated manner with re2c <a class="reference external" href="../manual/features/conditions/conditions.html">conditions</a> feature
+(outlined by a simple example of <a class="reference external" href="example_05.html">parsing integers</a> and also used in parsing <a class="reference external" href="example_06.html">Braille patterns</a>),
+or manually with the use of multiple blocks
+(outlined by <a class="reference external" href="example_04.html">another example</a> of parsing integers and a more complex example of <a class="reference external" href="example_07.html">C++98 lexer</a>).</p>
+<p>Reusing <a class="reference external" href="example_06.html">the same set of rules</a> to generate multiple lexers with different options.</p>
+<p>Using various <a class="reference external" href="example_06.html">encodings</a>.</p>
+</div></blockquote>
+<p>All examples are written in C-90 and in C++98, so they should be quite portable.
+However, many examples use new re2c features and options,
+and they have been tested on the latest re2c version.
+Please <a class="reference external" href="mailto:re2c-general&#37;&#52;&#48;lists&#46;sourceforge&#46;net">report</a> any errors and contribute new examples!</p>
 </div>
 
 
@@ -123,7 +129,7 @@ Please <a class="reference external" href="mailto:re2c-general&#37;&#52;&#48;lis
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 18, 2017.
+      Last updated on Aug 20, 2017.
     </div>
   </body>
 </html>
