@@ -55,6 +55,7 @@
 <li class="toctree-l2"><a class="reference internal" href="example_15.html">Strings in binaries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_16.html">Fake sentinel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_17.html">std::ifstream</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_18.html">Push model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -90,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="example_15.html">Strings in binaries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_16.html">Fake sentinel</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_17.html">std::ifstream</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_18.html">Push model</a></li>
 </ul>
 </div>
 <p>Examples have been written with two goals in mind.
@@ -113,6 +115,11 @@ and <a class="reference external" href="example_15.html">perform checks on each 
 <p>Handling <a class="reference external" href="example_03.html">large input</a>: how to organize buffering and how to refill buffer with <code class="docutils literal"><span class="pre">YYFILL</span></code>.
 Some additional details of handling <em>tags</em> in <code class="docutils literal"><span class="pre">YYFILL</span></code> are illustrated
 in parsing <a class="reference external" href="example_10.html">URI</a> and parsing <a class="reference external" href="example_11.html">HTTP messages</a>.</p>
+<p>Using <a class="reference external" href="/manual/features/state/state.html">storable state</a> feature
+to write <a class="reference external" href="example_18.html">push-model</a> lexers:
+it is necessary when the input comes in chunks that are controlled by the outside program.
+In such case lexer must be stopped when there is not enough input
+and later resumed from the same point.</p>
 <p><a class="reference external" href="../manual/features/submatch/submatch.html">Submatch extraction</a>:
 using <em>s-tags</em> to store input positions corresponding to various parts of the regular expression in variables
 (outlined by parsing <a class="reference external" href="example_08.html">IPv4 address</a> and also used in
