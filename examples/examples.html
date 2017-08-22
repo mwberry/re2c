@@ -52,6 +52,9 @@
 <li class="toctree-l2"><a class="reference internal" href="example_10.html">URI (RFC-3986)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_11.html">HTTP (RFC-7230)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_06.html">Braille patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_15.html">Strings in binaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_16.html">Fake sentinel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_17.html">std::ifstream</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -84,6 +87,9 @@
 <li class="toctree-l1"><a class="reference internal" href="example_10.html">URI (RFC-3986)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_11.html">HTTP (RFC-7230)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_06.html">Braille patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_15.html">Strings in binaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_16.html">Fake sentinel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_17.html">std::ifstream</a></li>
 </ul>
 </div>
 <p>Examples have been written with two goals in mind.
@@ -91,11 +97,19 @@ First, they are practical: each example solves a distinct real-world problem,
 ranging from simple recognizers to complex parsers conforming to real-world standards and specifications.
 Second, examples show various aspects of using re2c API:</p>
 <blockquote>
-<div><p>Checking for the end of input:
-simple and efficient <a class="reference external" href="example_01.html">sentinel method</a>
-which should be used when it is possible to mark the end of input with a <em>sentinel character</em> that never appears in the middle of well-formed input;
-and the more complex <a class="reference external" href="example_02.html">general method</a> based on <code class="docutils literal"><span class="pre">YYLIMIT</span></code>
-which requires apending <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> characters of padding at the end of input.</p>
+<div><p>Checking for the end of input: this can be done in a number of different ways.
+The simplest and the most efficient way is the sentinel method demonstrated by <a class="reference external" href="example_01.html">lexing numbers</a> example:
+it should be used when there is a <em>sentinel character</em> that never appears in the middle of well-formed input,
+such as the <code class="docutils literal"><span class="pre">NULL</span></code> character in null-terminated strings.
+If the input is buffered, sentinel should be <a class="reference external" href="example_09.html">appended at the end of buffer</a>.
+If appending is not possible, one can <a class="reference external" href="example_16.html">emulate fake sentinel</a> using generic API.
+Another, more general (but also less efficient) method is based on comparison of current input position and the end position:
+that is, comparison of <code class="docutils literal"><span class="pre">YYCURSOR</span></code> and <code class="docutils literal"><span class="pre">YYLIMIT</span></code> as explained in <a class="reference external" href="example_02.html">parsing strings</a> example,
+or using <code class="docutils literal"><span class="pre">YYLESSTHAN</span></code> in case of generic API.
+By default, this method requires padding input with <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> fake characters;
+if padding is undesirable or impossible, one can override the checking mechanism using generic API
+and <a class="reference external" href="example_15.html">perform checks on each input character</a>
+(also used in <a class="reference external" href="example_17.html">std::ifstream</a> example).</p>
 <p>Handling <a class="reference external" href="example_03.html">large input</a>: how to organize buffering and how to refill buffer with <code class="docutils literal"><span class="pre">YYFILL</span></code>.
 Some additional details of handling <em>tags</em> in <code class="docutils literal"><span class="pre">YYFILL</span></code> are illustrated
 in parsing <a class="reference external" href="example_10.html">URI</a> and parsing <a class="reference external" href="example_11.html">HTTP messages</a>.</p>
@@ -108,6 +122,12 @@ parsing command-line <a class="reference external" href="example_14.html">option
 and parsing <a class="reference external" href="example_10.html">URI</a>);
 using <em>m-tags</em> to handle repeated submatch and store repeated values efficiently in the form of a prefix tree
 (outlined by parsing non-recursive <a class="reference external" href="example_13.html">records and structures</a> and also used in parsing <a class="reference external" href="example_11.html">HTTP messages</a>).</p>
+<p>Using <a class="reference external" href="/manual/features/generic_api/generic_api.html">generic API</a>,
+either to override the input mechanism (outlined by <a class="reference external" href="example_17.html">std::ifstream</a> example),
+or to tweak it (as explained in
+<a class="reference external" href="example_16.html">fake sentinel</a> and
+<a class="reference external" href="example_15.html">strings in binaries</a>
+examples).</p>
 <p>Switching between different lexing <em>modes</em> using multiple interrelated sub-lexers:
 either in semi-automated manner with re2c <a class="reference external" href="../manual/features/conditions/conditions.html">conditions</a> feature
 (outlined by a simple example of <a class="reference external" href="example_05.html">parsing integers</a> and also used in parsing <a class="reference external" href="example_06.html">Braille patterns</a>),
@@ -129,7 +149,7 @@ Please <a class="reference external" href="mailto:re2c-general&#37;&#52;&#48;lis
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 20, 2017.
+      Last updated on Aug 22, 2017.
     </div>
   </body>
 </html>
