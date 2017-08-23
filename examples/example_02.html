@@ -55,6 +55,7 @@
 <li class="toctree-l2"><a class="reference internal" href="example_15.html">Strings in binaries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_16.html">Fake sentinel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_17.html">std::ifstream</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_18.html">Push model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -104,7 +105,7 @@ Since the lexer checks for multiple characters at once, the last few input chara
 A common hack is to pad the input with a few fake characters that <strong>do not form a valid lexeme or lexeme suffix</strong>.
 The length of the padding depends on the maximum argument to <code class="docutils literal"><span class="pre">YYFILL</span></code>
 (this value is called <code class="docutils literal"><span class="pre">YYMAXFILL</span></code> and can be generated with the <code class="docutils literal"><span class="pre">/*!max:re2c*/</span></code> directive).</p>
-<p><a class="reference download internal" href="../_downloads/02_recognizing_strings.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[strings.re]</span></code></a></p>
+<p><a class="reference download internal" href="../_downloads/02_recognizing_strings.i.re" download=""><code class="xref download docutils literal"><span class="pre">[strings.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -242,7 +243,7 @@ err: <span class="s2">&quot;</span>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 22, 2017.
+      Last updated on Aug 23, 2017.
     </div>
   </body>
 </html>

@@ -55,6 +55,7 @@
 <li class="toctree-l2"><a class="reference internal" href="example_15.html">Strings in binaries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example_16.html">Fake sentinel</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">std::ifstream</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_18.html">Push model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../news/news.html">News</a></li>
@@ -83,7 +84,7 @@ and puts the responsibility for checking on <code class="docutils literal"><span
 This results in more frequent checks: <code class="docutils literal"><span class="pre">YYSKIP</span></code> is happens on each input character,
 while <code class="docutils literal"><span class="pre">YYLESSTHAN</span></code> happens only once per each strongly connected component of automaton.
 However, this method allows to avoid padding, which would require buffering input and nullify all advantages of direct-file input.</p>
-<p><a class="reference download internal" href="../_downloads/17_ifstream.re.txt" download=""><code class="xref download docutils literal"><span class="pre">[ifstream.re]</span></code></a></p>
+<p><a class="reference download internal" href="../_downloads/17_ifstream.i--input(custom).re" download=""><code class="xref download docutils literal"><span class="pre">[ifstream.re]</span></code></a></p>
 <div class="highlight-cpp"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -159,7 +160,7 @@ $ g++ -o ifstream ifstream.cc
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 22, 2017.
+      Last updated on Aug 23, 2017.
     </div>
   </body>
 </html>
