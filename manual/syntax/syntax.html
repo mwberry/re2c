@@ -41,10 +41,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../warnings/warnings.html">Warnings</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Syntax</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#rules">Rules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#definitions">Definitions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configurations">Configurations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#regular-expressions">Regular expressions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#interface">Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#definitions">Definitions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#interface-code">Interface code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configurations">Configurations</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../features/features.html">Features</a></li>
@@ -59,10 +59,10 @@
         <ul>
 <li><a class="reference internal" href="#">Syntax</a><ul>
 <li><a class="reference internal" href="#rules">Rules</a></li>
-<li><a class="reference internal" href="#definitions">Definitions</a></li>
-<li><a class="reference internal" href="#configurations">Configurations</a></li>
 <li><a class="reference internal" href="#regular-expressions">Regular expressions</a></li>
-<li><a class="reference internal" href="#interface">Interface</a></li>
+<li><a class="reference internal" href="#definitions">Definitions</a></li>
+<li><a class="reference internal" href="#interface-code">Interface code</a></li>
+<li><a class="reference internal" href="#configurations">Configurations</a></li>
 </ul>
 </li>
 </ul>
@@ -81,7 +81,10 @@
 <h1>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<p>Code for <code class="docutils literal"><span class="pre">re2c</span></code> consists of a set of <a class="reference internal" href="#rules">rules</a>, <a class="reference internal" href="#definitions">definitions</a> and <a class="reference internal" href="#configurations">configurations</a>.</p>
+<p>A program can contain any number of re2c blocks.
+Each block consists of a sequence of <a class="reference internal" href="#definitions">definitions</a>,
+<a class="reference internal" href="#configurations">configurations</a> and <a class="reference internal" href="#rules">rules</a> that contain <a class="reference internal" href="#regular-expressions">regular expressions</a>.
+The generated lexers communicate with the outer world using the <a class="reference internal" href="#interface-code">interface code</a>.</p>
 <div class="section" id="rules">
 <h2>Rules<a class="headerlink" href="#rules" title="Permalink to this headline">¶</a></h2>
 <p>Rules consist of a regular expression followed by a user-defined action:
@@ -98,6 +101,33 @@ In case of variable-length encodings <code class="docutils literal"><span class=
 <p>If <code class="docutils literal"><span class="pre">-c</span></code> <code class="docutils literal"><span class="pre">--conditions</span></code> option is used, then rules have more complex form
 described in the section about conditions.</p>
 </div>
+<div class="section" id="regular-expressions">
+<h2>Regular expressions<a class="headerlink" href="#regular-expressions" title="Permalink to this headline">¶</a></h2>
+<p>re2c uses the following syntax for regular expressions:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;foo&quot;</span></code> case-sensitive string literal</li>
+<li><code class="docutils literal"><span class="pre">'foo'</span></code> case-insensitive string literal</li>
+<li><code class="docutils literal"><span class="pre">[a-xyz]</span></code>, <code class="docutils literal"><span class="pre">[^a-xyz]</span></code> character class (possibly negated)</li>
+<li><code class="docutils literal"><span class="pre">.</span></code> any character except newline</li>
+<li><code class="docutils literal"><span class="pre">R</span> <span class="pre">\</span> <span class="pre">S</span></code> difference of character classes <code class="docutils literal"><span class="pre">R</span></code> and <code class="docutils literal"><span class="pre">S</span></code></li>
+<li><code class="docutils literal"><span class="pre">R*</span></code> zero or more occurrences of <code class="docutils literal"><span class="pre">R</span></code></li>
+<li><code class="docutils literal"><span class="pre">R+</span></code> zero or more occurrences of <code class="docutils literal"><span class="pre">R</span></code></li>
+<li><code class="docutils literal"><span class="pre">R?</span></code> optional <code class="docutils literal"><span class="pre">R</span></code></li>
+<li><code class="docutils literal"><span class="pre">R{n}</span></code> repetition of <code class="docutils literal"><span class="pre">R</span></code> exactly <code class="docutils literal"><span class="pre">n</span></code> times</li>
+<li><code class="docutils literal"><span class="pre">R{n,}</span></code> repetition of <code class="docutils literal"><span class="pre">R</span></code> at least <code class="docutils literal"><span class="pre">n</span></code> times</li>
+<li><code class="docutils literal"><span class="pre">R{n,m}</span></code> repetition of <code class="docutils literal"><span class="pre">R</span></code> from <code class="docutils literal"><span class="pre">n</span></code> to <code class="docutils literal"><span class="pre">m</span></code> times</li>
+<li><code class="docutils literal"><span class="pre">(R)</span></code> just <code class="docutils literal"><span class="pre">R</span></code>; parentheses are used to override precedence or for POSIX-style submatch</li>
+<li><code class="docutils literal"><span class="pre">R</span> <span class="pre">S</span></code> concatenation: <code class="docutils literal"><span class="pre">R</span></code> followed by <code class="docutils literal"><span class="pre">S</span></code></li>
+<li><code class="docutils literal"><span class="pre">R</span> <span class="pre">|</span> <span class="pre">S</span></code> alternative: <code class="docutils literal"><span class="pre">R</span> <span class="pre">or</span> <span class="pre">S</span></code></li>
+<li><code class="docutils literal"><span class="pre">R</span> <span class="pre">/</span> <span class="pre">S</span></code> loohakead: <code class="docutils literal"><span class="pre">R</span></code> followed by <code class="docutils literal"><span class="pre">S</span></code>, but <code class="docutils literal"><span class="pre">S</span></code> is not consumed</li>
+<li><code class="docutils literal"><span class="pre">name</span></code> the regular expression defined as <code class="docutils literal"><span class="pre">name</span></code> (or literal string <code class="docutils literal"><span class="pre">&quot;name&quot;</span></code> in Flex compatibility mode)</li>
+<li><code class="docutils literal"><span class="pre">{name}</span></code> the regular expression defined as <code class="docutils literal"><span class="pre">name</span></code> in Flex compatibility mode</li>
+<li><code class="docutils literal"><span class="pre">&#64;stag</span></code> an <em>s-tag</em>: saves the last input position at which <code class="docutils literal"><span class="pre">&#64;stag</span></code> matches in a variable named <code class="docutils literal"><span class="pre">stag</span></code></li>
+<li><code class="docutils literal"><span class="pre">#mtag</span></code> an <em>m-tag</em>: saves all input positions at which <code class="docutils literal"><span class="pre">#mtag</span></code> matches in a variable named <code class="docutils literal"><span class="pre">mtag</span></code></li>
+</ul>
+<p>Character classes and string literals may contain the following escape sequences:
+<code class="docutils literal"><span class="pre">\a</span></code>, <code class="docutils literal"><span class="pre">\b</span></code>, <code class="docutils literal"><span class="pre">\f</span></code>, <code class="docutils literal"><span class="pre">\n</span></code>, <code class="docutils literal"><span class="pre">\r</span></code>, <code class="docutils literal"><span class="pre">\t</span></code>, <code class="docutils literal"><span class="pre">\v</span></code>, <code class="docutils literal"><span class="pre">\\</span></code>, octal escapes <code class="docutils literal"><span class="pre">\ooo</span></code> and hexadecimal escapes <code class="docutils literal"><span class="pre">\xhh</span></code>, <code class="docutils literal"><span class="pre">\uhhhh</span></code> and <code class="docutils literal"><span class="pre">\Uhhhhhhhh</span></code>.</p>
+</div>
 <div class="section" id="definitions">
 <h2>Definitions<a class="headerlink" href="#definitions" title="Permalink to this headline">¶</a></h2>
 <p>Named definitions are of the form <code class="docutils literal"><span class="pre">name</span> <span class="pre">=</span> <span class="pre">regexp</span> <span class="pre">;</span></code>
@@ -105,6 +135,99 @@ where <code class="docutils literal"><span class="pre">name</span></code> is an 
 and <code class="docutils literal"><span class="pre">regexp</span></code> is a regular expression.
 With <code class="docutils literal"><span class="pre">-F</span></code> <code class="docutils literal"><span class="pre">--flex-syntax</span></code> option named definitions are also of the form <code class="docutils literal"><span class="pre">name</span> <span class="pre">regexp</span></code>.
 Each name should be defined before it is used.</p>
+</div>
+<div class="section" id="interface-code">
+<h2>Interface code<a class="headerlink" href="#interface-code" title="Permalink to this headline">¶</a></h2>
+<p>Below is the list of all symbols which may be used by the lexer in order to interact with the outer world.
+These symbols should be defined by the user,
+either in the form of inplace configurations,
+or as C/C++ variables, functions, macros and other language constructs.
+Which primitives are necessary depends on the particular use case.</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">yyaccept</span></code></dt>
+<dd>L-value of unsigned integral type that is used to hold the number of the last matched rule.
+Explicit definition by the user is necessary only with <code class="docutils literal"><span class="pre">-f</span></code> <code class="docutils literal"><span class="pre">--storable-state</span></code> option.</dd>
+<dt><code class="docutils literal"><span class="pre">YYBACKUP</span> <span class="pre">()</span></code></dt>
+<dd>Backup current input position (used only with <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
+<dt><code class="docutils literal"><span class="pre">YYBACKUPCTX</span> <span class="pre">()</span></code></dt>
+<dd>Backup current input position for trailing context (used only with  <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
+<dt><code class="docutils literal"><span class="pre">yych</span></code></dt>
+<dd>L-value of type <code class="docutils literal"><span class="pre">YYCTYPE</span></code> that is used to hold current input character.
+Explicit definition by the user is necessary only with <code class="docutils literal"><span class="pre">-f</span></code> <code class="docutils literal"><span class="pre">--storable-state</span></code> option.</dd>
+<dt><code class="docutils literal"><span class="pre">YYCONDTYPE</span></code></dt>
+<dd>The type of <em>condition</em> identifiers (used only with <code class="docutils literal"><span class="pre">-c</span></code> <code class="docutils literal"><span class="pre">--conditions</span></code> option).
+Should be generated either with <code class="docutils literal"><span class="pre">/*!types:re2c*/</span></code> directive, or with <code class="docutils literal"><span class="pre">-t</span></code> <code class="docutils literal"><span class="pre">--type-header</span></code> option.</dd>
+<dt><code class="docutils literal"><span class="pre">YYCTXMARKER</span></code></dt>
+<dd>L-value of type <code class="docutils literal"><span class="pre">YYCTYPE</span> <span class="pre">*</span></code> that is used to backup input position of trailing context.
+It is needed only if regular expressions use the lookahead operator <code class="docutils literal"><span class="pre">/</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">YYCTYPE</span></code></dt>
+<dd>The type of the input characters (<em>code units</em>).
+Usually it should be <code class="docutils literal"><span class="pre">unsigned</span> <span class="pre">char</span></code> for ASCII, EBCDIC and UTF-8 encodings,
+<code class="docutils literal"><span class="pre">unsigned</span> <span class="pre">short</span></code> for UTF-16 or UCS-2 encodings,
+and <code class="docutils literal"><span class="pre">unsigned</span> <span class="pre">int</span></code> for UTF-32 encoding.</dd>
+<dt><code class="docutils literal"><span class="pre">YYCURSOR</span></code></dt>
+<dd>L-value of type <code class="docutils literal"><span class="pre">YYCTYPE</span> <span class="pre">*</span></code> that is used as a pointer to the current input symbol.
+Initially <code class="docutils literal"><span class="pre">YYCURSOR</span></code> points to the first character and is advanced by the lexer during matching.
+When a rule matches, <code class="docutils literal"><span class="pre">YYCURSOR</span></code> points past the last character of the matched string.</dd>
+<dt><code class="docutils literal"><span class="pre">YYDEBUG</span> <span class="pre">(state,</span> <span class="pre">symbol)</span></code></dt>
+<dd>A function-like primitive that is used to dump debug information (only used with <code class="docutils literal"><span class="pre">-d</span></code> <code class="docutils literal"><span class="pre">--debug-output</span></code> option).
+<code class="docutils literal"><span class="pre">YYDEBUG</span></code> should return no value and accept two arguments:
+<code class="docutils literal"><span class="pre">state</span></code> (either lexer state or <code class="docutils literal"><span class="pre">-1</span></code>) and <code class="docutils literal"><span class="pre">symbol</span></code> (current input symbol).</dd>
+<dt><code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code></dt>
+<dd>A function-like primitive that is called by the lexer when there is not enough input.
+<code class="docutils literal"><span class="pre">YYFILL</span></code> should return no value and supply at least <code class="docutils literal"><span class="pre">n</span></code> additional characters.
+Maximal value of <code class="docutils literal"><span class="pre">n</span></code> equals <code class="docutils literal"><span class="pre">YYMAXFILL</span></code>, which can be obtained with the <code class="docutils literal"><span class="pre">/*!max:re2c*/</span></code> directive.</dd>
+<dt><code class="docutils literal"><span class="pre">YYGETCONDITION</span> <span class="pre">()</span></code></dt>
+<dd>R-value of type <code class="docutils literal"><span class="pre">YYCONDTYPE</span></code> that represents current <em>condition</em> identifier (used only with <code class="docutils literal"><span class="pre">-c</span></code> <code class="docutils literal"><span class="pre">--conditions</span></code> option).</dd>
+<dt><code class="docutils literal"><span class="pre">YYGETSTATE</span> <span class="pre">()</span></code></dt>
+<dd>R-value of signed integral type that represents current lexer state (used only with <code class="docutils literal"><span class="pre">-f</span></code> <code class="docutils literal"><span class="pre">--storable-state</span></code> option).
+Initial value of lexer state should be <code class="docutils literal"><span class="pre">-1</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">YYLESSTHAN</span> <span class="pre">(n)</span></code></dt>
+<dd>R-value of boolean type that is <code class="docutils literal"><span class="pre">true</span></code> if and only if there is less than <code class="docutils literal"><span class="pre">n</span></code> input characters left (used only with  <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
+<dt><code class="docutils literal"><span class="pre">YYLIMIT</span></code></dt>
+<dd>R-value of type <code class="docutils literal"><span class="pre">YYCTYPE</span> <span class="pre">*</span></code> that marks the end of input (<code class="docutils literal"><span class="pre">YYLIMIT[-1]</span></code> should be the last input character).
+Lexer compares <code class="docutils literal"><span class="pre">YYCURSOR</span></code> and <code class="docutils literal"><span class="pre">YYLIMIT</span></code> in order to determine if there is enough input characters left.</dd>
+<dt><code class="docutils literal"><span class="pre">YYMARKER</span></code></dt>
+<dd>L-value of type <code class="docutils literal"><span class="pre">YYCTYPE</span> <span class="pre">*</span></code> used to backup input position of successful match.
+This might be necessary if there is an overlapping longer rule that might also match.</dd>
+<dt><code class="docutils literal"><span class="pre">YYMTAGP</span> <span class="pre">(t)</span></code></dt>
+<dd>Append current input position to the history of <em>m-tag</em> <code class="docutils literal"><span class="pre">t</span></code> (used only with <code class="docutils literal"><span class="pre">-T</span></code> <code class="docutils literal"><span class="pre">--tags</span></code> option).</dd>
+<dt><code class="docutils literal"><span class="pre">YYMTAGN</span> <span class="pre">(t)</span></code></dt>
+<dd>Append default value to the history of <em>m-tag</em> <code class="docutils literal"><span class="pre">t</span></code> (used only with <code class="docutils literal"><span class="pre">-T</span></code> <code class="docutils literal"><span class="pre">--tags</span></code> option).</dd>
+<dt><code class="docutils literal"><span class="pre">YYMAXFILL</span></code></dt>
+<dd>Integral constant that denotes maximal value of <code class="docutils literal"><span class="pre">YYFILL</span></code> argument
+and is autogenerated by <code class="docutils literal"><span class="pre">/*!max:re2c*/</span></code> directive.</dd>
+<dt><code class="docutils literal"><span class="pre">YYMAXNMATCH</span></code></dt>
+<dd>Integral constant that denotes maximal number of capturing groups in a rule
+and is autogenerated by <code class="docutils literal"><span class="pre">/*!maxnmatch:re2c*/</span></code> directive (used only with <code class="docutils literal"><span class="pre">--posix-captures</span></code> option).</dd>
+<dt><code class="docutils literal"><span class="pre">yynmatch</span></code></dt>
+<dd>L-value of unsigned integral type that is used to hold the number of capturing groups in the matching rule.
+Used only with <code class="docutils literal"><span class="pre">-P</span></code> <code class="docutils literal"><span class="pre">--posix-captures</span></code> option.</dd>
+<dt><code class="docutils literal"><span class="pre">YYPEEK</span> <span class="pre">()</span></code></dt>
+<dd>R-value of type <code class="docutils literal"><span class="pre">YYCTYPE</span></code> that denotes current input character (used only with <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
+<dt><code class="docutils literal"><span class="pre">yypmatch</span></code></dt>
+<dd>An array of l-values that are used to hold the values of <em>s-tags</em>
+corresponding to the capturing parentheses in the matching rule.
+The length of array must be at least <code class="docutils literal"><span class="pre">yynmatch</span> <span class="pre">*</span> <span class="pre">2</span></code> (ideally <code class="docutils literal"><span class="pre">YYMAXNMATCH</span> <span class="pre">*</span> <span class="pre">2</span></code>).
+Used only with <code class="docutils literal"><span class="pre">-P</span></code> <code class="docutils literal"><span class="pre">--posix-captures</span></code> option.</dd>
+<dt><code class="docutils literal"><span class="pre">YYRESTORE</span> <span class="pre">()</span></code></dt>
+<dd>Restore input position (used only with <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
+<dt><code class="docutils literal"><span class="pre">YYRESTORECTX</span> <span class="pre">()</span></code></dt>
+<dd>Restore input position from the value of trailing context (used only with <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
+<dt><code class="docutils literal"><span class="pre">YYRESTORETAG</span> <span class="pre">(t)</span></code></dt>
+<dd>Restore input position from the value of <em>s-tag</em> <code class="docutils literal"><span class="pre">t</span></code> (used only with <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
+<dt><code class="docutils literal"><span class="pre">YYSETCONDITION</span> <span class="pre">(condition)</span></code></dt>
+<dd>Set current <em>condition</em> identifier to <code class="docutils literal"><span class="pre">condition</span></code> (used only with <code class="docutils literal"><span class="pre">-c</span></code> <code class="docutils literal"><span class="pre">--conditions</span></code> option).</dd>
+<dt><code class="docutils literal"><span class="pre">YYSETSTATE</span> <span class="pre">(state)</span></code></dt>
+<dd>Set current lexer state to <code class="docutils literal"><span class="pre">state</span></code> (used only with <code class="docutils literal"><span class="pre">-f</span></code> <code class="docutils literal"><span class="pre">--storable-state</span></code> option).
+Parameter <code class="docutils literal"><span class="pre">state</span></code> is of signed integral type.</dd>
+<dt><code class="docutils literal"><span class="pre">YYSKIP</span> <span class="pre">()</span></code></dt>
+<dd>Advance input position to the next character (used only with generic API).</dd>
+<dt><code class="docutils literal"><span class="pre">YYSTAGP</span> <span class="pre">(t)</span></code></dt>
+<dd>Save current input position to <em>s-tag</em> <code class="docutils literal"><span class="pre">t</span></code> (used only with <code class="docutils literal"><span class="pre">-T</span></code> <code class="docutils literal"><span class="pre">--tags</span></code> and <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
+<dt><code class="docutils literal"><span class="pre">YYSTAGN</span> <span class="pre">(t)</span></code></dt>
+<dd>Save default value to <em>s-tag</em> <code class="docutils literal"><span class="pre">t</span></code> (used only with <code class="docutils literal"><span class="pre">-T</span></code> <code class="docutils literal"><span class="pre">--tags</span></code> and <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> options).</dd>
+</dl>
 </div>
 <div class="section" id="configurations">
 <h2>Configurations<a class="headerlink" href="#configurations" title="Permalink to this headline">¶</a></h2>
@@ -335,126 +458,6 @@ introduce severe security issues to your programs.</dd>
 <dt><code class="docutils literal"><span class="pre">re2c:yyfill:parameter</span> <span class="pre">=</span> <span class="pre">1;</span></code></dt>
 <dd>Controls the argument in the parentheses that follow <code class="docutils literal"><span class="pre">YYFILL</span></code>. If zero, the argument is omitted.
 If non-zero, the argument is generated unless <code class="docutils literal"><span class="pre">re2c:define:YYFILL:naked</span></code> is set to non-zero.</dd>
-</dl>
-</div>
-<div class="section" id="regular-expressions">
-<h2>Regular expressions<a class="headerlink" href="#regular-expressions" title="Permalink to this headline">¶</a></h2>
-<p>re2c uses the following syntax for regular expressions:</p>
-<ul class="simple">
-<li><code class="docutils literal"><span class="pre">&quot;foo&quot;</span></code> case-sensitive string literal</li>
-<li><code class="docutils literal"><span class="pre">'foo'</span></code> case-insensitive string literal</li>
-<li><code class="docutils literal"><span class="pre">[a-xyz]</span></code>, <code class="docutils literal"><span class="pre">[^a-xyz]</span></code> character class (possibly negated)</li>
-<li><code class="docutils literal"><span class="pre">.</span></code> any character except newline</li>
-<li><code class="docutils literal"><span class="pre">R</span> <span class="pre">\</span> <span class="pre">S</span></code> difference of character classes <code class="docutils literal"><span class="pre">R</span></code> and <code class="docutils literal"><span class="pre">S</span></code></li>
-<li><code class="docutils literal"><span class="pre">R*</span></code> zero or more occurrences of <code class="docutils literal"><span class="pre">R</span></code></li>
-<li><code class="docutils literal"><span class="pre">R+</span></code> zero or more occurrences of <code class="docutils literal"><span class="pre">R</span></code></li>
-<li><code class="docutils literal"><span class="pre">R?</span></code> optional <code class="docutils literal"><span class="pre">R</span></code></li>
-<li><code class="docutils literal"><span class="pre">R{n}</span></code> repetition of <code class="docutils literal"><span class="pre">R</span></code> exactly <code class="docutils literal"><span class="pre">n</span></code> times</li>
-<li><code class="docutils literal"><span class="pre">R{n,}</span></code> repetition of <code class="docutils literal"><span class="pre">R</span></code> at least <code class="docutils literal"><span class="pre">n</span></code> times</li>
-<li><code class="docutils literal"><span class="pre">R{n,m}</span></code> repetition of <code class="docutils literal"><span class="pre">R</span></code> from <code class="docutils literal"><span class="pre">n</span></code> to <code class="docutils literal"><span class="pre">m</span></code> times</li>
-<li><code class="docutils literal"><span class="pre">(R)</span></code> just <code class="docutils literal"><span class="pre">R</span></code>; parentheses are used to override precedence or for POSIX-style submatch</li>
-<li><code class="docutils literal"><span class="pre">R</span> <span class="pre">S</span></code> concatenation: <code class="docutils literal"><span class="pre">R</span></code> followed by <code class="docutils literal"><span class="pre">S</span></code></li>
-<li><code class="docutils literal"><span class="pre">R</span> <span class="pre">|</span> <span class="pre">S</span></code> alternative: <code class="docutils literal"><span class="pre">R</span> <span class="pre">or</span> <span class="pre">S</span></code></li>
-<li><code class="docutils literal"><span class="pre">R</span> <span class="pre">/</span> <span class="pre">S</span></code> loohakead: <code class="docutils literal"><span class="pre">R</span></code> followed by <code class="docutils literal"><span class="pre">S</span></code>, but <code class="docutils literal"><span class="pre">S</span></code> is not consumed</li>
-<li><code class="docutils literal"><span class="pre">name</span></code> the regular expression defined as <code class="docutils literal"><span class="pre">name</span></code> (or literal string <code class="docutils literal"><span class="pre">&quot;name&quot;</span></code> in Flex compatibility mode)</li>
-<li><code class="docutils literal"><span class="pre">{name}</span></code> the regular expression defined as <code class="docutils literal"><span class="pre">name</span></code> in Flex compatibility mode</li>
-<li><code class="docutils literal"><span class="pre">&#64;stag</span></code> an <em>s-tag</em>: saves the last input position at which <code class="docutils literal"><span class="pre">&#64;stag</span></code> matches in a variable named <code class="docutils literal"><span class="pre">stag</span></code></li>
-<li><code class="docutils literal"><span class="pre">#mtag</span></code> an <em>m-tag</em>: saves all input positions at which <code class="docutils literal"><span class="pre">#mtag</span></code> matches in a variable named <code class="docutils literal"><span class="pre">mtag</span></code></li>
-</ul>
-<p>Character classes and string literals may contain the following escape sequences:
-<code class="docutils literal"><span class="pre">\a</span></code>, <code class="docutils literal"><span class="pre">\b</span></code>, <code class="docutils literal"><span class="pre">\f</span></code>, <code class="docutils literal"><span class="pre">\n</span></code>, <code class="docutils literal"><span class="pre">\r</span></code>, <code class="docutils literal"><span class="pre">\t</span></code>, <code class="docutils literal"><span class="pre">\v</span></code>, <code class="docutils literal"><span class="pre">\\</span></code>, octal escapes <code class="docutils literal"><span class="pre">\ooo</span></code> and hexadecimal escapes <code class="docutils literal"><span class="pre">\xhh</span></code>, <code class="docutils literal"><span class="pre">\uhhhh</span></code> and <code class="docutils literal"><span class="pre">\Uhhhhhhhh</span></code>.</p>
-</div>
-<div class="section" id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this headline">¶</a></h2>
-<p>Below is the list of all symbols which may be used by the lexer in order to interact with the outer world.
-These symbols should be defined by the user,
-either in the form of inplace configurations,
-or as C/C++ variables, functions, macros and other language constructs.
-Which primitives are necessary depends on the particular use case.</p>
-<dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">yyaccept</span></code></dt>
-<dd>L-value of unsigned integral type that is used to hold the number of the last matched rule.
-Explicit definition by the user is necessary only with <code class="docutils literal"><span class="pre">-f</span></code> <code class="docutils literal"><span class="pre">--storable-state</span></code> option.</dd>
-<dt><code class="docutils literal"><span class="pre">YYBACKUP</span> <span class="pre">()</span></code></dt>
-<dd>Backup current input position (used only with <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
-<dt><code class="docutils literal"><span class="pre">YYBACKUPCTX</span> <span class="pre">()</span></code></dt>
-<dd>Backup current input position for trailing context (used only with  <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
-<dt><code class="docutils literal"><span class="pre">yych</span></code></dt>
-<dd>L-value of type <code class="docutils literal"><span class="pre">YYCTYPE</span></code> that is used to hold current input character.
-Explicit definition by the user is necessary only with <code class="docutils literal"><span class="pre">-f</span></code> <code class="docutils literal"><span class="pre">--storable-state</span></code> option.</dd>
-<dt><code class="docutils literal"><span class="pre">YYCONDTYPE</span></code></dt>
-<dd>The type of <em>condition</em> identifiers (used only with <code class="docutils literal"><span class="pre">-c</span></code> <code class="docutils literal"><span class="pre">--conditions</span></code> option).
-Should be generated either with <code class="docutils literal"><span class="pre">/*!types:re2c*/</span></code> directive, or with <code class="docutils literal"><span class="pre">-t</span></code> <code class="docutils literal"><span class="pre">--type-header</span></code> option.</dd>
-<dt><code class="docutils literal"><span class="pre">YYCTXMARKER</span></code></dt>
-<dd>L-value of type <code class="docutils literal"><span class="pre">YYCTYPE</span> <span class="pre">*</span></code> that is used to backup input position of trailing context.
-It is needed only if regular expressions use the lookahead operator <code class="docutils literal"><span class="pre">/</span></code>.</dd>
-<dt><code class="docutils literal"><span class="pre">YYCTYPE</span></code></dt>
-<dd>The type of the input characters (<em>code units</em>).
-Usually it should be <code class="docutils literal"><span class="pre">unsigned</span> <span class="pre">char</span></code> for ASCII, EBCDIC and UTF-8 encodings,
-<code class="docutils literal"><span class="pre">unsigned</span> <span class="pre">short</span></code> for UTF-16 or UCS-2 encodings,
-and <code class="docutils literal"><span class="pre">unsigned</span> <span class="pre">int</span></code> for UTF-32 encoding.</dd>
-<dt><code class="docutils literal"><span class="pre">YYCURSOR</span></code></dt>
-<dd>L-value of type <code class="docutils literal"><span class="pre">YYCTYPE</span> <span class="pre">*</span></code> that is used as a pointer to the current input symbol.
-Initially <code class="docutils literal"><span class="pre">YYCURSOR</span></code> points to the first character and is advanced by the lexer during matching.
-When a rule matches, <code class="docutils literal"><span class="pre">YYCURSOR</span></code> points past the last character of the matched string.</dd>
-<dt><code class="docutils literal"><span class="pre">YYDEBUG</span> <span class="pre">(state,</span> <span class="pre">symbol)</span></code></dt>
-<dd>A function-like primitive that is used to dump debug information (only used with <code class="docutils literal"><span class="pre">-d</span></code> <code class="docutils literal"><span class="pre">--debug-output</span></code> option).
-<code class="docutils literal"><span class="pre">YYDEBUG</span></code> should return no value and accept two arguments:
-<code class="docutils literal"><span class="pre">state</span></code> (either lexer state or <code class="docutils literal"><span class="pre">-1</span></code>) and <code class="docutils literal"><span class="pre">symbol</span></code> (current input symbol).</dd>
-<dt><code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code></dt>
-<dd>A function-like primitive that is called by the lexer when there is not enough input.
-<code class="docutils literal"><span class="pre">YYFILL</span></code> should return no value and supply at least <code class="docutils literal"><span class="pre">n</span></code> additional characters.
-Maximal value of <code class="docutils literal"><span class="pre">n</span></code> equals <code class="docutils literal"><span class="pre">YYMAXFILL</span></code>, which can be obtained with the <code class="docutils literal"><span class="pre">/*!max:re2c*/</span></code> directive.</dd>
-<dt><code class="docutils literal"><span class="pre">YYGETCONDITION</span> <span class="pre">()</span></code></dt>
-<dd>R-value of type <code class="docutils literal"><span class="pre">YYCONDTYPE</span></code> that represents current <em>condition</em> identifier (used only with <code class="docutils literal"><span class="pre">-c</span></code> <code class="docutils literal"><span class="pre">--conditions</span></code> option).</dd>
-<dt><code class="docutils literal"><span class="pre">YYGETSTATE</span> <span class="pre">()</span></code></dt>
-<dd>R-value of signed integral type that represents current lexer state (used only with <code class="docutils literal"><span class="pre">-f</span></code> <code class="docutils literal"><span class="pre">--storable-state</span></code> option).
-Initial value of lexer state should be <code class="docutils literal"><span class="pre">-1</span></code>.</dd>
-<dt><code class="docutils literal"><span class="pre">YYLESSTHAN</span> <span class="pre">(n)</span></code></dt>
-<dd>R-value of boolean type that is <code class="docutils literal"><span class="pre">true</span></code> if and only if there is less than <code class="docutils literal"><span class="pre">n</span></code> input characters left (used only with  <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
-<dt><code class="docutils literal"><span class="pre">YYLIMIT</span></code></dt>
-<dd>R-value of type <code class="docutils literal"><span class="pre">YYCTYPE</span> <span class="pre">*</span></code> that marks the end of input (<code class="docutils literal"><span class="pre">YYLIMIT[-1]</span></code> should be the last input character).
-Lexer compares <code class="docutils literal"><span class="pre">YYCURSOR</span></code> and <code class="docutils literal"><span class="pre">YYLIMIT</span></code> in order to determine if there is enough input characters left.</dd>
-<dt><code class="docutils literal"><span class="pre">YYMARKER</span></code></dt>
-<dd>L-value of type <code class="docutils literal"><span class="pre">YYCTYPE</span> <span class="pre">*</span></code> used to backup input position of successful match.
-This might be necessary if there is an overlapping longer rule that might also match.</dd>
-<dt><code class="docutils literal"><span class="pre">YYMTAGP</span> <span class="pre">(t)</span></code></dt>
-<dd>Append current input position to the history of <em>m-tag</em> <code class="docutils literal"><span class="pre">t</span></code> (used only with <code class="docutils literal"><span class="pre">-T</span></code> <code class="docutils literal"><span class="pre">--tags</span></code> option).</dd>
-<dt><code class="docutils literal"><span class="pre">YYMTAGN</span> <span class="pre">(t)</span></code></dt>
-<dd>Append default value to the history of <em>m-tag</em> <code class="docutils literal"><span class="pre">t</span></code> (used only with <code class="docutils literal"><span class="pre">-T</span></code> <code class="docutils literal"><span class="pre">--tags</span></code> option).</dd>
-<dt><code class="docutils literal"><span class="pre">YYMAXFILL</span></code></dt>
-<dd>Integral constant that denotes maximal value of <code class="docutils literal"><span class="pre">YYFILL</span></code> argument
-and is autogenerated by <code class="docutils literal"><span class="pre">/*!max:re2c*/</span></code> directive.</dd>
-<dt><code class="docutils literal"><span class="pre">YYMAXNMATCH</span></code></dt>
-<dd>Integral constant that denotes maximal number of capturing groups in a rule
-and is autogenerated by <code class="docutils literal"><span class="pre">/*!maxnmatch:re2c*/</span></code> directive (used only with <code class="docutils literal"><span class="pre">--posix-captures</span></code> option).</dd>
-<dt><code class="docutils literal"><span class="pre">yynmatch</span></code></dt>
-<dd>L-value of unsigned integral type that is used to hold the number of capturing groups in the matching rule.
-Used only with <code class="docutils literal"><span class="pre">-P</span></code> <code class="docutils literal"><span class="pre">--posix-captures</span></code> option.</dd>
-<dt><code class="docutils literal"><span class="pre">YYPEEK</span> <span class="pre">()</span></code></dt>
-<dd>R-value of type <code class="docutils literal"><span class="pre">YYCTYPE</span></code> that denotes current input character (used only with <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
-<dt><code class="docutils literal"><span class="pre">yypmatch</span></code></dt>
-<dd>An array of l-values that are used to hold the values of <em>s-tags</em>
-corresponding to the capturing parentheses in the matching rule.
-The length of array must be at least <code class="docutils literal"><span class="pre">yynmatch</span> <span class="pre">*</span> <span class="pre">2</span></code> (ideally <code class="docutils literal"><span class="pre">YYMAXNMATCH</span> <span class="pre">*</span> <span class="pre">2</span></code>).
-Used only with <code class="docutils literal"><span class="pre">-P</span></code> <code class="docutils literal"><span class="pre">--posix-captures</span></code> option.</dd>
-<dt><code class="docutils literal"><span class="pre">YYRESTORE</span> <span class="pre">()</span></code></dt>
-<dd>Restore input position (used only with <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
-<dt><code class="docutils literal"><span class="pre">YYRESTORECTX</span> <span class="pre">()</span></code></dt>
-<dd>Restore input position from the value of trailing context (used only with <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
-<dt><code class="docutils literal"><span class="pre">YYRESTORETAG</span> <span class="pre">(t)</span></code></dt>
-<dd>Restore input position from the value of <em>s-tag</em> <code class="docutils literal"><span class="pre">t</span></code> (used only with <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
-<dt><code class="docutils literal"><span class="pre">YYSETCONDITION</span> <span class="pre">(condition)</span></code></dt>
-<dd>Set current <em>condition</em> identifier to <code class="docutils literal"><span class="pre">condition</span></code> (used only with <code class="docutils literal"><span class="pre">-c</span></code> <code class="docutils literal"><span class="pre">--conditions</span></code> option).</dd>
-<dt><code class="docutils literal"><span class="pre">YYSETSTATE</span> <span class="pre">(state)</span></code></dt>
-<dd>Set current lexer state to <code class="docutils literal"><span class="pre">state</span></code> (used only with <code class="docutils literal"><span class="pre">-f</span></code> <code class="docutils literal"><span class="pre">--storable-state</span></code> option).
-Parameter <code class="docutils literal"><span class="pre">state</span></code> is of signed integral type.</dd>
-<dt><code class="docutils literal"><span class="pre">YYSKIP</span> <span class="pre">()</span></code></dt>
-<dd>Advance input position to the next character (used only with generic API).</dd>
-<dt><code class="docutils literal"><span class="pre">YYSTAGP</span> <span class="pre">(t)</span></code></dt>
-<dd>Save current input position to <em>s-tag</em> <code class="docutils literal"><span class="pre">t</span></code> (used only with <code class="docutils literal"><span class="pre">-T</span></code> <code class="docutils literal"><span class="pre">--tags</span></code> and <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option).</dd>
-<dt><code class="docutils literal"><span class="pre">YYSTAGN</span> <span class="pre">(t)</span></code></dt>
-<dd>Save default value to <em>s-tag</em> <code class="docutils literal"><span class="pre">t</span></code> (used only with <code class="docutils literal"><span class="pre">-T</span></code> <code class="docutils literal"><span class="pre">--tags</span></code> and <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> options).</dd>
 </dl>
 </div>
 </div>
