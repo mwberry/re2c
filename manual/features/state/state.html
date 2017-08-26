@@ -72,47 +72,27 @@
 <h1>State<a class="headerlink" href="#state" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<p>When the <code class="docutils literal"><span class="pre">-f</span></code> flag is specified, <code class="docutils literal"><span class="pre">re2c</span></code> generates a scanner that can
-store its current state, return to its caller, and later resume
-operations exactly where it left off.</p>
-<p>The default mode of operation in <code class="docutils literal"><span class="pre">re2c</span></code> is a
-“pull” model, where the scanner asks for extra input whenever it needs it. However, this mode of operation assumes that the scanner is the “owner” of the parsing loop, and that may not always be convenient.</p>
-<p>Typically, if there is a preprocessor ahead of the scanner in the
-stream, or for that matter, any other procedural source of data, the
-scanner cannot “ask” for more data unless both the scanner and the source
-live in separate threads.</p>
-<p>The <code class="docutils literal"><span class="pre">-f</span></code> flag is useful exactly for situations like that: it lets users design
-scanners that work in a “push” model, i.e., a model where data is fed to the
-scanner chunk by chunk. When the scanner runs out of data to consume, it
-stores its state and returns to the caller. When more input data is
-fed to the scanner, it resumes operations exactly where it left off.</p>
+<p>With <code class="docutils literal"><span class="pre">-f</span></code> <code class="docutils literal"><span class="pre">--storable-state</span></code> option re2c generates a lexer that can
+store its current state, return to the caller, and later resume operations exactly where it left off.
+The default mode of operation in re2c is a “pull” model, where the lexer “pulls” more input whenever it needs it.
+However, this mode of operation assumes that the lexer is the owner of the parsing loop, and that may not always be convenient.</p>
+<p>Storable state is useful exactly for situations like that: it allows to construct
+lexers that work in a “push” model, where data is fed to the lexer chunk by chunk.
+When the lexer needs more input, it stores its state and returns to the caller.
+Later, when more input becomes available, it resumes operations exactly where it stopped.</p>
 <p>Changes needed compared to the “pull” model:</p>
 <ul class="simple">
-<li>The user has to supply macros named <code class="docutils literal"><span class="pre">YYSETSTATE</span> <span class="pre">()</span></code> and <code class="docutils literal"><span class="pre">YYGETSTATE</span> <span class="pre">(state)</span></code>.</li>
-<li>The <code class="docutils literal"><span class="pre">-f</span></code> option inhibits declaration of <code class="docutils literal"><span class="pre">yych</span></code> and <code class="docutils literal"><span class="pre">yyaccept</span></code>, so the
-user has to declare them and save and restore them where required.
-In the <code class="docutils literal"><span class="pre">examples/push_model/push.re</span></code> example, these are declared as
-fields of a (C++) class of which the scanner is a method, so they do
-not need to be saved/restored explicitly. For C, they could, e.g., be made
-macros that select fields from a structure passed in as a parameter.
-Alternatively, they could be declared as local variables, saved with
-<code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code> when it decides to return and restored upon entering the
-function. Also, it could be more efficient to save the state from
-<code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code> because <code class="docutils literal"><span class="pre">YYSETSTATE</span> <span class="pre">(state)</span></code> is called unconditionally.
-<code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code> however does not get <code class="docutils literal"><span class="pre">state</span></code> as a parameter, so we would have
-to store state in a local variable by <code class="docutils literal"><span class="pre">YYSETSTATE</span> <span class="pre">(state)</span></code>.</li>
-<li>Modify <code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code> to return (from the function calling it) if more input is needed.</li>
-<li>Modify the caller to recognize if more input is needed and respond appropriately.</li>
-<li>The generated code will contain a switch block that is used to
-restore the last state by jumping behind the corresponding <code class="docutils literal"><span class="pre">YYFILL</span> <span class="pre">(n)</span></code>
-call. This code is automatically generated in the epilogue of the first <code class="docutils literal"><span class="pre">/*!re2c</span> <span class="pre">*/</span></code>
-block. It is possible to trigger generation of the <code class="docutils literal"><span class="pre">YYGETSTATE</span> <span class="pre">()</span></code>
-block earlier by placing a <code class="docutils literal"><span class="pre">/*!getstate:re2c*/</span></code> comment. This is especially useful when the scanner code should be
-wrapped inside a loop.</li>
+<li>Define <code class="docutils literal"><span class="pre">YYSETSTATE</span> <span class="pre">()</span></code> and <code class="docutils literal"><span class="pre">YYGETSTATE</span> <span class="pre">(state)</span></code>.</li>
+<li>Define <code class="docutils literal"><span class="pre">yych</span></code>, <code class="docutils literal"><span class="pre">yyaccept</span></code> and <code class="docutils literal"><span class="pre">state</span></code> variables as a part of persistent lexer state.
+<code class="docutils literal"><span class="pre">state</span></code> should be initialized to <code class="docutils literal"><span class="pre">-1</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">YYFILL</span></code> should return to the outer program instead of trying to supply more input.
+Return code should indicate that lexer needs more input.</li>
+<li>The outer program should recognize situations when lexer needs more input
+and respond appropriately.</li>
+<li>Use <code class="docutils literal"><span class="pre">/*!getstate:re2c*/</span></code> directive if it is necessary to execute any code
+before entering the lexer.</li>
+<li>Use configurations <code class="docutils literal"><span class="pre">state:abort</span></code> and <code class="docutils literal"><span class="pre">state:nextlabel</span></code> to tweak the generated code.</li>
 </ul>
-<p>Please see <code class="docutils literal"><span class="pre">examples/push_model/push.re</span></code> for an example of a “push” model scanner. The
-generated code can be tweaked with inplace configurations <code class="docutils literal"><span class="pre">state:abort</span></code>
-and <code class="docutils literal"><span class="pre">state:nextlabel</span></code>.</p>
 </div>
 
 
@@ -122,7 +102,7 @@ and <code class="docutils literal"><span class="pre">state:nextlabel</span></cod
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 23, 2017.
+      Last updated on Aug 26, 2017.
     </div>
   </body>
 </html>

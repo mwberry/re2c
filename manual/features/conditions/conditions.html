@@ -72,33 +72,50 @@
 <h1>Conditions<a class="headerlink" href="#conditions" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<p>You can precede regular expressions with a list of condition names when
-using the <code class="docutils literal"><span class="pre">-c</span></code> switch. <code class="docutils literal"><span class="pre">re2c</span></code> will then generate a scanner block for
-each condition, and each of the generated blocks will have its own
-precondition. The precondition is given by the interface define
-<code class="docutils literal"><span class="pre">YYGETCONDITON()</span></code> and must be of type <code class="docutils literal"><span class="pre">YYCONDTYPE</span></code>.</p>
-<p>There are two special rule types. First, the rules of the condition <code class="docutils literal"><span class="pre">&lt;*&gt;</span></code>
-are merged to all conditions (note that they have a lower priority than
-other rules of that condition). And second, the empty condition list
-allows to provide a code block that does not have a scanner part,
-meaning it does not allow any regular expressions. The condition value
-referring to this special block is always the one with the enumeration
-value 0. This way the code of this special rule can be used to
-initialize a scanner. It is in no way necessary to have these rules: but
-sometimes it is helpful to have a dedicated uninitialized condition
-state.</p>
-<p>Non empty rules allow to specify the new condition, which makes them
-transition rules. Besides generating calls for the
-<code class="docutils literal"><span class="pre">YYSETCONDTITION</span></code> define, no other special code is generated.</p>
-<p>There is another kind of special rule that allows to prepend code to any
-code block of all rules of a certain set of conditions or to all code
-blocks of all rules. This can be helpful when some operation is common
-among rules. For instance, this can be used to store the length of the
-scanned string. These special setup rules start with an exclamation mark
-followed by either a list of conditions <code class="docutils literal"><span class="pre">&lt;!</span> <span class="pre">condition,</span> <span class="pre">...</span> <span class="pre">&gt;</span></code> or a star
-<code class="docutils literal"><span class="pre">&lt;!*&gt;</span></code>. When <code class="docutils literal"><span class="pre">re2c</span></code> generates the code for a rule whose state does not have a
-setup rule and a starred setup rule is present, the starred setup code will be
-used as setup code.</p>
+<p><em>Conditions</em> are enabled with <code class="docutils literal"><span class="pre">-c</span></code> <code class="docutils literal"><span class="pre">--conditions</span></code>.
+This option allows to encode multiple interrelated lexers within the same re2c block.</p>
+<p>Each lexer corresponds to a single <em>condition</em>.
+It starts with a label of the form <code class="docutils literal"><span class="pre">yyc_name</span></code>,
+where <code class="docutils literal"><span class="pre">name</span></code> is <em>condition</em> name
+and <code class="docutils literal"><span class="pre">yyc</span></code> prefix can be adjusted with configuration <code class="docutils literal"><span class="pre">re2c:condprefix</span></code>.
+Different lexers are separated with a comment <code class="docutils literal"><span class="pre">/*</span> <span class="pre">***********************************</span> <span class="pre">*/</span></code>
+which can be adjusted with configuration <code class="docutils literal"><span class="pre">re2c:cond:divider</span></code>.</p>
+<p>Furthermore, each <em>condition</em> has a unique identifier of the form <code class="docutils literal"><span class="pre">yycname</span></code>,
+where <code class="docutils literal"><span class="pre">name</span></code> is condition name
+and <code class="docutils literal"><span class="pre">yyc</span></code> prefix can be adjusted with configuration <code class="docutils literal"><span class="pre">re2c:condenumprefix</span></code>.
+Identifiers have the type <code class="docutils literal"><span class="pre">YYCONDTYPE</span></code> and should be generated with <code class="docutils literal"><span class="pre">/*!types:re2c*/</span></code> directive or <code class="docutils literal"><span class="pre">-t</span></code> <code class="docutils literal"><span class="pre">--type-header</span></code> option.
+Users shouldn’t define these identifiers manually, as the order of <em>conditions</em> is not specified.</p>
+<p>Before all <em>conditions</em> re2c generates entry code that checks the current <em>condition</em> identifier
+and transfers control flow to the start label of the active <em>condition</em>.
+After matching some rule of this <em>condition</em>,
+lexer may either transfer control flow back to the entry code (after executing the associated action and optionally setting another <em>condition</em> with <code class="docutils literal"><span class="pre">=&gt;</span></code>),
+or use <code class="docutils literal"><span class="pre">:=&gt;</span></code> shortcut and transition directly to the start label of another <em>condition</em> (skipping the action and the entry code).
+Configuration <code class="docutils literal"><span class="pre">re2c:cond:goto</span></code> allows to change the default behavior.</p>
+<p>Syntactically each rule must be preceded with a list of comma-separated <em>condition</em> names or a wildcard <code class="docutils literal"><span class="pre">*</span></code>
+enclosed in angle brackets <code class="docutils literal"><span class="pre">&lt;</span></code> and <code class="docutils literal"><span class="pre">&gt;</span></code>.
+Wildcard means “any condition” and is semantically equivalent to listing all condition names.
+Here <code class="docutils literal"><span class="pre">regexp</span></code> is a regular expression, <code class="docutils literal"><span class="pre">default</span></code> refers to the <em>default rule</em> <code class="docutils literal"><span class="pre">*</span></code>,
+and <code class="docutils literal"><span class="pre">action</span></code> is a block of C/C++ code.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&lt;conditions-or-wildcard&gt;</span>&#160; <span class="pre">regexp-or-default</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">action</span></code></li>
+<li><code class="docutils literal"><span class="pre">&lt;conditions-or-wildcard&gt;</span>&#160; <span class="pre">regexp-or-default</span>&#160; <span class="pre">=&gt;</span>&#160; <span class="pre">condition</span>&#160; <span class="pre">action</span></code></li>
+<li><code class="docutils literal"><span class="pre">&lt;conditions-or-wildcard&gt;</span>&#160; <span class="pre">regexp-or-default</span>&#160; <span class="pre">:=&gt;</span> <span class="pre">condition</span></code></li>
+</ul>
+<p>Rules with an exclamation mark <code class="docutils literal"><span class="pre">!</span></code> in front of condition list have a special meaning:
+they have no regular expression,
+and the associated action is merged as an entry code to actions of normal rules.
+This might be a convenient place to peform a routine task that is common to all rules.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&lt;!conditions-or-wildcard&gt;</span>&#160; <span class="pre">action</span></code></li>
+</ul>
+<p>Another special form of rules with an empty condition list <code class="docutils literal"><span class="pre">&lt;&gt;</span></code> and no regular expression
+allows to specify an “entry condition” that can be used to execute code before entering the lexer.
+It is semantically equivalent to a condition with number zero, name <code class="docutils literal"><span class="pre">0</span></code> and an empty regular expression.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&lt;&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">action</span></code></li>
+<li><code class="docutils literal"><span class="pre">&lt;&gt;</span>&#160; <span class="pre">=&gt;</span>&#160; <span class="pre">condition</span>&#160; <span class="pre">action</span></code></li>
+<li><code class="docutils literal"><span class="pre">&lt;&gt;</span>&#160; <span class="pre">:=&gt;</span> <span class="pre">condition</span></code></li>
+</ul>
 </div>
 
 
@@ -108,7 +125,7 @@ used as setup code.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 23, 2017.
+      Last updated on Aug 26, 2017.
     </div>
   </body>
 </html>

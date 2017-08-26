@@ -72,57 +72,58 @@
 <h1>Generic API<a class="headerlink" href="#generic-api" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<p><code class="docutils literal"><span class="pre">re2c</span></code> usually operates on input with pointer-like primitives
-<code class="docutils literal"><span class="pre">YYCURSOR</span></code>, <code class="docutils literal"><span class="pre">YYMARKER</span></code>, <code class="docutils literal"><span class="pre">YYCTXMARKER</span></code>, and <code class="docutils literal"><span class="pre">YYLIMIT</span></code>.</p>
-<p>The generic input API (enabled with the <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> switch) allows
-customizing input operations. In this mode, <code class="docutils literal"><span class="pre">re2c</span></code> will express all
-operations on input in terms of the following primitives:</p>
-<blockquote>
-<div><table border="1" class="docutils">
-<colgroup>
-<col width="27%" />
-<col width="73%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">YYPEEK</span> <span class="pre">()</span></code></td>
-<td>get current input character</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">YYSKIP</span> <span class="pre">()</span></code></td>
-<td>advance to next character</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">YYBACKUP</span> <span class="pre">()</span></code></td>
-<td>backup current input position</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">YYBACKUPCTX</span> <span class="pre">()</span></code></td>
-<td>backup current input position for trailing context</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">YYSTAGP</span> <span class="pre">(t)</span></code></td>
-<td>save current input position to tag <code class="docutils literal"><span class="pre">t</span></code></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">YYSTAGN</span> <span class="pre">(t)</span></code></td>
-<td>save default value to tag <code class="docutils literal"><span class="pre">t</span></code></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">YYMTAGP</span> <span class="pre">(t)</span></code></td>
-<td>append input position to the history of tag <code class="docutils literal"><span class="pre">t</span></code></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">YYMTAGN</span> <span class="pre">(t)</span></code></td>
-<td>append default value to the history of tag <code class="docutils literal"><span class="pre">t</span></code></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">YYRESTORE</span> <span class="pre">()</span></code></td>
-<td>restore current input position</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">YYRESTORECTX</span> <span class="pre">()</span></code></td>
-<td>restore current input position for trailing context</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">YYRESTORETAG</span> <span class="pre">(t)</span></code></td>
-<td>restore current input position from tag <code class="docutils literal"><span class="pre">t</span></code></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">YYLESSTHAN</span> <span class="pre">(n)</span></code></td>
-<td>check if less than <code class="docutils literal"><span class="pre">n</span></code> input characters are left</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
+<p>By default <code class="docutils literal"><span class="pre">re2c</span></code> operates on input using pointer-like primitives
+<code class="docutils literal"><span class="pre">YYCURSOR</span></code>, <code class="docutils literal"><span class="pre">YYMARKER</span></code>, <code class="docutils literal"><span class="pre">YYCTXMARKER</span></code>, and <code class="docutils literal"><span class="pre">YYLIMIT</span></code>.
+Normally pointer-like primitives are defined as variables of type <code class="docutils literal"><span class="pre">YYCTYPE*</span></code>,
+but it is possible to use STL iterators or any other abstraction as long as it syntactically fits into the following use cases:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">++YYCURSOR;</span></code></li>
+<li><code class="docutils literal"><span class="pre">yych</span> <span class="pre">=</span> <span class="pre">*YYCURSOR;</span></code></li>
+<li><code class="docutils literal"><span class="pre">yych</span> <span class="pre">=</span> <span class="pre">*++YYCURSOR;</span></code></li>
+<li><code class="docutils literal"><span class="pre">yych</span> <span class="pre">=</span> <span class="pre">*(YYMARKER</span> <span class="pre">=</span> <span class="pre">YYCURSOR);</span></code></li>
+<li><code class="docutils literal"><span class="pre">yych</span> <span class="pre">=</span> <span class="pre">*(YYMARKER</span> <span class="pre">=</span> <span class="pre">++YCURSOR);</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYMARKER</span> <span class="pre">=</span> <span class="pre">YYCURSOR;</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYMARKER</span> <span class="pre">=</span> <span class="pre">++YYCURSOR;</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYCURSOR</span> <span class="pre">=</span> <span class="pre">YYMARKER;</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYCTXMARKER</span> <span class="pre">=</span> <span class="pre">YYCURSOR</span> <span class="pre">+</span> <span class="pre">1;</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYCURSOR</span> <span class="pre">=</span> <span class="pre">YYCTXMARKER;</span></code></li>
+<li><code class="docutils literal"><span class="pre">if</span> <span class="pre">(YYLIMIT</span> <span class="pre">&lt;=</span> <span class="pre">YYCURSOR)</span> <span class="pre">...</span></code></li>
+<li><code class="docutils literal"><span class="pre">if</span> <span class="pre">((YYLIMIT</span> <span class="pre">-</span> <span class="pre">YYCURSOR)</span> <span class="pre">&lt;</span> <span class="pre">n)</span> <span class="pre">...</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYDEBUG</span> <span class="pre">(label,</span> <span class="pre">*YYCURSOR);</span></code></li>
+</ul>
+<p>If this input model is too restrictive, then it is possible to use generic input API enabled with <code class="docutils literal"><span class="pre">--input</span> <span class="pre">custom</span></code> option.
+In this mode all input operations are expressed in terms of the primitives below.
+These primitives can be defined in any suitable way; one doesn’t have to stick to the pointer semantics.
+For example, it is possible to read input directly from file without any buffering,
+or to disable <code class="docutils literal"><span class="pre">YYFILL</span></code> mechanism and perform end-of-input checking on each input character from inside of <code class="docutils literal"><span class="pre">YYPEEK</span></code> or <code class="docutils literal"><span class="pre">YYSKIP</span></code>.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">YYPEEK</span> <span class="pre">()</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYSKIP</span> <span class="pre">()</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYBACKUP</span> <span class="pre">()</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYBACKUPCTX</span> <span class="pre">()</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYSTAGP</span> <span class="pre">(t)</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYSTAGN</span> <span class="pre">(t)</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYMTAGP</span> <span class="pre">(t)</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYMTAGN</span> <span class="pre">(t)</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYRESTORE</span> <span class="pre">()</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYRESTORECTX</span> <span class="pre">()</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYRESTORETAG</span> <span class="pre">(t)</span></code></li>
+<li><code class="docutils literal"><span class="pre">YYLESSTHAN</span> <span class="pre">(n)</span></code></li>
+</ul>
+<p>Default input model can be expressed in terms of generic API as follows
+(except for <code class="docutils literal"><span class="pre">YMTAGP</span></code> and <code class="docutils literal"><span class="pre">YYMTAGN</span></code>, which have no default implementation):</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">#define</span>&#160; <span class="pre">YYPEEK</span> <span class="pre">()</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">*YYCURSOR</span></code></li>
+<li><code class="docutils literal"><span class="pre">#define</span>&#160; <span class="pre">YYSKIP</span> <span class="pre">()</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">++YYCURSOR</span></code></li>
+<li><code class="docutils literal"><span class="pre">#define</span>&#160; <span class="pre">YYBACKUP</span> <span class="pre">()</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">YYMARKER</span> <span class="pre">=</span> <span class="pre">YYCURSOR</span></code></li>
+<li><code class="docutils literal"><span class="pre">#define</span>&#160; <span class="pre">YYBACKUPCTX</span> <span class="pre">()</span>&#160;&#160;&#160; <span class="pre">YYCTXMARKER</span> <span class="pre">=</span> <span class="pre">YYCURSOR</span></code></li>
+<li><code class="docutils literal"><span class="pre">#define</span>&#160; <span class="pre">YYRESTORE</span> <span class="pre">()</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">YYCURSOR</span> <span class="pre">=</span> <span class="pre">YYMARKER</span></code></li>
+<li><code class="docutils literal"><span class="pre">#define</span>&#160; <span class="pre">YYRESTORECTX</span> <span class="pre">()</span>&#160;&#160; <span class="pre">YYCURSOR</span> <span class="pre">=</span> <span class="pre">YYCTXMARKER</span></code></li>
+<li><code class="docutils literal"><span class="pre">#define</span>&#160; <span class="pre">YYRESTORERAG</span> <span class="pre">(t)</span>&#160; <span class="pre">YYCURSOR</span> <span class="pre">=</span> <span class="pre">t</span></code></li>
+<li><code class="docutils literal"><span class="pre">#define</span>&#160; <span class="pre">YYLESSTHAN</span> <span class="pre">(n)</span>&#160;&#160;&#160; <span class="pre">YYLIMIT</span> <span class="pre">-</span> <span class="pre">YYCURSOR</span> <span class="pre">&lt;</span> <span class="pre">n</span></code></li>
+<li><code class="docutils literal"><span class="pre">#define</span>&#160; <span class="pre">YYSTAGP</span> <span class="pre">(t)</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">t</span> <span class="pre">=</span> <span class="pre">YYCURSOR</span></code></li>
+<li><code class="docutils literal"><span class="pre">#define</span>&#160; <span class="pre">YYSTAGN</span> <span class="pre">(t)</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">t</span> <span class="pre">=</span> <span class="pre">NULL</span></code></li>
+</ul>
 <p>This <a class="reference external" href="http://skvadrik.github.io/aleph_null/posts/re2c/2015-01-13-input_model.html">article</a>
 has more details, and you can find some usage examples
 <a class="reference external" href="http://skvadrik.github.io/aleph_null/posts/re2c/2015-01-15-input_model_custom.html">here</a>.</p>
@@ -135,7 +136,7 @@ has more details, and you can find some usage examples
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 23, 2017.
+      Last updated on Aug 26, 2017.
     </div>
   </body>
 </html>

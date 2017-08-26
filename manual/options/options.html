@@ -64,162 +64,134 @@
 </div>
 <dl class="docutils">
 <dt><code class="docutils literal"><span class="pre">-?</span> <span class="pre">-h</span> <span class="pre">--help</span></code></dt>
-<dd>Show a short help screen:</dd>
+<dd>Show help message.</dd>
 <dt><code class="docutils literal"><span class="pre">-b</span> <span class="pre">--bit-vectors</span></code></dt>
-<dd>Implies <code class="docutils literal"><span class="pre">-s</span></code>. Use bit vectors as well to try to
-coax better code out of the compiler. Most useful for
-specifications with more than a few keywords (e.g., for most programming
-languages).</dd>
+<dd>Optimize conditional jumps using bit masks. Implies <code class="docutils literal"><span class="pre">-s</span></code>.</dd>
 <dt><code class="docutils literal"><span class="pre">-c</span> <span class="pre">--conditions</span></code></dt>
-<dd>Used for (f)lex-like condition support.</dd>
+<dd>Enable support of Flex-like “conditions”: multiple interrelated lexers within one block.</dd>
 <dt><code class="docutils literal"><span class="pre">-d</span> <span class="pre">--debug-output</span></code></dt>
-<dd>Creates a parser that dumps information about
-the current position and the state the parser is in.
-This is useful for debugging parser issues and states. If you use this
-switch, you need to define a <code class="docutils literal"><span class="pre">YYDEBUG</span></code> macro, which will be called like a
-function with two parameters: <code class="docutils literal"><span class="pre">void</span> <span class="pre">YYDEBUG</span> <span class="pre">(int</span> <span class="pre">state,</span> <span class="pre">char</span> <span class="pre">current)</span></code>.
-The first parameter receives the state or <code class="docutils literal"><span class="pre">-1</span></code> and the second parameter
-receives the input at the current cursor.</dd>
+<dd>Emit <code class="docutils literal"><span class="pre">YYDEBUG</span></code> in the generated code.
+<code class="docutils literal"><span class="pre">YYDEBUG</span></code> should be defined by the user in the form of a void function with two parameters:
+<code class="docutils literal"><span class="pre">state</span></code> (lexer state or -1) and <code class="docutils literal"><span class="pre">symbol</span></code> (current input symbol of type <code class="docutils literal"><span class="pre">YYCTYPE</span></code>).</dd>
 <dt><code class="docutils literal"><span class="pre">-D</span> <span class="pre">--emit-dot</span></code></dt>
-<dd>Emit Graphviz dot data, which can then be processed
-with e.g., <code class="docutils literal"><span class="pre">dot</span> <span class="pre">-Tpng</span> <span class="pre">input.dot</span> <span class="pre">&gt;</span> <span class="pre">output.png</span></code>. Please note that
-scanners with many states may crash dot.</dd>
+<dd>Instead of normal output generate lexer graph in DOT format.
+The output can be converted to PNG with the help of Graphviz (something like <code class="docutils literal"><span class="pre">dot</span> <span class="pre">-Tpng</span> <span class="pre">-odfa.png</span> <span class="pre">dfa.dot</span></code>).
+Note that large graphs may crash Graphviz.</dd>
 <dt><code class="docutils literal"><span class="pre">-e</span> <span class="pre">--ecb</span></code></dt>
-<dd>Generate a parser that supports EBCDIC. The generated
-code can deal with any character up to 0xFF. In this mode, <code class="docutils literal"><span class="pre">re2c</span></code> assumes
-an input character size of 1 byte. This switch is incompatible with
-<code class="docutils literal"><span class="pre">-w</span></code>, <code class="docutils literal"><span class="pre">-x</span></code>, <code class="docutils literal"><span class="pre">-u</span></code>, and <code class="docutils literal"><span class="pre">-8</span></code>.</dd>
+<dd>Generate a lexer that reads input in EBCDIC encoding.
+<code class="docutils literal"><span class="pre">re2c</span></code> assumes that character range is 0 – 0xFF an character size is 1 byte.</dd>
 <dt><code class="docutils literal"><span class="pre">-f</span> <span class="pre">--storable-state</span></code></dt>
-<dd>Generate a scanner with support for storable state.</dd>
+<dd>Generate a lexer which can store its inner state.
+This is useful in push-model lexers which are stopped by an outer program when there is not enough input,
+and then resumed when more input becomes available.
+In this mode users should additionally define
+<code class="docutils literal"><span class="pre">YYGETSTATE</span> <span class="pre">()</span></code> and <code class="docutils literal"><span class="pre">YYSETSTATE</span> <span class="pre">(state)</span></code> macros
+and variables <code class="docutils literal"><span class="pre">yych</span></code>, <code class="docutils literal"><span class="pre">yyaccept</span></code> and the <code class="docutils literal"><span class="pre">state</span></code> as part of the lexer state.</dd>
 <dt><code class="docutils literal"><span class="pre">-F</span> <span class="pre">--flex-syntax</span></code></dt>
-<dd>Partial support for flex syntax. When this flag
-is active, named definitions must be surrounded by curly braces and
-can be defined without an equal sign and the terminating semicolon.
-Instead, names are treated as direct double quoted strings.</dd>
+<dd>Partial support for Flex syntax:
+in this mode named definitions don’t need the equal sign and the terminating semicolon,
+and when used they must be surrounded by curly braces.
+Names without curly braces are treated as double-quoted strings.</dd>
 <dt><code class="docutils literal"><span class="pre">-g</span> <span class="pre">--computed-gotos</span></code></dt>
-<dd>Generate a scanner that utilizes GCC’s
-computed-goto feature. That is, <code class="docutils literal"><span class="pre">re2c</span></code> generates jump tables whenever a
-decision is of certain complexity (e.g., a lot of if conditions would be
-otherwise necessary). This is only usable with compilers that support this feature.
-Note that this implies <code class="docutils literal"><span class="pre">-b</span></code> and that the complexity threshold can be configured
-using the <code class="docutils literal"><span class="pre">cgoto:threshold</span></code> inplace configuration.</dd>
+<dd>Optimize conditional jumps using non-standard “computed goto” extension (must be supported by C/C++ compiler).
+<code class="docutils literal"><span class="pre">re2c</span></code> generates jump tables only in complex cases with a lot of conditional branches.
+Complexity threshold can be configured with <code class="docutils literal"><span class="pre">cgoto:threshold</span></code> configuration.
+This option implies <code class="docutils literal"><span class="pre">-b</span></code>.</dd>
 <dt><code class="docutils literal"><span class="pre">-i</span> <span class="pre">--no-debug-info</span></code></dt>
-<dd>Do not output <code class="docutils literal"><span class="pre">#line</span></code> information. This is
-useful when you want use a CMS tool with <code class="docutils literal"><span class="pre">re2c</span></code>’s output. You might
-want to do this if you do not want to impose re2c as a build requirement
-for your source.</dd>
+<dd>Do not output <code class="docutils literal"><span class="pre">#line</span></code> information.
+This is useful when the generated code is tracked by some version control system.</dd>
 <dt><code class="docutils literal"><span class="pre">-o</span> <span class="pre">OUTPUT</span> <span class="pre">--output=OUTPUT</span></code></dt>
 <dd>Specify the <code class="docutils literal"><span class="pre">OUTPUT</span></code> file.</dd>
 <dt><code class="docutils literal"><span class="pre">-r</span> <span class="pre">--reusable</span></code></dt>
-<dd>Allows reuse of scanner definitions with <code class="docutils literal"><span class="pre">/*!use:re2c</span> <span class="pre">*/</span></code> after <code class="docutils literal"><span class="pre">/*!rules:re2c</span> <span class="pre">*/</span></code>.
-In this mode, no <code class="docutils literal"><span class="pre">/*!re2c</span> <span class="pre">*/</span></code> block and exactly one <code class="docutils literal"><span class="pre">/*!rules:re2c</span> <span class="pre">*/</span></code> must be present.
-The rules are saved and used by every <code class="docutils literal"><span class="pre">/*!use:re2c</span> <span class="pre">*/</span></code> block that follows.
-These blocks can contain inplace configurations, especially <code class="docutils literal"><span class="pre">re2c:flags:e</span></code>,
-<code class="docutils literal"><span class="pre">re2c:flags:w</span></code>, <code class="docutils literal"><span class="pre">re2c:flags:x</span></code>, <code class="docutils literal"><span class="pre">re2c:flags:u</span></code>, and <code class="docutils literal"><span class="pre">re2c:flags:8</span></code>.
-That way it is possible to create the same scanner multiple times for
-different character types, different input mechanisms, or different output mechanisms.
-The <code class="docutils literal"><span class="pre">/*!use:re2c</span> <span class="pre">*/</span></code> blocks can also contain additional rules that will be appended
-to the set of rules in <code class="docutils literal"><span class="pre">/*!rules:re2c</span> <span class="pre">*/</span></code>.</dd>
+<dd>Allows reuse of <code class="docutils literal"><span class="pre">re2c</span></code> rules with <code class="docutils literal"><span class="pre">/*!rules:re2c</span> <span class="pre">*/</span></code> and <code class="docutils literal"><span class="pre">/*!use:re2c</span> <span class="pre">*/</span></code> blocks.
+In this mode simple <code class="docutils literal"><span class="pre">/*!re2c</span> <span class="pre">*/</span></code> blocks are not allowed
+and exactly one <code class="docutils literal"><span class="pre">/*!rules:re2c</span> <span class="pre">*/</span></code> block must be present.
+The rules are saved and used by every <code class="docutils literal"><span class="pre">/*!use:re2c</span> <span class="pre">*/</span></code> block that follows (which may add rules of their own).
+This option allows to reuse the same set of rules with different configurations.</dd>
 <dt><code class="docutils literal"><span class="pre">-s</span> <span class="pre">--nested-ifs</span></code></dt>
-<dd>Generate nested ifs for some switches. Many
-compilers need this assist to generate better code.</dd>
+<dd>Use nested <code class="docutils literal"><span class="pre">if</span></code> statements instead of <code class="docutils literal"><span class="pre">switch</span></code> statements in conditional jumps.
+This usually results in more efficient code with non-optimizing C/C++ compilers.</dd>
 <dt><code class="docutils literal"><span class="pre">-t</span> <span class="pre">HEADER</span> <span class="pre">--type-header=HEADER</span></code></dt>
-<dd>Create a <code class="docutils literal"><span class="pre">HEADER</span></code> file that
-contains types for the (f)lex-like condition support. This can only be
-activated when <code class="docutils literal"><span class="pre">-c</span></code> is in use.</dd>
+<dd>Generate a <code class="docutils literal"><span class="pre">HEADER</span></code> file that contains enum with condition names.
+Requires <code class="docutils literal"><span class="pre">-c</span></code> option.</dd>
 <dt><code class="docutils literal"><span class="pre">-T</span> <span class="pre">--tags</span></code></dt>
 <dd>Enable submatch extraction with tags.</dd>
 <dt><code class="docutils literal"><span class="pre">-P</span> <span class="pre">--posix-captures</span></code></dt>
 <dd>Enable submatch extraction with POSIX-style capturing groups.</dd>
 <dt><code class="docutils literal"><span class="pre">-u</span> <span class="pre">--unicode</span></code></dt>
-<dd>Generate a parser that supports UTF-32. The generated
-code can deal with any valid Unicode character up to 0x10FFFF. In this
-mode, <code class="docutils literal"><span class="pre">re2c</span></code> assumes an input character size of 4 bytes. This switch is
-incompatible with <code class="docutils literal"><span class="pre">-e</span></code>, <code class="docutils literal"><span class="pre">-w</span></code>, <code class="docutils literal"><span class="pre">-x</span></code>, and <code class="docutils literal"><span class="pre">-8</span></code>. This implies <code class="docutils literal"><span class="pre">-s</span></code>.</dd>
+<dd>Generate a lexer that reads input in UTF-32 encoding.
+<code class="docutils literal"><span class="pre">re2c</span></code> assumes that character range is 0 – 0x10FFFF and character size is 4 bytes.
+Implies <code class="docutils literal"><span class="pre">-s</span></code>.</dd>
 <dt><code class="docutils literal"><span class="pre">-v</span> <span class="pre">--version</span></code></dt>
 <dd>Show version information.</dd>
 <dt><code class="docutils literal"><span class="pre">-V</span> <span class="pre">--vernum</span></code></dt>
-<dd>Show the version as a number in the MMmmpp (Majorm, minor, patch) format.</dd>
+<dd>Show version information in <code class="docutils literal"><span class="pre">MMmmpp</span></code> format (major, minor, patch).</dd>
 <dt><code class="docutils literal"><span class="pre">-w</span> <span class="pre">--wide-chars</span></code></dt>
-<dd>Generate a parser that supports UCS-2. The
-generated code can deal with any valid Unicode character up to 0xFFFF.
-In this mode, <code class="docutils literal"><span class="pre">re2c</span></code> assumes an input character size of 2 bytes. This
-switch is incompatible with <code class="docutils literal"><span class="pre">-e</span></code>, <code class="docutils literal"><span class="pre">-x</span></code>, <code class="docutils literal"><span class="pre">-u</span></code>, and <code class="docutils literal"><span class="pre">-8</span></code>. This implies
-<code class="docutils literal"><span class="pre">-s</span></code>.</dd>
+<dd>Generate a lexer that reads input in UCS-2 encoding.
+<code class="docutils literal"><span class="pre">re2c</span></code> assumes that character range is 0 – 0xFFFF and character size is 2 bytes.
+Implies <code class="docutils literal"><span class="pre">-s</span></code>.</dd>
 <dt><code class="docutils literal"><span class="pre">-x</span> <span class="pre">--utf-16</span></code></dt>
-<dd>Generate a parser that supports UTF-16. The generated
-code can deal with any valid Unicode character up to 0x10FFFF. In this
-mode, <code class="docutils literal"><span class="pre">re2c</span></code> assumes an input character size of 2 bytes. This switch is
-incompatible with <code class="docutils literal"><span class="pre">-e</span></code>, <code class="docutils literal"><span class="pre">-w</span></code>, <code class="docutils literal"><span class="pre">-u</span></code>, and <code class="docutils literal"><span class="pre">-8</span></code>. This implies <code class="docutils literal"><span class="pre">-s</span></code>.</dd>
+<dd>Generate a lexer that reads input in UTF-16 encoding.
+<code class="docutils literal"><span class="pre">re2c</span></code> assumes that character range is 0 – 0x10FFFF and character size is 2 bytes.
+Implies <code class="docutils literal"><span class="pre">-s</span></code>.</dd>
 <dt><code class="docutils literal"><span class="pre">-8</span> <span class="pre">--utf-8</span></code></dt>
-<dd>Generate a parser that supports UTF-8. The generated
-code can deal with any valid Unicode character up to 0x10FFFF. In this
-mode, <code class="docutils literal"><span class="pre">re2c</span></code> assumes an input character size of 1 byte. This switch is
-incompatible with <code class="docutils literal"><span class="pre">-e</span></code>, <code class="docutils literal"><span class="pre">-w</span></code>, <code class="docutils literal"><span class="pre">-x</span></code>, and <code class="docutils literal"><span class="pre">-u</span></code>.</dd>
+<dd>Generate a lexer that reads input in UTF-8 encoding.
+<code class="docutils literal"><span class="pre">re2c</span></code> assumes that character range is 0 – 0x10FFFF and character size is 1 byte.</dd>
 <dt><code class="docutils literal"><span class="pre">--case-insensitive</span></code></dt>
-<dd>Makes all strings case insensitive. This makes
-“-quoted expressions behave as ‘-quoted expressions.</dd>
+<dd>Treat single-quoted and double-quoted strings as case-insensitive.</dd>
 <dt><code class="docutils literal"><span class="pre">--case-inverted</span></code></dt>
-<dd>Invert the meaning of single and double quoted
-strings. With this switch, single quotes are case sensitive and double
-quotes are case insensitive.</dd>
+<dd>Invert the meaning of single-quoted and double-quoted strings:
+treat single-quoted strings as case-sensitive and double-quoted strings as case-insensitive.</dd>
 <dt><code class="docutils literal"><span class="pre">--no-generation-date</span></code></dt>
 <dd>Suppress date output in the generated file.</dd>
 <dt><code class="docutils literal"><span class="pre">--no-lookahead</span></code></dt>
 <dd>Use TDFA(0) instead of TDFA(1).
 This option only has effect with <code class="docutils literal"><span class="pre">--tags</span></code> or <code class="docutils literal"><span class="pre">--posix-captures</span></code> options.</dd>
 <dt><code class="docutils literal"><span class="pre">--no-optimize-tags</span></code></dt>
-<dd>Suppress optimization of tag variables (mostly used for debugging).</dd>
+<dd>Suppress optimization of tag variables (useful for debugging or benchmarking).</dd>
 <dt><code class="docutils literal"><span class="pre">--no-version</span></code></dt>
 <dd>Suppress version output in the generated file.</dd>
-<dt><code class="docutils literal"><span class="pre">--no-generation-date</span></code></dt>
-<dd>Suppress version output in the generated file.</dd>
 <dt><code class="docutils literal"><span class="pre">--encoding-policy</span> <span class="pre">POLICY</span></code></dt>
-<dd>Specify how <code class="docutils literal"><span class="pre">re2c</span></code> must treat Unicode
-surrogates. <code class="docutils literal"><span class="pre">POLICY</span></code> can be one of the following: <code class="docutils literal"><span class="pre">fail</span></code> (abort with
-an error when a surrogate is encountered), <code class="docutils literal"><span class="pre">substitute</span></code> (silently replace
-surrogates with the error code point 0xFFFD), <code class="docutils literal"><span class="pre">ignore</span></code> (treat surrogates as
-normal code points). By default, <code class="docutils literal"><span class="pre">re2c</span></code> ignores surrogates (for backward
-compatibility). The Unicode standard says that standalone surrogates are
-invalid code points, but different libraries and programs treat them
-differently.</dd>
+<dd>Define the way <code class="docutils literal"><span class="pre">re2c</span></code> treats Unicode surrogates.
+<code class="docutils literal"><span class="pre">POLICY</span></code> can be one of the following: <code class="docutils literal"><span class="pre">fail</span></code> (abort with an error when a surrogate is encountered),
+<code class="docutils literal"><span class="pre">substitute</span></code> (silently replace surrogates with the error code point 0xFFFD),
+<code class="docutils literal"><span class="pre">ignore</span></code> (default, treat surrogates as normal code points).
+The Unicode standard says that standalone surrogates are invalid,
+but real-world libraries and programs behave in different ways.</dd>
 <dt><code class="docutils literal"><span class="pre">--input</span> <span class="pre">INPUT</span></code></dt>
-<dd>Specify re2c’s input API. <code class="docutils literal"><span class="pre">INPUT</span></code> can be either <code class="docutils literal"><span class="pre">default</span></code> or <code class="docutils literal"><span class="pre">custom</span></code>.</dd>
+<dd>Specify <code class="docutils literal"><span class="pre">re2c</span></code> input API. <code class="docutils literal"><span class="pre">INPUT</span></code> can be either <code class="docutils literal"><span class="pre">default</span></code> or <code class="docutils literal"><span class="pre">custom</span></code> (enables the use of generic API).</dd>
 <dt><code class="docutils literal"><span class="pre">-S</span> <span class="pre">--skeleton</span></code></dt>
-<dd>Instead of embedding re2c-generated code into C/C++
-source, generate a self-contained program for the same DFA. Most useful
-for correctness and performance testing.</dd>
+<dd>Ignore user-defined interface code and generate a self-contained “skeleton” program.
+Additionally, generate input files with strings derived from the regular grammar
+and compressed match results that are used to verify “skeleton” behavior on all inputs.
+This option is useful for finding bugs in optimizations and code generation.</dd>
 <dt><code class="docutils literal"><span class="pre">--empty-class</span> <span class="pre">POLICY</span></code></dt>
-<dd>What to do if the user uses an empty character
-class. <code class="docutils literal"><span class="pre">POLICY</span></code> can be one of the following: <code class="docutils literal"><span class="pre">match-empty</span></code> (match empty
-input: pretty illogical, but this is the default for backwards
-compatibility reasons), <code class="docutils literal"><span class="pre">match-none</span></code> (fail to match on any input),
-<code class="docutils literal"><span class="pre">error</span></code> (compilation error). Note that there are various ways to
-construct an empty class, e.g., [], [^\x00-\xFF],
-[\x00-\xFF][\x00-\xFF].</dd>
-<dt><code class="docutils literal"><span class="pre">--dfa-minimization</span> <span class="pre">&lt;table</span> <span class="pre">|</span> <span class="pre">moore&gt;</span></code></dt>
-<dd>The internal algorithm used by re2c to minimize the DFA (defaults to <code class="docutils literal"><span class="pre">moore</span></code>).
-Both the table filling algorithm and the Moore algorithm should produce the same DFA (up to states relabeling).
-The table filling algorithm is much simpler and slower; it serves as a reference implementation.</dd>
+<dd>Define the way <code class="docutils literal"><span class="pre">re2c</span></code> treats empty character classes.
+<code class="docutils literal"><span class="pre">POLICY</span></code> can be one of the following: <code class="docutils literal"><span class="pre">match-empty</span></code> (match empty input: illogical, but default behavior for backwards compatibility reasons),
+<code class="docutils literal"><span class="pre">match-none</span></code> (fail to match on any input),
+<code class="docutils literal"><span class="pre">error</span></code> (compilation error).</dd>
+<dt><code class="docutils literal"><span class="pre">--dfa-minimization</span> <span class="pre">ALGORITHM</span></code></dt>
+<dd>The internal algorithm used by re2c to minimize the DFA.
+<code class="docutils literal"><span class="pre">ALGORITHM</span></code> can be either <code class="docutils literal"><span class="pre">moore</span></code> (Moore algorithm, the default) or <code class="docutils literal"><span class="pre">table</span></code> (table filling algorithm).
+Both algorithms should produce the same DFA up to states relabeling;
+table filling is much slower and serves as a reference implementation.</dd>
 <dt><code class="docutils literal"><span class="pre">--eager-skip</span></code></dt>
-<dd>This option controls when the generated lexer advances to the next input symbol
-(that is, increments YYCURSOR or invokes YYSKIP).
-By default this happens after transition to the next state,
-but <code class="docutils literal"><span class="pre">--eager-skip</span></code> option allows to override default behavior
-and advance input position immediately after reading input symbol.
-This option is implied by <code class="docutils literal"><span class="pre">--no-lookahead</span></code>.</dd>
+<dd>Make the generated lexer advance the input position “eagerly”:
+immediately after reading input symbol.
+By default this happens after transition to the next state.
+Implied by <code class="docutils literal"><span class="pre">--no-lookahead</span></code>.</dd>
 <dt><code class="docutils literal"><span class="pre">--dump-nfa</span></code></dt>
-<dd>Generate .dot representation of NFA and dump it on stderr.</dd>
+<dd>Generate representation of NFA in DOT format and dump it on stderr.</dd>
 <dt><code class="docutils literal"><span class="pre">--dump-dfa-raw</span></code></dt>
-<dd>Generate .dot representation of DFA under construction and dump it on stderr.</dd>
+<dd>Generate representation of DFA in DOT format under construction and dump it on stderr.</dd>
 <dt><code class="docutils literal"><span class="pre">--dump-dfa-det</span></code></dt>
-<dd>Generate .dot representation of DFA immediately after determinization and dump it on stderr.</dd>
+<dd>Generate representation of DFA in DOT format immediately after determinization and dump it on stderr.</dd>
 <dt><code class="docutils literal"><span class="pre">--dump-dfa-tagopt</span></code></dt>
-<dd>Generate .dot representation of DFA after tag optimizations and dump it on stderr.</dd>
+<dd>Generate representation of DFA in DOT format after tag optimizations and dump it on stderr.</dd>
 <dt><code class="docutils literal"><span class="pre">--dump-dfa-min</span></code></dt>
-<dd>Generate .dot representation of DFA after minimization and dump it on stderr.</dd>
+<dd>Generate representation of DFA in DOT format after minimization and dump it on stderr.</dd>
 <dt><code class="docutils literal"><span class="pre">--dump-adfa</span></code></dt>
-<dd>Generate .dot representation of DFA after tunneling and dump it on stderr.</dd>
+<dd>Generate representation of DFA in DOT format after tunneling and dump it on stderr.</dd>
 <dt><code class="docutils literal"><span class="pre">-1</span> <span class="pre">--single-pass</span></code></dt>
 <dd>Deprecated. Does nothing (single pass is the default now).</dd>
 </dl>
@@ -232,7 +204,7 @@ This option is implied by <code class="docutils literal"><span class="pre">--no-
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 23, 2017.
+      Last updated on Aug 26, 2017.
     </div>
   </body>
 </html>
