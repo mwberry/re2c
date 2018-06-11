@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>C++98 lexer &#8212; re2c 1.0.2 documentation</title>
+    <title>C++98 lexer &#8212; re2c 1.0.3 documentation</title>
     <link rel="stylesheet" href="../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.2',
+        VERSION:     '1.0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -29,7 +29,7 @@
   <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
-    re2c-1.0.2
+    re2c-1.0.3
 </div>
 
 <h3><a href="../index.html">Home</a></h3>
@@ -856,35 +856,35 @@ $ g++ -o cxx98 cxx98.cc
 </div>
 <p>Run:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./cxx98 07_cxx98.re <span class="p">|</span> fold
- STATIC CONST size_t <span class="nv">SIZE</span> <span class="o">=</span> <span class="m">64</span> * 1024<span class="p">;</span> STRUCT input_t <span class="o">{</span> UNSIGNED CHAR buf<span class="o">[</span>SIZE +
+ STATIC CONST size_t <span class="nv">SIZE</span> <span class="o">=</span> <span class="m">64</span> * <span class="m">1024</span><span class="p">;</span> STRUCT input_t <span class="o">{</span> UNSIGNED CHAR buf<span class="o">[</span>SIZE +
  YYMAXFILL<span class="o">]</span><span class="p">;</span> UNSIGNED CHAR *lim<span class="p">;</span> UNSIGNED CHAR *cur<span class="p">;</span> UNSIGNED CHAR *mar<span class="p">;</span> UNSIGNE
 D CHAR *tok<span class="p">;</span> BOOL eof<span class="p">;</span> FILE *CONST file<span class="p">;</span> input_t<span class="o">(</span>FILE *f<span class="o">)</span> : buf<span class="o">()</span> , lim<span class="o">(</span>buf + SI
 ZE<span class="o">)</span> , cur<span class="o">(</span>lim<span class="o">)</span> , mar<span class="o">(</span>lim<span class="o">)</span> , tok<span class="o">(</span>lim<span class="o">)</span> , eof<span class="o">(</span><span class="nb">false</span><span class="o">)</span> , file<span class="o">(</span>f<span class="o">)</span> <span class="o">{}</span> BOOL fill<span class="o">(</span>size_t
 need<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>eof<span class="o">)</span> <span class="o">{</span> RETURN false<span class="p">;</span> <span class="o">}</span> CONST size_t <span class="nv">free</span> <span class="o">=</span> tok - buf<span class="p">;</span> IF <span class="o">(</span>free &lt; nee
 d<span class="o">)</span> <span class="o">{</span> RETURN false<span class="p">;</span> <span class="o">}</span> memmove<span class="o">(</span>buf, tok, lim - tok<span class="o">)</span><span class="p">;</span> lim -<span class="o">=</span> free<span class="p">;</span> cur -<span class="o">=</span> free<span class="p">;</span> mar
- -<span class="o">=</span> free<span class="p">;</span> tok -<span class="o">=</span> free<span class="p">;</span> lim +<span class="o">=</span> fread<span class="o">(</span>lim, 1, free, file<span class="o">)</span><span class="p">;</span> IF <span class="o">(</span>lim &lt; buf + SIZE<span class="o">)</span> <span class="o">{</span>
- <span class="nv">eof</span> <span class="o">=</span> true<span class="p">;</span> memset<span class="o">(</span>lim, 0, YYMAXFILL<span class="o">)</span><span class="p">;</span> lim +<span class="o">=</span> YYMAXFILL<span class="p">;</span> <span class="o">}</span> RETURN true<span class="p">;</span> <span class="o">}</span> <span class="o">}</span><span class="p">;</span> TE
+ -<span class="o">=</span> free<span class="p">;</span> tok -<span class="o">=</span> free<span class="p">;</span> <span class="nv">lim</span> <span class="o">+=</span> fread<span class="o">(</span>lim, <span class="m">1</span>, free, file<span class="o">)</span><span class="p">;</span> IF <span class="o">(</span>lim &lt; buf + SIZE<span class="o">)</span> <span class="o">{</span>
+ <span class="nv">eof</span> <span class="o">=</span> true<span class="p">;</span> memset<span class="o">(</span>lim, <span class="m">0</span>, YYMAXFILL<span class="o">)</span><span class="p">;</span> <span class="nv">lim</span> <span class="o">+=</span> YYMAXFILL<span class="p">;</span> <span class="o">}</span> RETURN true<span class="p">;</span> <span class="o">}</span> <span class="o">}</span><span class="p">;</span> TE
 MPLATE&lt;INT base&gt; STATIC BOOL adddgt<span class="o">(</span>UNSIGNED LONG <span class="p">&amp;</span>u, UNSIGNED LONG d<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>u &gt;
  <span class="o">(</span>ULONG_MAX - d<span class="o">)</span> / base<span class="o">)</span> <span class="o">{</span> RETURN false<span class="p">;</span> <span class="o">}</span> <span class="nv">u</span> <span class="o">=</span> u * base + d<span class="p">;</span> RETURN true<span class="p">;</span> <span class="o">}</span> STAT
 IC BOOL lex_oct<span class="o">(</span>CONST UNSIGNED CHAR *s, CONST UNSIGNED CHAR *e, UNSIGNED LONG <span class="p">&amp;</span>u
-<span class="o">)</span> <span class="o">{</span> FOR <span class="o">(</span><span class="nv">u</span> <span class="o">=</span> 0, ++s<span class="p">;</span> s &lt; e<span class="p">;</span> ++s<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>!adddgt&lt;8&gt;<span class="o">(</span>u, *s - 48<span class="o">))</span> <span class="o">{</span> RETURN false<span class="p">;</span> <span class="o">}</span>
+<span class="o">)</span> <span class="o">{</span> FOR <span class="o">(</span><span class="nv">u</span> <span class="o">=</span> <span class="m">0</span>, ++s<span class="p">;</span> s &lt; e<span class="p">;</span> ++s<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>!adddgt&lt;<span class="m">8</span>&gt;<span class="o">(</span>u, *s - <span class="m">48</span><span class="o">))</span> <span class="o">{</span> RETURN false<span class="p">;</span> <span class="o">}</span>
  <span class="o">}</span> RETURN true<span class="p">;</span> <span class="o">}</span> STATIC BOOL lex_dec<span class="o">(</span>CONST UNSIGNED CHAR *s, CONST UNSIGNED CHA
-R *e, UNSIGNED LONG <span class="p">&amp;</span>u<span class="o">)</span> <span class="o">{</span> FOR <span class="o">(</span><span class="nv">u</span> <span class="o">=</span> 0<span class="p">;</span> s &lt; e<span class="p">;</span> ++s<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>!adddgt&lt;10&gt;<span class="o">(</span>u, *s - 48<span class="o">))</span>
+R *e, UNSIGNED LONG <span class="p">&amp;</span>u<span class="o">)</span> <span class="o">{</span> FOR <span class="o">(</span><span class="nv">u</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span> s &lt; e<span class="p">;</span> ++s<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>!adddgt&lt;<span class="m">10</span>&gt;<span class="o">(</span>u, *s - <span class="m">48</span><span class="o">))</span>
  <span class="o">{</span> RETURN false<span class="p">;</span> <span class="o">}</span> <span class="o">}</span> RETURN true<span class="p">;</span> <span class="o">}</span> STATIC BOOL lex_hex<span class="o">(</span>CONST UNSIGNED CHAR *s,
-CONST UNSIGNED CHAR *e, UNSIGNED LONG <span class="p">&amp;</span>u<span class="o">)</span> <span class="o">{</span> FOR <span class="o">(</span><span class="nv">u</span> <span class="o">=</span> 0, s +<span class="o">=</span> 2<span class="p">;</span> s &lt; e<span class="p">;</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span> RETU
+CONST UNSIGNED CHAR *e, UNSIGNED LONG <span class="p">&amp;</span>u<span class="o">)</span> <span class="o">{</span> FOR <span class="o">(</span><span class="nv">u</span> <span class="o">=</span> <span class="m">0</span>, <span class="nv">s</span> <span class="o">+=</span> <span class="m">2</span><span class="p">;</span> s &lt; e<span class="p">;</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span> RETU
 RN true<span class="p">;</span> <span class="o">}</span> STATIC BOOL lex_str<span class="o">(</span>input_t <span class="p">&amp;</span>in, UNSIGNED CHAR q<span class="o">)</span> <span class="o">{</span> printf<span class="o">(</span><span class="s2">&quot;\x25\x63&quot;</span>
 , q<span class="o">)</span><span class="p">;</span> FOR <span class="o">(</span>UNSIGNED LONG <span class="nv">u</span> <span class="o">=</span> q<span class="p">;;</span> printf<span class="o">(</span><span class="s2">&quot;\x5c\x78\x25\x6c\x78&quot;</span>, u<span class="o">))</span> <span class="o">{</span> in.tok <span class="o">=</span> i
 n.cur<span class="p">;</span> <span class="o">}</span> printf<span class="o">(</span><span class="s2">&quot;\x25\x63&quot;</span>, q<span class="o">)</span><span class="p">;</span> RETURN true<span class="p">;</span> <span class="o">}</span> STATIC BOOL lex_flt<span class="o">(</span>CONST UNSIGNE
-D CHAR *s<span class="o">)</span> <span class="o">{</span> DOUBLE <span class="nv">d</span> <span class="o">=</span> 0<span class="p">;</span> DOUBLE <span class="nv">x</span> <span class="o">=</span> 1<span class="p">;</span> INT <span class="nv">e</span> <span class="o">=</span> 0<span class="p">;</span> mant_int: mant_frac: exp_sig
+D CHAR *s<span class="o">)</span> <span class="o">{</span> DOUBLE <span class="nv">d</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span> DOUBLE <span class="nv">x</span> <span class="o">=</span> <span class="m">1</span><span class="p">;</span> INT <span class="nv">e</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span> mant_int: mant_frac: exp_sig
 n: exp: sfx: end: printf<span class="o">(</span><span class="s2">&quot;\x25\x67&quot;</span>, d<span class="o">)</span><span class="p">;</span> RETURN true<span class="p">;</span> <span class="o">}</span> STATIC BOOL lex<span class="o">(</span>input_t
 <span class="p">&amp;</span>in<span class="o">)</span> <span class="o">{</span> UNSIGNED LONG u<span class="p">;</span> FOR <span class="o">(</span><span class="p">;;</span><span class="o">)</span> <span class="o">{</span> in.tok <span class="o">=</span> in.cur<span class="p">;</span> sfx: <span class="o">}</span> <span class="o">}</span> INT main<span class="o">(</span>INT argc,
-CHAR **argv<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>argc !<span class="o">=</span> 2<span class="o">)</span> <span class="o">{</span> <span class="nb">printf</span> <span class="o">(</span><span class="s2">&quot;\x75\x73\x61\x67\x65\x3a\x20\x2e\x2f\x6</span>
+CHAR **argv<span class="o">)</span> <span class="o">{</span> IF <span class="o">(</span>argc !<span class="o">=</span> <span class="m">2</span><span class="o">)</span> <span class="o">{</span> <span class="nb">printf</span> <span class="o">(</span><span class="s2">&quot;\x75\x73\x61\x67\x65\x3a\x20\x2e\x2f\x6</span>
 <span class="s2">5\x78\x61\x6d\x70\x6c\x65\x20\x3c\x66\x69\x6c\x65\x6e\x61\x6d\x65\x3e\xa&quot;</span><span class="o">)</span><span class="p">;</span> RETU
-RN 1<span class="p">;</span> <span class="o">}</span> FILE *file <span class="o">=</span> fopen<span class="o">(</span>argv<span class="o">[</span>1<span class="o">]</span>, <span class="s2">&quot;\x72\x62&quot;</span><span class="o">)</span><span class="p">;</span> IF <span class="o">(</span>!file<span class="o">)</span> <span class="o">{</span> printf<span class="o">(</span><span class="s2">&quot;\x65\x72\x</span>
+RN <span class="m">1</span><span class="p">;</span> <span class="o">}</span> FILE *file <span class="o">=</span> fopen<span class="o">(</span>argv<span class="o">[</span><span class="m">1</span><span class="o">]</span>, <span class="s2">&quot;\x72\x62&quot;</span><span class="o">)</span><span class="p">;</span> IF <span class="o">(</span>!file<span class="o">)</span> <span class="o">{</span> printf<span class="o">(</span><span class="s2">&quot;\x65\x72\x</span>
 <span class="s2">72\x6f\x72\x3a\x20\x63\x61\x6e\x6e\x6f\x74\x20\x6f\x70\x65\x6e\x20\x66\x69\x6c\x</span>
-<span class="s2">65\x3a\x20\x25\x73\xa&quot;</span>, argv<span class="o">[</span>1<span class="o">])</span><span class="p">;</span> RETURN 1<span class="p">;</span> <span class="o">}</span> input_t in<span class="o">(</span>file<span class="o">)</span><span class="p">;</span> IF <span class="o">(</span>!lex<span class="o">(</span>in<span class="o">))</span> <span class="o">{</span>
+<span class="s2">65\x3a\x20\x25\x73\xa&quot;</span>, argv<span class="o">[</span><span class="m">1</span><span class="o">])</span><span class="p">;</span> RETURN <span class="m">1</span><span class="p">;</span> <span class="o">}</span> input_t in<span class="o">(</span>file<span class="o">)</span><span class="p">;</span> IF <span class="o">(</span>!lex<span class="o">(</span>in<span class="o">))</span> <span class="o">{</span>
 printf<span class="o">(</span><span class="s2">&quot;\x2e\x2e\x2e\x20\x65\x72\x72\x6f\x72\xa&quot;</span><span class="o">)</span><span class="p">;</span> <span class="o">}</span> ELSE <span class="o">{</span> printf<span class="o">(</span><span class="s2">&quot;\xa&quot;</span><span class="o">)</span><span class="p">;</span> <span class="o">}</span> fcl
-ose<span class="o">(</span>file<span class="o">)</span><span class="p">;</span> RETURN 0<span class="p">;</span> <span class="o">}</span>
+ose<span class="o">(</span>file<span class="o">)</span><span class="p">;</span> RETURN <span class="m">0</span><span class="p">;</span> <span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -896,7 +896,7 @@ ose<span class="o">(</span>file<span class="o">)</span><span class="p">;</span> 
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 08, 2017.
+      Last updated on Jun 11, 2018.
     </div>
   </body>
 </html>

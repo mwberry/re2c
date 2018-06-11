@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Release 0.15 &#8212; re2c 1.0.2 documentation</title>
+    <title>Release 0.15 &#8212; re2c 1.0.3 documentation</title>
     <link rel="stylesheet" href="../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.2',
+        VERSION:     '1.0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -29,7 +29,7 @@
   <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
-    re2c-1.0.2
+    re2c-1.0.3
 </div>
 
 <h3><a href="../../index.html">Home</a></h3>
@@ -89,10 +89,10 @@ not only the main program, but also the command-line options, inplace configurat
 and all kinds of escaped strings are parsed with re2c.
 I also updated the website (feel free to suggest improvements).</p>
 <p>Here is the list of all the changes:</p>
-<ul>
+<ul class="simple">
 <li><dl class="first docutils">
 <dt>Updated website <a class="reference external" href="http://re2c.org">http://re2c.org</a>:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>added examples</li>
 <li>updated docs</li>
 <li>added news</li>
@@ -103,7 +103,7 @@ I also updated the website (feel free to suggest improvements).</p>
 </li>
 <li><dl class="first docutils">
 <dt>Added options:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">-S,</span> <span class="pre">--skeleton</span></code></li>
 <li><code class="docutils literal"><span class="pre">--empty-class</span> <span class="pre">&lt;match-empty</span> <span class="pre">|</span> <span class="pre">match-none</span> <span class="pre">|</span> <span class="pre">error&gt;</span></code></li>
 </ul>
@@ -112,7 +112,7 @@ I also updated the website (feel free to suggest improvements).</p>
 </li>
 <li><dl class="first docutils">
 <dt>Added warnings:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">-W</span></code></li>
 <li><code class="docutils literal"><span class="pre">-Werror</span></code></li>
 <li><code class="docutils literal"><span class="pre">-W&lt;warning&gt;</span></code></li>
@@ -125,7 +125,7 @@ I also updated the website (feel free to suggest improvements).</p>
 </li>
 <li><dl class="first docutils">
 <dt>Added specific warnings:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">-Wundefined-control-flow</span></code></li>
 <li><code class="docutils literal"><span class="pre">-Wunreachable-rules</span></code></li>
 <li><code class="docutils literal"><span class="pre">-Wcondition-order</span></code></li>
@@ -139,7 +139,7 @@ I also updated the website (feel free to suggest improvements).</p>
 </li>
 <li><dl class="first docutils">
 <dt>Fixed options:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">--</span></code> (interpret remaining arguments as non-options)</li>
 </ul>
 </dd>
@@ -147,17 +147,16 @@ I also updated the website (feel free to suggest improvements).</p>
 </li>
 <li><dl class="first docutils">
 <dt>Deprecated options:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">-1</span> <span class="pre">--single-pass</span></code> (single pass is the default now)</li>
 </ul>
 </dd>
 </dl>
 </li>
-<li><p class="first">Reduced size of the generated <code class="docutils literal"><span class="pre">.dot</span></code> files.</p>
-</li>
+<li>Reduced size of the generated <code class="docutils literal"><span class="pre">.dot</span></code> files.</li>
 <li><dl class="first docutils">
 <dt>Fixed bugs:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>#27 re2c crashes reading files containing <code class="docutils literal"><span class="pre">%{</span> <span class="pre">%}</span></code> (patch by Rui)</li>
 <li>#51 default rule doesn’t work in reuse mode</li>
 <li>#52 eliminate multiple passes</li>
@@ -173,7 +172,7 @@ I also updated the website (feel free to suggest improvements).</p>
 </li>
 <li><dl class="first docutils">
 <dt>Added test options:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">-j</span></code>, <code class="docutils literal"><span class="pre">-j</span> <span class="pre">&lt;N&gt;</span></code> (run tests in <code class="docutils literal"><span class="pre">N</span></code> threads, defaults to the number of CPUs)</li>
 <li><code class="docutils literal"><span class="pre">--wine</span></code> (test windows builds using <code class="docutils literal"><span class="pre">wine</span></code>)</li>
 <li><code class="docutils literal"><span class="pre">--skeleton</span></code> (generate skeleton programs, compile and execute them)</li>
@@ -184,7 +183,7 @@ I also updated the website (feel free to suggest improvements).</p>
 </li>
 <li><dl class="first docutils">
 <dt>Updated build system:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>support out of source builds</li>
 <li>support <code class="docutils literal"><span class="pre">`make</span> <span class="pre">distcheck`</span></code></li>
 <li>added <code class="docutils literal"><span class="pre">`make</span> <span class="pre">bootstrap`</span></code> (rebuild re2c after building with precompiled <code class="docutils literal"><span class="pre">.re</span></code> files)</li>
@@ -201,8 +200,7 @@ respect user-defined <code class="docutils literal"><span class="pre">CXXFLAGS</
 </dd>
 </dl>
 </li>
-<li><p class="first">Moved development to github (<a class="reference external" href="https://github.com/skvadrik/re2c">https://github.com/skvadrik/re2c</a>), keep a mirror on sourceforge.</p>
-</li>
+<li>Moved development to github (<a class="reference external" href="https://github.com/skvadrik/re2c">https://github.com/skvadrik/re2c</a>), keep a mirror on sourceforge.</li>
 </ul>
 </div>
 
@@ -213,7 +211,7 @@ respect user-defined <code class="docutils literal"><span class="pre">CXXFLAGS</
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 08, 2017.
+      Last updated on Jun 11, 2018.
     </div>
   </body>
 </html>

@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Skeleton &#8212; re2c 1.0.2 documentation</title>
+    <title>Skeleton &#8212; re2c 1.0.3 documentation</title>
     <link rel="stylesheet" href="../../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.0.2',
+        VERSION:     '1.0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -29,7 +29,7 @@
   <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
-    re2c-1.0.2
+    re2c-1.0.3
 </div>
 
 <h3><a href="../../../index.html">Home</a></h3>
@@ -735,7 +735,7 @@ For example, let’s change the first byte (length of current input string) to <
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -S -o example.c hex2.re
 $ sed -i -e <span class="s1">&#39;s/\x01\x01\xfe/\xff\x01\xfe/&#39;</span> example.c.line4.keys
 $ ./example
-error: lex_line4: unused input strings left at position 255
+error: lex_line4: unused input strings left at position <span class="m">255</span>
 error: lex_line4: unused keys left after <span class="m">1</span> iterations
 </pre></div>
 </div>
@@ -746,27 +746,27 @@ Now let’s alter the second byte (length of the matching prefix):</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -S -o example.c hex2.re
 $ sed -i -e <span class="s1">&#39;s/\x01\x01\xfe/\x01\x03\xfe/&#39;</span> example.c.line4.keys
 $ ./example
-error: lex_line4: at position <span class="m">0</span> <span class="o">(</span>iteration 0<span class="o">)</span>:
-        expected: match length 3, rule 254
-        actual:   match length 1, rule 254
+error: lex_line4: at position <span class="m">0</span> <span class="o">(</span>iteration <span class="m">0</span><span class="o">)</span>:
+        expected: match length <span class="m">3</span>, rule <span class="m">254</span>
+        actual:   match length <span class="m">1</span>, rule <span class="m">254</span>
 </pre></div>
 </div>
 <p>Third byte stands for rule number:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -S -o example.c hex2.re
 $ sed -i -e <span class="s1">&#39;s/\x01\x01\xfe/\x01\x01\xfd/&#39;</span> example.c.line4.keys
 $ ./example
-error: lex_line4: at position <span class="m">0</span> <span class="o">(</span>iteration 0<span class="o">)</span>:
-        expected: match length 1, rule 253
-        actual:   match length 1, rule 254
+error: lex_line4: at position <span class="m">0</span> <span class="o">(</span>iteration <span class="m">0</span><span class="o">)</span>:
+        expected: match length <span class="m">1</span>, rule <span class="m">253</span>
+        actual:   match length <span class="m">1</span>, rule <span class="m">254</span>
 </pre></div>
 </div>
 <p>Now let’s change the input string:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -S -o example.c hex2.re
 $ sed -i -e <span class="s1">&#39;s/@/00/&#39;</span> example.c.line4.input
 $ ./example
-error: lex_line4: at position <span class="m">3</span> <span class="o">(</span>iteration 3<span class="o">)</span>:
-        expected: match length 1, rule 254
-        actual:   match length 2, rule 0
+error: lex_line4: at position <span class="m">3</span> <span class="o">(</span>iteration <span class="m">3</span><span class="o">)</span>:
+        expected: match length <span class="m">1</span>, rule <span class="m">254</span>
+        actual:   match length <span class="m">2</span>, rule <span class="m">0</span>
 </pre></div>
 </div>
 <p>Finally, let’s break the generated code:</p>
@@ -774,9 +774,9 @@ error: lex_line4: at position <span class="m">3</span> <span class="o">(</span>i
 $ sed -i -e <span class="s2">&quot;s/case &#39;7&#39;://&quot;</span> example.c
 $ gcc -o example example.c
 $ ./example
-error: lex_line4: at position <span class="m">248</span> <span class="o">(</span>iteration 241<span class="o">)</span>:
-        expected: match length 2, rule 0
-        actual:   match length 1, rule 254
+error: lex_line4: at position <span class="m">248</span> <span class="o">(</span>iteration <span class="m">241</span><span class="o">)</span>:
+        expected: match length <span class="m">2</span>, rule <span class="m">0</span>
+        actual:   match length <span class="m">1</span>, rule <span class="m">254</span>
 </pre></div>
 </div>
 <p>And so on.</p>
@@ -797,16 +797,16 @@ but because of the undefined control flow skeleton program fails:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -S -o example.c hex2.re
 $ gcc -o example example.c
 $ ./example
-warning: lex_line3: control flow is undefined <span class="k">for</span> input at position 72, rerun re2c with <span class="s1">&#39;-W&#39;</span>
-error: lex_line3: at position <span class="m">72</span> <span class="o">(</span>iteration 36<span class="o">)</span>:
-        expected: match length 0, rule 255
-        actual:   match length 3, rule 0
+warning: lex_line3: control flow is undefined <span class="k">for</span> input at position <span class="m">72</span>, rerun re2c with <span class="s1">&#39;-W&#39;</span>
+error: lex_line3: at position <span class="m">72</span> <span class="o">(</span>iteration <span class="m">36</span><span class="o">)</span>:
+        expected: match length <span class="m">0</span>, rule <span class="m">255</span>
+        actual:   match length <span class="m">3</span>, rule <span class="m">0</span>
 </pre></div>
 </div>
 <p>In this case we are lucky: lexer erroneously hit an action and was terminated.
 We got a nice error and a warning that suggests that we should rerun re2c with <code class="docutils literal"><span class="pre">-W</span></code>:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ re2c -W -S -o example.c hex2.re
-re2c: warning: line 3: control flow is undefined <span class="k">for</span> strings that match
+re2c: warning: line <span class="m">3</span>: control flow is undefined <span class="k">for</span> strings that match
         <span class="s1">&#39;[\x0-\x2F\x3A-\x40\x47-\x60\x67-\xFF]&#39;</span>
         <span class="s1">&#39;[\x30-\x39\x41-\x46\x61-\x66] [\x0-\x2F\x3A-\x40\x47-\x60\x67-\xFF]&#39;</span>
 , use default rule <span class="s1">&#39;*&#39;</span> <span class="o">[</span>-Wundefined-control-flow<span class="o">]</span>
@@ -860,10 +860,10 @@ generates skeleton program and measures the size of <code class="docutils litera
 8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nb">printf</span> <span class="s2">&quot;%10s%10s%10s%10s\n\n&quot;</span> iters edges input keys
 <span class="k">for</span> i in <span class="sb">`</span>seq <span class="nv">$1</span> <span class="nv">$2</span><span class="sb">`</span>
 <span class="k">do</span>
-    <span class="nb">echo</span> <span class="s1">&#39;/*!re2c * {} [0-9a-fA-F]{&#39;</span>$i<span class="s1">&#39;} {} */&#39;</span> <span class="p">|</span> re2c -S -o example.c -
+    <span class="nb">echo</span> <span class="s1">&#39;/*!re2c * {} [0-9a-fA-F]{&#39;</span><span class="nv">$i</span><span class="s1">&#39;} {} */&#39;</span> <span class="p">|</span> re2c -S -o example.c -
     <span class="nv">input</span><span class="o">=</span><span class="sb">`</span>stat -c <span class="s1">&#39;%s&#39;</span> example.c.line1.input<span class="sb">`</span>
     <span class="nv">keys</span><span class="o">=</span><span class="sb">`</span>stat -c <span class="s1">&#39;%s&#39;</span> example.c.line1.keys<span class="sb">`</span>
-    <span class="nb">printf</span> <span class="s2">&quot;%10d%10d%10d%10d\n&quot;</span> $i <span class="k">$((</span><span class="m">256</span> <span class="o">*</span> i<span class="k">))</span> $input $keys
+    <span class="nb">printf</span> <span class="s2">&quot;%10d%10d%10d%10d\n&quot;</span> <span class="nv">$i</span> <span class="k">$((</span><span class="m">256</span> <span class="o">*</span> i<span class="k">))</span> <span class="nv">$input</span> <span class="nv">$keys</span>
 <span class="k">done</span>
 </pre></div>
 </td></tr></table></div>
@@ -963,7 +963,7 @@ and immediately get an executable program.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 08, 2017.
+      Last updated on Jun 11, 2018.
     </div>
   </body>
 </html>

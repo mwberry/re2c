@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Changelog &#8212; re2c 1.0.2 documentation</title>
+    <title>Changelog &#8212; re2c 1.0.3 documentation</title>
     <link rel="stylesheet" href="../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.2',
+        VERSION:     '1.0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -29,7 +29,7 @@
   <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
-    re2c-1.0.2
+    re2c-1.0.3
 </div>
 
 <h3><a href="../../index.html">Home</a></h3>
@@ -264,10 +264,10 @@
 </div>
 <div class="section" id="id4">
 <h3>1.0 (2017-08-11)<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<ul>
+<ul class="simple">
 <li><dl class="first docutils">
 <dt>Added options:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">-P</span> <span class="pre">--posix-captures</span></code> (POSIX-compliant capturing groups)</li>
 <li><code class="docutils literal"><span class="pre">-T</span> <span class="pre">--tags</span></code> (standalone tags with leftmost greedy disambiguation)</li>
 <li><code class="docutils literal"><span class="pre">--no-lookahead</span></code></li>
@@ -285,7 +285,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Added new syntax:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">&#64;&lt;stag&gt;</span></code></li>
 <li><code class="docutils literal"><span class="pre">#&lt;mtag&gt;</span></code></li>
 </ul>
@@ -294,7 +294,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Added new directives:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">/*!stags:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code></li>
 <li><code class="docutils literal"><span class="pre">/*!mtags:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code></li>
 <li><code class="docutils literal"><span class="pre">/*!maxnmatch:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code></li>
@@ -304,7 +304,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Added new API:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">YYSTAGN</span> <span class="pre">(t)</span></code></li>
 <li><code class="docutils literal"><span class="pre">YYSTAGP</span> <span class="pre">(t)</span></code></li>
 <li><code class="docutils literal"><span class="pre">YYMTAGN</span> <span class="pre">(t)</span></code></li>
@@ -319,7 +319,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Added inplace confgurations:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">re2c:define:YYSTAGN</span></code></li>
 <li><code class="docutils literal"><span class="pre">re2c:define:YYSTAGP</span></code></li>
 <li><code class="docutils literal"><span class="pre">re2c:define:YYMTAGN</span></code></li>
@@ -352,15 +352,12 @@
 </dd>
 </dl>
 </li>
-<li><p class="first">Added warning <code class="docutils literal"><span class="pre">-Wnondeterministic-tags</span></code></p>
-</li>
-<li><p class="first">Added fuzz-testing scripts</p>
-</li>
-<li><p class="first">Added paper “Tagged Deterministic Finite Automata with Lookahead”</p>
-</li>
+<li>Added warning <code class="docutils literal"><span class="pre">-Wnondeterministic-tags</span></code></li>
+<li>Added fuzz-testing scripts</li>
+<li>Added paper “Tagged Deterministic Finite Automata with Lookahead”</li>
 <li><dl class="first docutils">
 <dt>Fixed bugs:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>#121 “trailing contexts are fundamentally broken”</li>
 <li>#135 “In installation <code class="docutils literal"><span class="pre">make</span> <span class="pre">check</span></code> give syntax error”</li>
 <li>#137 “run_tests.sh fail when running configure script with absolute path”</li>
@@ -384,7 +381,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Merged pull requests:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>#131 “Use bash-specific <code class="docutils literal"><span class="pre">[[</span></code> builtin”</li>
 <li>#136 “Added basic support for travis-ci.org integration”</li>
 <li>#171 “Typo fix”</li>
@@ -420,10 +417,10 @@
 <h2>0.15x<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id8">
 <h3>0.15.3 (2015-12-02)<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
-<ul>
+<ul class="simple">
 <li><dl class="first docutils">
 <dt>Fixed bugs and applied patches:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>#122 “clang does not compile re2c 0.15.x” (reported and fixed by Oleksii Taran).</li>
 <li>#124 “Get rid of UINT32_MAX and friends” (patch by Sergei Trofimovich, fixes FreeBSD builds).</li>
 <li>#125 “[OS X] git reports changes not staged for commit in newly cloned repository” (by Oleksii Taran, this fix also applies to Windows).</li>
@@ -431,12 +428,9 @@
 </dd>
 </dl>
 </li>
-<li><p class="first">Added option <code class="docutils literal"><span class="pre">--no-version</span></code> that allows to omit version information.</p>
-</li>
-<li><p class="first">Reduced memory and time consumed with <code class="docutils literal"><span class="pre">-Wundefined-control-flow</span></code>.</p>
-</li>
-<li><p class="first">Improved coverage of input data generated with <code class="docutils literal"><span class="pre">-S</span> <span class="pre">--skeleton</span></code>.</p>
-</li>
+<li>Added option <code class="docutils literal"><span class="pre">--no-version</span></code> that allows to omit version information.</li>
+<li>Reduced memory and time consumed with <code class="docutils literal"><span class="pre">-Wundefined-control-flow</span></code>.</li>
+<li>Improved coverage of input data generated with <code class="docutils literal"><span class="pre">-S</span> <span class="pre">--skeleton</span></code>.</li>
 </ul>
 </div>
 <div class="section" id="id9">
@@ -454,10 +448,10 @@
 </div>
 <div class="section" id="id11">
 <h3>0.15 (2015-11-22)<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
-<ul>
+<ul class="simple">
 <li><dl class="first docutils">
 <dt>Updated website <a class="reference external" href="http://re2c.org">http://re2c.org</a>:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>added examples</li>
 <li>updated docs</li>
 <li>added news</li>
@@ -468,7 +462,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Added options:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">-S,</span> <span class="pre">--skeleton</span></code></li>
 <li><code class="docutils literal"><span class="pre">--empty-class</span> <span class="pre">&lt;match-empty</span> <span class="pre">|</span> <span class="pre">match-none</span> <span class="pre">|</span> <span class="pre">error&gt;</span></code></li>
 </ul>
@@ -477,7 +471,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Added warnings:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">-W</span></code></li>
 <li><code class="docutils literal"><span class="pre">-Werror</span></code></li>
 <li><code class="docutils literal"><span class="pre">-W&lt;warning&gt;</span></code></li>
@@ -490,7 +484,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Added specific warnings:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">-Wundefined-control-flow</span></code></li>
 <li><code class="docutils literal"><span class="pre">-Wunreachable-rules</span></code></li>
 <li><code class="docutils literal"><span class="pre">-Wcondition-order</span></code></li>
@@ -504,7 +498,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Fixed options:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">--</span></code> (interpret remaining arguments as non-options)</li>
 </ul>
 </dd>
@@ -512,17 +506,16 @@
 </li>
 <li><dl class="first docutils">
 <dt>Deprecated options:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">-1</span> <span class="pre">--single-pass</span></code> (single pass is the default now)</li>
 </ul>
 </dd>
 </dl>
 </li>
-<li><p class="first">Reduced size of the generated <code class="docutils literal"><span class="pre">.dot</span></code> files.</p>
-</li>
+<li>Reduced size of the generated <code class="docutils literal"><span class="pre">.dot</span></code> files.</li>
 <li><dl class="first docutils">
 <dt>Fixed bugs:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>#27 re2c crashes reading files containing <code class="docutils literal"><span class="pre">%{</span> <span class="pre">%}</span></code> (patch by Rui)</li>
 <li>#51 default rule doesn’t work in reuse mode</li>
 <li>#52 eliminate multiple passes</li>
@@ -538,7 +531,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Added test options:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">-j</span></code>, <code class="docutils literal"><span class="pre">-j</span> <span class="pre">&lt;N&gt;</span></code> (run tests in <code class="docutils literal"><span class="pre">N</span></code> threads, defaults to the number of CPUs)</li>
 <li><code class="docutils literal"><span class="pre">--wine</span></code> (test windows builds using <code class="docutils literal"><span class="pre">wine</span></code>)</li>
 <li><code class="docutils literal"><span class="pre">--skeleton</span></code> (generate skeleton programs, compile and execute them)</li>
@@ -549,7 +542,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Updated build system:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>support out of source builds</li>
 <li>support <code class="docutils literal"><span class="pre">`make</span> <span class="pre">distcheck`</span></code></li>
 <li>added <code class="docutils literal"><span class="pre">`make</span> <span class="pre">bootstrap`</span></code> (rebuild re2c after building with precompiled <code class="docutils literal"><span class="pre">.re</span></code> files)</li>
@@ -566,8 +559,7 @@ respect user-defined <code class="docutils literal"><span class="pre">CXXFLAGS</
 </dd>
 </dl>
 </li>
-<li><p class="first">Moved development to github (<a class="reference external" href="https://github.com/skvadrik/re2c">https://github.com/skvadrik/re2c</a>), keep a mirror on sourceforge.</p>
-</li>
+<li>Moved development to github (<a class="reference external" href="https://github.com/skvadrik/re2c">https://github.com/skvadrik/re2c</a>), keep a mirror on sourceforge.</li>
 </ul>
 </div>
 </div>
@@ -747,16 +739,13 @@ respect user-defined <code class="docutils literal"><span class="pre">CXXFLAGS</
 </div>
 <div class="section" id="id35">
 <h3>0.12.0 (2007-05-01)<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h3>
-<ul>
-<li><p class="first">Re-release of 0.11.3 as new stable branch.</p>
-</li>
-<li><p class="first">Fixed issue with short form of switches and parameter if not first switch.</p>
-</li>
-<li><p class="first">Fixed #1708378 segfault in <code class="docutils literal"><span class="pre">actions.cc</span></code>.</p>
-</li>
+<ul class="simple">
+<li>Re-release of 0.11.3 as new stable branch.</li>
+<li>Fixed issue with short form of switches and parameter if not first switch.</li>
+<li>Fixed #1708378 segfault in <code class="docutils literal"><span class="pre">actions.cc</span></code>.</li>
 <li><dl class="first docutils">
 <dt>re2c 0.12.0 has been tested with the following compilers:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>gcc version 4.1.2 (Gentoo 4.1.2)</li>
 <li>gcc version 4.1.2 20070302 (prerelease) (4.1.2-1mdv2007.1)</li>
 <li>gcc version 4.1.2 20061115 (prerelease) (Debian 4.1.1-21)</li>
@@ -864,48 +853,29 @@ respect user-defined <code class="docutils literal"><span class="pre">CXXFLAGS</
 </div>
 <div class="section" id="id48">
 <h3>0.10.2 (2006-05-01)<a class="headerlink" href="#id48" title="Permalink to this headline">¶</a></h3>
-<ul>
-<li><p class="first">Changed to generate <code class="docutils literal"><span class="pre">YYMARKER</span></code> only when needed or in single pass mode.</p>
-</li>
-<li><p class="first">Added <code class="docutils literal"><span class="pre">-1</span></code> switch to force single pass generation and make two pass the default.</p>
-</li>
-<li><p class="first">Fixed <code class="docutils literal"><span class="pre">-i</span></code> switch.</p>
-</li>
-<li><p class="first">Added configuration <code class="docutils literal"><span class="pre">yyfill:enable</span></code> to allow suppression of <code class="docutils literal"><span class="pre">YYFILL()</span></code> blocks.</p>
-</li>
-<li><p class="first">Added tutorial like lessons to re2c.</p>
-</li>
-<li><p class="first">Added <code class="docutils literal"><span class="pre">/*!ignore:re2c</span> <span class="pre">*/</span></code> to support documenting of re2c source.</p>
-</li>
-<li><p class="first">Fixed issue with multiline re2c comments (<code class="docutils literal"><span class="pre">/*!max:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code> and alike).</p>
-</li>
-<li><p class="first">Fixed generation of <code class="docutils literal"><span class="pre">YYDEBUG()</span></code> when using <code class="docutils literal"><span class="pre">-d</span></code> switch.</p>
-</li>
-<li><p class="first">Added <code class="docutils literal"><span class="pre">/*!getstate:re2c</span> <span class="pre">*/</span></code> which triggers generation of the <code class="docutils literal"><span class="pre">YYGETSTATE()</span></code> block.</p>
-</li>
-<li><p class="first">Added configuration <code class="docutils literal"><span class="pre">state:abort</span></code>.</p>
-</li>
-<li><p class="first">Changed to not generate <code class="docutils literal"><span class="pre">yyNext</span></code> unless configuration <code class="docutils literal"><span class="pre">state:nextlabel</span></code> is used.</p>
-</li>
-<li><p class="first">Changed to not generate <code class="docutils literal"><span class="pre">yyaccept</span></code> code unless needed.</p>
-</li>
-<li><p class="first">Changed to use <code class="docutils literal"><span class="pre">if</span></code> instead of <code class="docutils literal"><span class="pre">switch</span></code> expression when <code class="docutils literal"><span class="pre">yyaccpt</span></code> has only one case.</p>
-</li>
-<li><p class="first">Added docu, examples and tests to <code class="docutils literal"><span class="pre">.src.zip</span></code> package (0.10.1 zip was repackaged).</p>
-</li>
-<li><p class="first">Fixed #1479044 incorrect code generated when using <code class="docutils literal"><span class="pre">-b</span></code>.</p>
-</li>
-<li><p class="first">Fixed #1472770 re2c creates an infinite loop.</p>
-</li>
-<li><p class="first">Fixed #1454253 Piece of code saving a backtracking point not generated.</p>
-</li>
-<li><p class="first">Fixed #1463639 Missing forward declaration.</p>
-</li>
-<li><p class="first">Implemented #1187127 savable state support for multiple re2c blocks.</p>
-</li>
+<ul class="simple">
+<li>Changed to generate <code class="docutils literal"><span class="pre">YYMARKER</span></code> only when needed or in single pass mode.</li>
+<li>Added <code class="docutils literal"><span class="pre">-1</span></code> switch to force single pass generation and make two pass the default.</li>
+<li>Fixed <code class="docutils literal"><span class="pre">-i</span></code> switch.</li>
+<li>Added configuration <code class="docutils literal"><span class="pre">yyfill:enable</span></code> to allow suppression of <code class="docutils literal"><span class="pre">YYFILL()</span></code> blocks.</li>
+<li>Added tutorial like lessons to re2c.</li>
+<li>Added <code class="docutils literal"><span class="pre">/*!ignore:re2c</span> <span class="pre">*/</span></code> to support documenting of re2c source.</li>
+<li>Fixed issue with multiline re2c comments (<code class="docutils literal"><span class="pre">/*!max:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code> and alike).</li>
+<li>Fixed generation of <code class="docutils literal"><span class="pre">YYDEBUG()</span></code> when using <code class="docutils literal"><span class="pre">-d</span></code> switch.</li>
+<li>Added <code class="docutils literal"><span class="pre">/*!getstate:re2c</span> <span class="pre">*/</span></code> which triggers generation of the <code class="docutils literal"><span class="pre">YYGETSTATE()</span></code> block.</li>
+<li>Added configuration <code class="docutils literal"><span class="pre">state:abort</span></code>.</li>
+<li>Changed to not generate <code class="docutils literal"><span class="pre">yyNext</span></code> unless configuration <code class="docutils literal"><span class="pre">state:nextlabel</span></code> is used.</li>
+<li>Changed to not generate <code class="docutils literal"><span class="pre">yyaccept</span></code> code unless needed.</li>
+<li>Changed to use <code class="docutils literal"><span class="pre">if</span></code> instead of <code class="docutils literal"><span class="pre">switch</span></code> expression when <code class="docutils literal"><span class="pre">yyaccpt</span></code> has only one case.</li>
+<li>Added docu, examples and tests to <code class="docutils literal"><span class="pre">.src.zip</span></code> package (0.10.1 zip was repackaged).</li>
+<li>Fixed #1479044 incorrect code generated when using <code class="docutils literal"><span class="pre">-b</span></code>.</li>
+<li>Fixed #1472770 re2c creates an infinite loop.</li>
+<li>Fixed #1454253 Piece of code saving a backtracking point not generated.</li>
+<li>Fixed #1463639 Missing forward declaration.</li>
+<li>Implemented #1187127 savable state support for multiple re2c blocks.</li>
 <li><dl class="first docutils">
 <dt>re2c 0.10.2 has been tested with the following compilers:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>gcc (GCC) 4.1.0 (Gentoo 4.1.0)</li>
 <li>gcc version 4.0.3 (4.0.3-0.20060215.2mdk for Mandriva Linux release 2006.1)</li>
 <li>gcc version 4.0.2 20050901 (prerelease) (SUSE Linux)</li>
@@ -930,14 +900,12 @@ respect user-defined <code class="docutils literal"><span class="pre">CXXFLAGS</
 </div>
 <div class="section" id="id49">
 <h3>0.10.1 (2006-02-28)<a class="headerlink" href="#id49" title="Permalink to this headline">¶</a></h3>
-<ul>
-<li><p class="first">Added support for Solaris and native SUN compiler.</p>
-</li>
-<li><p class="first">Applied #1438160 expose <code class="docutils literal"><span class="pre">YYCTXMARKER</span></code>.</p>
-</li>
+<ul class="simple">
+<li>Added support for Solaris and native SUN compiler.</li>
+<li>Applied #1438160 expose <code class="docutils literal"><span class="pre">YYCTXMARKER</span></code>.</li>
 <li><dl class="first docutils">
 <dt>re2c 0.10.1 has been tested with the following compilers:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>gcc version 4.0.3 (4.0.3-0.20060215.2mdk for Mandriva Linux release 2006.1)</li>
 <li>gcc version 4.0.2 (4.0.2-1mdk for Mandriva Linux release 2006.1)</li>
 <li>gcc version 4.0.2 20050901 (prerelease) (SUSE Linux)</li>
@@ -1220,7 +1188,7 @@ Peter
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 08, 2017.
+      Last updated on Jun 11, 2018.
     </div>
   </body>
 </html>

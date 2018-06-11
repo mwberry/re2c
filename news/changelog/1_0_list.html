@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>&lt;no title&gt; &#8212; re2c 1.0.2 documentation</title>
+    <title>&lt;no title&gt; &#8212; re2c 1.0.3 documentation</title>
     <link rel="stylesheet" href="../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.2',
+        VERSION:     '1.0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -29,7 +29,7 @@
   <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
-    re2c-1.0.2
+    re2c-1.0.3
 </div>
 
 <h3><a href="../../index.html">Home</a></h3>
@@ -50,10 +50,10 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <ul>
+  <ul class="simple">
 <li><dl class="first docutils">
 <dt>Added options:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">-P</span> <span class="pre">--posix-captures</span></code> (POSIX-compliant capturing groups)</li>
 <li><code class="docutils literal"><span class="pre">-T</span> <span class="pre">--tags</span></code> (standalone tags with leftmost greedy disambiguation)</li>
 <li><code class="docutils literal"><span class="pre">--no-lookahead</span></code></li>
@@ -71,7 +71,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Added new syntax:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">&#64;&lt;stag&gt;</span></code></li>
 <li><code class="docutils literal"><span class="pre">#&lt;mtag&gt;</span></code></li>
 </ul>
@@ -80,7 +80,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Added new directives:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">/*!stags:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code></li>
 <li><code class="docutils literal"><span class="pre">/*!mtags:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code></li>
 <li><code class="docutils literal"><span class="pre">/*!maxnmatch:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code></li>
@@ -90,7 +90,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Added new API:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">YYSTAGN</span> <span class="pre">(t)</span></code></li>
 <li><code class="docutils literal"><span class="pre">YYSTAGP</span> <span class="pre">(t)</span></code></li>
 <li><code class="docutils literal"><span class="pre">YYMTAGN</span> <span class="pre">(t)</span></code></li>
@@ -105,7 +105,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Added inplace confgurations:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li><code class="docutils literal"><span class="pre">re2c:define:YYSTAGN</span></code></li>
 <li><code class="docutils literal"><span class="pre">re2c:define:YYSTAGP</span></code></li>
 <li><code class="docutils literal"><span class="pre">re2c:define:YYMTAGN</span></code></li>
@@ -138,15 +138,12 @@
 </dd>
 </dl>
 </li>
-<li><p class="first">Added warning <code class="docutils literal"><span class="pre">-Wnondeterministic-tags</span></code></p>
-</li>
-<li><p class="first">Added fuzz-testing scripts</p>
-</li>
-<li><p class="first">Added paper “Tagged Deterministic Finite Automata with Lookahead”</p>
-</li>
+<li>Added warning <code class="docutils literal"><span class="pre">-Wnondeterministic-tags</span></code></li>
+<li>Added fuzz-testing scripts</li>
+<li>Added paper “Tagged Deterministic Finite Automata with Lookahead”</li>
 <li><dl class="first docutils">
 <dt>Fixed bugs:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>#121 “trailing contexts are fundamentally broken”</li>
 <li>#135 “In installation <code class="docutils literal"><span class="pre">make</span> <span class="pre">check</span></code> give syntax error”</li>
 <li>#137 “run_tests.sh fail when running configure script with absolute path”</li>
@@ -170,7 +167,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Merged pull requests:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>#131 “Use bash-specific <code class="docutils literal"><span class="pre">[[</span></code> builtin”</li>
 <li>#136 “Added basic support for travis-ci.org integration”</li>
 <li>#171 “Typo fix”</li>
@@ -196,7 +193,7 @@
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 08, 2017.
+      Last updated on Jun 11, 2018.
     </div>
   </body>
 </html>
