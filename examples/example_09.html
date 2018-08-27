@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>/etc/passwd &#8212; re2c 1.0.3 documentation</title>
+    <title>/etc/passwd &#8212; re2c 1.1 documentation</title>
     <link rel="stylesheet" href="../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.3',
+        VERSION:     '1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -29,7 +29,7 @@
   <body>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><div class="re2c-logo">
-    re2c-1.0.3
+    re2c-1.1
 </div>
 
 <h3><a href="../index.html">Home</a></h3>
@@ -160,7 +160,7 @@ Our example file is the following <a class="reference download internal" href=".
 
 <span class="k">static</span> <span class="kt">int</span> <span class="nf">lex</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">YYCURSOR</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">YYMARKER</span><span class="p">,</span> <span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="o">*</span><span class="n">u</span><span class="p">,</span> <span class="o">*</span><span class="n">g</span><span class="p">,</span> <span class="o">*</span><span class="n">i</span><span class="p">,</span> <span class="o">*</span><span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">c</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">YYMARKER</span><span class="p">,</span> <span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="o">*</span><span class="n">u</span><span class="p">,</span> <span class="o">*</span><span class="n">g</span><span class="p">,</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span> <span class="o">*</span><span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">c</span><span class="p">;</span>
     <span class="cm">/*!stags:re2c format = &#39;const char *@@;&#39;; */</span>
 <span class="nl">loop</span><span class="p">:</span>
     <span class="cm">/*!re2c</span>
@@ -186,14 +186,14 @@ Our example file is the following <a class="reference download internal" href=".
 <span class="cm">        @p pass sep</span>
 <span class="cm">        @u uid  sep</span>
 <span class="cm">        @g gid  sep</span>
-<span class="cm">        @i info sep</span>
+<span class="cm">        @f info sep</span>
 <span class="cm">        @h home sep</span>
 <span class="cm">        @c cmd  eol {</span>
 <span class="cm">            printf(&quot;user:     %.*s\n&quot;, (int)(p - n) - 1, n);</span>
 <span class="cm">            printf(&quot;password: %.*s\n&quot;, (int)(u - p) - 1, p);</span>
 <span class="cm">            printf(&quot;UID:      %.*s\n&quot;, (int)(g - u) - 1, u);</span>
-<span class="cm">            printf(&quot;GID:      %.*s\n&quot;, (int)(i - g) - 1, g);</span>
-<span class="cm">            printf(&quot;info:     %.*s\n&quot;, (int)(h - i) - 1, i);</span>
+<span class="cm">            printf(&quot;GID:      %.*s\n&quot;, (int)(f - g) - 1, g);</span>
+<span class="cm">            printf(&quot;info:     %.*s\n&quot;, (int)(h - f) - 1, f);</span>
 <span class="cm">            printf(&quot;home:     %.*s\n&quot;, (int)(c - h) - 1, h);</span>
 <span class="cm">            printf(&quot;command:  %.*s\n&quot;, (int)(YYCURSOR - c - 1), c);</span>
 <span class="cm">            printf(&quot;\n&quot;);</span>
@@ -270,7 +270,7 @@ command:  /bin/false
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jun 11, 2018.
+      Last updated on Aug 27, 2018.
     </div>
   </body>
 </html>

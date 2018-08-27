@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Release 1.0.3 &#8212; re2c 1.1 documentation</title>
+    <title>Release 1.1 &#8212; re2c 1.1 documentation</title>
     <link rel="stylesheet" href="../../_static/theme-re2c.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -39,8 +39,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples/examples.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../news.html">News</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="1_1.html">Release 1.1</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Release 1.0.3</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Release 1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1_0_3.html">Release 1.0.3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="1_0_2.html">Release 1.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="1_0_1.html">Release 1.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="1_0.html">Release 1.0</a></li>
@@ -63,14 +63,26 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="release-1-0-3">
-<h1>Release 1.0.3<a class="headerlink" href="#release-1-0-3" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="release-1-1">
+<h1>Release 1.1<a class="headerlink" href="#release-1-1" title="Permalink to this headline">¶</a></h1>
 <p><em>by Ulya Trofimovich</em></p>
-<p>Yet another minor bug-fix release in the 1.0.x series; see <a class="reference external" href="./1_0.html">release 1.0</a> for details.
-This release fixes build failure on Mac OS X 10.5.8 with with GCC version 4.2.1.
-Thanks to Ryan Shmidt for the bug report.</p>
+<p>This release doesn’t bring in any serious user-visible changes;
+most of the work concentrated on the internal POSIX disambiguation algorithm
+used for submatch extraction with <code class="docutils literal"><span class="pre">--posix-captures</span></code> option.
+The old algorithm, introduced in <a class="reference external" href="./1_0.html">release 1.0</a>, was based on the work of Chris Kuklewicz
+(outlined on this <a class="reference external" href="https://wiki.haskell.org/index.php?title=Regular_expressions/Bounded_space_proposal&amp;oldid=11475">haskell wiki page</a>
+and formalized in the paper <a class="reference external" href="http://re2c.org/2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf">Tagged Deterministic Finite Automata with Lookahead</a>).
+Kuklewicz algorithm was replaced with a totally different algorithm
+based on the work of Satoshi Okui and Taro Suzuki (described in the paper
+“Disambiguation in Regular Expression Matching via Position Automata with Augmented Transitions”, year 2013).
+The main effort in this release was in developing proper theoretical foundations for the new algorithm.</p>
+<p>As usual, there has been a couple of bug fixes. The list of changes:</p>
 <ul class="simple">
-<li>Fixed bug #198 (build error on MacOS with GCC-4.2.1)</li>
+<li>Replaced Kuklewicz POSIX disambiguation algorithm with Okui algorithm.</li>
+<li>Optimized GOR1 algorithm (computation of tagged epsilon-closure).</li>
+<li>Added option <code class="docutils literal"><span class="pre">--conditions</span></code> (an alias for <code class="docutils literal"><span class="pre">-c</span> <span class="pre">--start-conditions</span></code>).</li>
+<li>Fixed bug #201 Bugs with option: <code class="docutils literal"><span class="pre">re2c:flags:no-debug-info</span></code>.</li>
+<li>Reworked first part of TDFA paper.</li>
 </ul>
 </div>
 
