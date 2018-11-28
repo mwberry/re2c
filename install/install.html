@@ -146,8 +146,10 @@ $ make install
 <p>If you intend to use re2c on Windows, you can either
 use <a class="reference external" href="https://cygwin.com/">cygwin</a>
 or build re2c with <a class="reference external" href="http://mingw.org/">mingw</a>
-(mingw builds are supported and tested regularly).</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./configure --host i686-w64-mingw32
+(mingw builds are supported and tested regularly).
+For some mingw versions you might have to use <code class="docutils literal"><span class="pre">-std=gnu++11</span></code> compiler option to avoid spurious build errors
+(re2c uses <code class="docutils literal"><span class="pre">-std=c++98</span></code> by default).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./configure --host i686-w64-mingw32 <span class="nv">CXXFLAGS</span><span class="o">=</span><span class="s2">&quot;-std=gnu++11&quot;</span>
 $ make
 $ make install
 </pre></div>
@@ -190,7 +192,7 @@ $ make docs
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Aug 30, 2018.
+      Last updated on Nov 28, 2018.
     </div>
   </body>
 </html>
